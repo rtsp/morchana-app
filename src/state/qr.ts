@@ -69,7 +69,9 @@ export const useSelfQR = () => {
         type: QR_ACTION.LOADING,
       })
       const _qrData = (await getQRData()) as QRData
-      const isLinked = await getUserLinkedStatus(userPrivateData.getAnonymousId())
+      const {
+        data: { linked: isLinked },
+      } = await getUserLinkedStatus(userPrivateData.getAnonymousId())
       const qrData = await SelfQR.setCurrentQRFromQRData(_qrData)
       const qrState = SelfQR.getCurrentState()
       dispatch({
