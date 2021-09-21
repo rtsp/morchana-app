@@ -13,11 +13,15 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  Modal,
 } from 'react-native'
+import { Button } from 'react-native-elements'
 import RNFS from 'react-native-fs'
 import GPSState from 'react-native-gps-state'
 import NotificationPopup from 'react-native-push-notification-popup'
+import { useSafeArea } from 'react-native-safe-area-view'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FeatherIcon from 'react-native-vector-icons/Feather'
 import Carousel from '../../../../src/components/Carousel'
 import { CircularProgressAvatar } from '../../../../src/components/CircularProgressAvatar'
 import { useVaccine } from '../../../../src/services/use-vaccine'
@@ -27,15 +31,16 @@ import { useResetTo } from '../../../../src/utils/navigation'
 import { useContactTracer } from '../../../services/contact-tracing-provider'
 import { pushNotification } from '../../../services/notification'
 import { QR_STATE, SelfQR, useSelfQR } from '../../../state/qr'
-import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_SIZES } from '../../../styles'
+import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../../styles'
 import { BeaconFoundPopupContent } from '../BeaconFoundPopup'
 import QRCard from './QRCard'
 import { UpdateProfileButton } from './UpdateProfileButton'
 import VaccineCard from './VaccineCard'
 import WorkFromHomeCard from './WorkFromHomeCard'
-import { useSafeArea } from 'react-native-safe-area-view'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const carouselItems = ['qr', 'vaccine'] //, 'wfh']
+
 // Can change up to 3 picture a week.
 export const MAX_CHANGE_PROFILE_LIMIT = 3
 const mapQrStatusColor = (qr?: SelfQR, qrState?: QR_STATE) =>
@@ -47,18 +52,43 @@ const mapQrStatusColor = (qr?: SelfQR, qrState?: QR_STATE) =>
 
 export const MainApp = () => {
   const inset = useSafeArea()
-  const { qrData, qrState } = useSelfQR()
+  const { qrData, qrState, isLinked } = useSelfQR()
   const { beaconLocationName, isBluetoothOn } = useContactTracer()
   const [location, setLocation] = useState('')
   const popupRef = useRef<NotificationPopup | any>()
   const activeDotAnim = useRef(new Animated.Value(0)).current
   const { vaccineList, getVaccineUserName } = useVaccine()
   const [{ updateProfileDate, changeCount, card }] = useApplicationState()
+  const navigation = useNavigation()
+  const [modalValue, setModalValue] = useState<boolean>(false)
+  const [alertModalData, SetAlertModalData] = useState<{ title: string; text: string }>({
+    title: '',
+    text: '',
+  })
 
   const windowWidth = Dimensions.get('window').width
 
   const [triggerGps, setTriggerGps] = useState<number>(0)
   const gpsRef = React.useRef({ triggerGps })
+
+  const initALertData = () => {
+    if (applicationState.getData('coeAutoAlert')) {
+      setModalValue(true)
+    }
+    const coeNo = userPrivateData.getData('coeNo')
+    const coeRfNo = userPrivateData.getData('coeRfNo')
+    if (!coeNo && !coeRfNo) {
+      SetAlertModalData({
+        title: I18n.t('no_coe_alert_title'),
+        text: I18n.t('no_coe_alert_text'),
+      })
+    } else if (coeNo && coeRfNo) {
+      SetAlertModalData({
+        title: I18n.t('coe_alert_title'),
+        text: I18n.t('coe_alert_text'),
+      })
+    }
+  }
 
   React.useEffect(() => {
     const updateGPS = async () => {
@@ -70,7 +100,7 @@ export const MainApp = () => {
         setTriggerGps(status)
       }
     }
-
+    initALertData()
     updateGPS()
     const timer = setInterval(updateGPS, 2000)
     return () => clearInterval(timer)
@@ -84,6 +114,10 @@ export const MainApp = () => {
       })
     }
   }, [beaconLocationName, location])
+
+  const isLeftAvatar = () => {
+    return !isLinked && userPrivateData.getData('coeRfNo') && userPrivateData.getData('coeNo')
+  }
 
   const startAnimated = useCallback(
     () =>
@@ -173,55 +207,31 @@ export const MainApp = () => {
     marginLeft: inset.left,
     marginRight: inset.right,
     backgroundColor: '#F9F9F9',
-    height: '100%',
-    width: '100%',
+    flex: 1,
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: '#F9F9F9' }}>
-      <StatusBar barStyle='dark-content' backgroundColor={COLORS.WHITE} />
+    <SafeAreaView style={styles.safeAreaView}>
       <View style={containerStyle}>
-        {
-          // <StatusBar
-          //   barStyle={qrData?.getTagColor() ? 'light-content' : 'dark-content'}
-          //   backgroundColor={
-          //     qrData?.getTagColor() ? COLORS.BLACK_1 : COLORS.PRIMARY_LIGHT
-          //   }
-          // />
-        }
+        <StatusBar barStyle='dark-content' backgroundColor={COLORS.WHITE} />
         <View style={styles.containerTop}>
           <View style={styles.containerHeader}>
-            {
-              // <TouchableOpacity style={styles.circularButton} onPress={refreshQR}>
-              //   <FontAwesome
-              //     name="refresh"
-              //     color={COLORS.GRAY_4}
-              //     size={24}
-              //     style={{ marginLeft: 10 }}
-              //   />
-              // </TouchableOpacity>
-              // <Text style={styles.textHeader}>
-              //   {qrData &&
-              //     `${qrData.getCreatedDate().format(I18n.t('fully_date'))}`}
-              // </Text>
-            }
-            <View style={{ flexDirection: 'row', paddingTop: 16, height: 45 }}>
+            <View style={styles.iconStatusContainer}>
               <FontAwesome
                 name='map-marker'
                 color={triggerGps === 3 ? '#10A7DC' : '#C1C1C1'}
                 size={24}
-                style={{ marginRight: 10 }}
+                style={styles.iconStatusButton}
               />
               <FontAwesome
                 name='bluetooth-b'
                 color={isBluetoothOn ? '#10A7DC' : '#C1C1C1'}
                 size={24}
-                style={{ marginRight: 10 }}
+                style={styles.iconStatusButton}
               />
-              {/* {isServiceEnabled ? <View style={styles.greenDot} /> : null} */}
             </View>
           </View>
-          <View style={[styles.profileHeader, profileStyle]}>
+          <View style={[styles.profileHeader, profileStyle, isLeftAvatar() ? { alignItems: 'flex-start' } : {}]}>
             <View style={styles.profileContainer}>
               {qrData && qrState && (
                 <>
@@ -234,6 +244,32 @@ export const MainApp = () => {
                     changeCount={changeCount}
                     updateProfileDate={updateProfileDate}
                   />
+                  {isLeftAvatar() ? (
+                    <>
+                      <View style={{ marginLeft: 8 }}>
+                        <View style={styles.flexRow}>
+                          <Text style={styles.textDarkBlue}>COE CODE</Text>
+                          <TouchableOpacity onPress={() => setModalValue(true)}>
+                            <FeatherIcon name='help-circle' style={[styles.textDarkBlue, styles.iconPadding]} />
+                          </TouchableOpacity>
+                        </View>
+                        <View>
+                          <Text style={[styles.coeTitle, styles.textDarkBlue]}>{userPrivateData.getData('coeNo')}</Text>
+                        </View>
+                        <View>
+                          <TouchableOpacity
+                            style={styles.flexRow}
+                            onPress={() => navigation.navigate('EditCoePersonalInformation')}
+                          >
+                            <Text style={styles.textBlue}>{I18n.t('edit')}</Text>
+                            <FontAwesome name='edit' style={[styles.textBlueIcon, styles.iconPadding]} />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </>
+                  ) : (
+                    <View />
+                  )}
                 </>
               )}
             </View>
@@ -273,17 +309,52 @@ export const MainApp = () => {
               }}
             />
           )}
+          <NotificationPopup
+            ref={popupRef}
+            renderPopupContent={(props) => <BeaconFoundPopupContent {...props} result={location} />}
+          />
         </View>
-        <NotificationPopup
-          ref={popupRef}
-          renderPopupContent={(props) => <BeaconFoundPopupContent {...props} result={location} />}
-        />
       </View>
+      <Modal visible={modalValue} transparent>
+        <View style={styles.modalStyle}>
+          <View style={styles.modalContainer}>
+            <View style={{ alignItems: 'center', paddingTop: 32, paddingHorizontal: 32 }}>
+              <Text style={{ fontSize: FONT_SIZES[700], color: COLORS.DARK_BLUE, fontFamily: FONT_BOLD }}>
+                {alertModalData.title}
+              </Text>
+              <Text style={{ textAlign: 'center', marginTop: 24, fontFamily: FONT_MED, fontSize: FONT_SIZES[500] }}>
+                {alertModalData.text}
+              </Text>
+            </View>
+            <View style={styles.bottomContainer}>
+              <Button
+                type='outline'
+                title={I18n.t('close')}
+                titleStyle={styles.buttonTitleStyle}
+                buttonStyle={styles.buttonStyle}
+                containerStyle={{ alignItems: 'center' }}
+                onPress={() => {
+                  if (applicationState.getData('coeAutoAlert')) {
+                    applicationState.setData('coeAutoAlert', false)
+                  }
+                  setModalValue(false)
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    backgroundColor: '#F9F9F9',
+    flex: 1,
+  },
+  iconStatusContainer: { flexDirection: 'row', paddingTop: 16, height: 45 },
+  iconStatusButton: { marginRight: 10 },
   containerTop: { flex: 1, flexDirection: 'column' },
   containerHeader: {
     flexDirection: 'column',
@@ -317,6 +388,43 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: COLORS.BLACK_1,
   },
+  flexRow: { flexDirection: 'row' },
+  coeTitle: {
+    fontFamily: FONT_BOLD,
+    fontSize: FONT_SIZES[800],
+    textTransform: 'uppercase',
+  },
+  textVerticalBottom: {
+    textAlignVertical: 'bottom',
+  },
+  textDarkBlue: {
+    color: COLORS.DARK_BLUE,
+  },
+  textBlue: {
+    color: COLORS.BLUE,
+    fontFamily: FONT_MED,
+    fontSize: FONT_SIZES[500],
+  },
+  textBlueIcon: {
+    color: COLORS.BLUE,
+    fontFamily: FONT_MED,
+    fontSize: FONT_SIZES[400],
+  },
+  modalStyle: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    borderRadius: 20,
+    borderColor: COLORS.GRAY_3,
+    borderWidth: 1,
+    backgroundColor: '#fff',
+    width: Dimensions.get('window').width - 64,
+    height: Dimensions.get('window').height / 2,
+  },
+  iconPadding: { marginLeft: 4, marginTop: 4 },
   profileHeader: {
     height: 180,
     marginLeft: 15,
@@ -326,7 +434,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileContainer: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
   },
   greenDot: {
@@ -347,14 +455,14 @@ const styles = StyleSheet.create({
     left: 45,
   },
   firstNameText: {
-    color: '#222222',
+    color: COLORS.TEXT,
     fontFamily: FONT_BOLD,
     fontSize: 40,
     paddingTop: 3,
     width: '100%',
   },
   lastNameText: {
-    color: '#222222',
+    color: COLORS.TEXT,
     fontFamily: FONT_FAMILY,
     fontSize: 28,
     fontWeight: 'normal',
@@ -374,6 +482,21 @@ const styles = StyleSheet.create({
   },
   flex1: {
     flex: 1,
+  },
+  bottomContainer: {
+    bottom: 32,
+    left: 0,
+    right: 0,
+    position: 'absolute',
+  },
+  buttonStyle: {
+    width: 80,
+    borderColor: COLORS.DARK_BLUE,
+  },
+  buttonTitleStyle: {
+    color: COLORS.DARK_BLUE,
+    fontFamily: FONT_MED,
+    fontSize: FONT_SIZES[500],
   },
 })
 
@@ -405,11 +528,11 @@ const AvatarProfile = ({
   const avatarWidth = 100
   useEffect(() => {
     RNFS.exists(faceURI).then((exists) => {
-      if (!exists) {
-        resetTo({
-          name: 'Onboarding',
-        })
-      }
+      // if (!exists) {
+      //   resetTo({
+      //     name: 'Onboarding',
+      //   })
+      // }
     })
   }, [faceURI, resetTo])
 

@@ -9,6 +9,7 @@ export const COLORS = {
   GRAY_3: '#E5E5E5',
   GRAY_4: '#505565',
   GRAY_5: '#E0E0E0',
+  GRAY_6: '#C1C1C1',
   DANGER: '#DF4A4A',
   BLACK_1: '#1F1D1D',
   BLACK_2: '#171717',
@@ -22,10 +23,10 @@ export const COLORS = {
   SECONDARY_NORMAL: '#296EB7',
   SECONDARY_DARK: '#0C2641',
   SECONDARY_DIM: '#576675',
+  DARK_BLUE: '#1E4E87',
   LIGHT_BLUE: '#FAFDFF',
   BORDER_LIGHT_BLUE: '#E6F2FA',
-  RED_WARNING: '#B82020',
-  BLUE_INFO: '#205DB8',
+  RED_WARNING: '#C41F03',
   WFH_HOME: '#3663D7',
   WFH_WORK: '#8DB4EF',
   WFH_OTHER: '#070C38',
@@ -33,6 +34,7 @@ export const COLORS = {
   WFH_NOT_TIME: '#E1E1E1',
   WFH_NOT_TIME_TEXT: 'rgba(0, 0, 0, 0.4)',
   BACKGROUND: '#F9F9F9',
+  TEXT: '#222222',
 }
 
 export const FONT_FAMILY = 'DBHelvethaicaX-Reg'
@@ -43,7 +45,7 @@ export const FONT_SIZES = {
   200: 10,
   300: 12,
   400: 16,
-  500: 21, // 16px
+  500: 20, // 16px
   600: 24,
   700: 28,
   800: 37,

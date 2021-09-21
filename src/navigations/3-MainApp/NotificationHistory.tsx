@@ -1,14 +1,13 @@
 import { useFocusEffect } from '@react-navigation/native'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { FlatList, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StatusBar, StyleSheet, Text, View, Image } from 'react-native'
 import Autolink from 'react-native-autolink'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import AntIcon from 'react-native-vector-icons/AntDesign'
 import I18n from '../../../i18n/i18n'
 import { getNotifications } from '../../api-notification'
 import { ContractTracerContext } from '../../services/contact-tracing-provider'
-import { COLORS, FONT_FAMILY, FONT_SIZES } from '../../styles'
+import { COLORS, FONT_FAMILY, FONT_SIZES, FONT_BOLD } from '../../styles'
 
 export interface NotificationHistoryModel {
   title: string
@@ -78,24 +77,26 @@ export const NotificationHistory = () => {
             setHistory(newList)
           }
         }}
-        renderItem={({ item, index }) => {
+        keyExtractor={(_, index) => 'noti' + index}
+        renderItem={({ item }) => {
           return (
-            <View style={styles.sectionLine} key={'c' + index}>
+            <View style={styles.sectionLine}>
+              <Text style={styles.dateStyle}>{moment(item?.sendedAt).format('DD MMMM').toString()}</Text>
               <View style={styles.titleSection}>
-                <View>
-                  <AntIcon
-                    style={styles.iconStyle}
-                    name={item.type === 'ALERT' ? 'warning' : 'infocirlceo'}
-                    color={item.type === 'ALERT' ? COLORS.RED_WARNING : COLORS.BLUE_INFO}
-                    size={16}
-                  />
+                <View style={styles.iconStyle}>
+                  {item?.type === 'ALERT' ? (
+                    <Image source={require('../../assets/red-horn.png')} resizeMode='contain' width={16} height={16} />
+                  ) : (
+                    <Image source={require('../../assets/blue-horn.png')} resizeMode='contain' width={16} height={16} />
+                  )}
                 </View>
                 <View>
-                  <Text style={item.type === 'ALERT' ? styles.titleWarning : styles.titleInfo}>{item.title}</Text>
+                  <Text style={item?.type === 'ALERT' ? styles.titleWarning : styles.titleInfo}>
+                    {item?.title || ''}
+                  </Text>
                 </View>
               </View>
-              <Autolink style={styles.descriptionStyle} text={item.message} />
-              <Text style={styles.dateStyle}>{moment(item.sendedAt).format('DD MMM YYYY HH:mm น.').toString()}</Text>
+              <Autolink style={styles.descriptionStyle} text={item?.message || ''} />
             </View>
           )
         }}
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   titleInfo: {
-    color: COLORS.BLUE_INFO,
+    color: COLORS.DARK_BLUE,
     fontSize: FONT_SIZES[500],
     fontFamily: FONT_FAMILY,
     fontWeight: '500',
@@ -154,10 +155,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   emptyText: {
-    fontSize: 18,
+    fontSize: FONT_SIZES[600],
+    fontFamily: FONT_BOLD,
     textAlign: 'center',
     textAlignVertical: 'center',
-    fontWeight: 'bold',
     flex: 1,
     color: '#A0A4B1',
   },

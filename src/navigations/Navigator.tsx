@@ -15,6 +15,9 @@ import { SetLocationStack } from './5-SetLocation/SetLocationStack'
 import { ChangeLanguageScreen } from './ChangeLanguage'
 import { PrivacyPolicy } from './PrivacyPolicy'
 import { WebviewScreen } from './Webview'
+import { EditCoePersonalInformation } from './EditCoePersonalInformation'
+import { OnboardRefIdEx } from './OnboardRefIdEx'
+import { OnboardCoeEx } from './OnboardCoeEx'
 
 const Root = () => {
   const resetTo = useResetTo()
@@ -67,10 +70,13 @@ export const Navigator = () => {
       <Stack.Screen name='Questionaire' component={QuestionaireStack} />
       <Stack.Screen name='Webview' component={WebviewScreen} />
       <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy} />
+      <Stack.Screen name='EditCoePersonalInformation' component={EditCoePersonalInformation} />
       <Stack.Screen name='ChangeLanguage' component={ChangeLanguageScreen} />
       <Stack.Screen name='SetLocationHome' component={SetLocationHome} />
       <Stack.Screen name='SetLocationMapWebView' component={SetLocationMapWebView} />
       <Stack.Screen name='SetLocationStack' component={SetLocationStack} />
+      <Stack.Screen name='OnboardRefIdEx' component={OnboardRefIdEx} />
+      <Stack.Screen name='OnboardCoeEx' component={OnboardCoeEx} />
     </Stack.Navigator>
   )
 }
