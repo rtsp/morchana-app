@@ -214,8 +214,9 @@ export default {
   privacy_policy_body_02_05:
     '    2.4 To help the doctors, nurses and healthcare personnel in the history taking in order to take history and give medical treatment faster',
   privacy_policy_body_02_06:
-    '    2.5 To alert the risked person as soon as the patient is found without wasting the time searching and give appropriate advices in time, for example, to come to the hospital to see the doctor as soon as possible. For the benefits in economics, tourism or other activities according to the government policies, for example, Phuket Sandbox, Samui Plus Model. However, once you receive the permission to enter the areas designated as pilot provinces for tourism, there will be the data for monitoring or tracking you while staying in the area.',
-  privacy_policy_body_02_07: '    ',
+    '    2.5 To alert the risked person as soon as the patient is found without wasting the time searching and give appropriate advices in time, for example, to come to the hospital to see the doctor as soon as possible.',
+  privacy_policy_body_02_07:
+    '    2.6 For the benefits in economics, tourism or other activities according to the government policies, for example, Phuket Sandbox, Samui Plus Model. However, once you receive the permission to enter the areas designated as pilot provinces for tourism, there will be the data for monitoring or tracking you while staying in the area.',
   privacy_policy_body_03: '3. The Personal Data We Collect and Use',
   privacy_policy_body_03_00:
     '    We will collect and use your personal data for the purposes as mentioned in Item 2. However, we will collect and use the personal data as per necessity by mainly using the Anonymous ID in the data processing of the app according to their purposes.',
