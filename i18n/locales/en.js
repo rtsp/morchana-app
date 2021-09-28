@@ -1,7 +1,7 @@
 export default {
-  term_and_conditions: 'Terms and conditions',
+  term_and_conditions: 'Privacy notice',
   before_usage: 'Before Usage',
-  please_accept_terms: 'Please accept terms and conditions',
+  please_accept_terms: 'Please accept privacy notice',
   i_accept_term: 'I accept terms and conditions',
   accept: 'Acknowledge and Consent',
   deny: 'Decline',
