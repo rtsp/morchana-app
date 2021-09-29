@@ -1,5 +1,5 @@
 export default {
-  term_and_conditions: 'Privacy notice',
+  term_and_conditions: 'Terms and condition',
   before_usage: 'Before Usage',
   please_accept_terms: 'Please accept privacy notice',
   i_accept_term: 'I accept terms and conditions',
@@ -391,4 +391,6 @@ export default {
   coe_alert_text: 'Please make sure that the COE displayed is accurate.',
   coe_alert_title_error: 'Error',
   coe_alert_text_error: 'Please double check information entered',
+  notification_history_warning: 'notification',
+  notification_history_notify: 'alert',
 }

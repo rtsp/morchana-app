@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { COLORS, FONT_FAMILY, FONT_BOLD, FONT_SIZES } from '../styles'
 import { CheckBox, normalize } from 'react-native-elements'
 import { FormHeader } from '../components/Form/FormHeader'
-import { getAgreementText, getAgreementTextBody1, getAgreementTextBody2, getAgreementTextBody3 } from './const'
+import { getAgreementTextBody1, getAgreementTextBody2, getAgreementTextBody3 } from './const'
 import { Row, Table } from 'react-native-table-component'
 
 import I18n from '../../i18n/i18n'
@@ -20,7 +20,7 @@ export const PrivacyPolicy = () => {
       <StatusBar backgroundColor={'white'} barStyle='dark-content' />
       <FormHeader backIcon='close'>
         <View style={styles.header}>
-          <Text style={styles.title}>{I18n.t('privacy_policy')} </Text>
+          <Text style={styles.title}>{I18n.t('term_and_conditions')} </Text>
           <Text style={styles.subtitle}>{I18n.t('for_using_service')}</Text>
         </View>
       </FormHeader>

@@ -1,5 +1,5 @@
 export default {
-  term_and_conditions: 'คำประกาศเกี่ยวกับความเป็นส่วนตัว',
+  term_and_conditions: 'ข้อตกลงและเงื่อนไข',
   before_usage: 'ก่อนการเริ่มต้นใช้งาน',
   please_accept_terms: 'กรุณายอมรับคำประกาศเกี่ยวกับความเป็นส่วนตัว',
   i_accept_term: 'ฉันยอมรับข้อตกลงและเงื่อนไข',
@@ -385,4 +385,6 @@ export default {
   coe_alert_text: 'กรุณาตรวจสอบว่าหมายเลข COE ที่แสดงถูกต้อง',
   coe_alert_title_error: 'ผิดพลาด',
   coe_alert_text_error: 'กรุณาตรวจสอบข้อมูลใหม่อีกครั้ง',
+  notification_history_warning: 'แจ้งเตือน',
+  notification_history_notify: 'แจ้งข่าว',
 }
