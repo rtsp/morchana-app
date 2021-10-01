@@ -92,7 +92,11 @@ export const NotificationHistory = () => {
                 </View>
                 <View>
                   <Text style={item?.type === 'ALERT' ? styles.titleWarning : styles.titleInfo}>
-                    {item?.title || ''}
+                    {item?.title
+                      ? item?.type === 'ALERT'
+                        ? I18n.t('notification_history_warning')
+                        : I18n.t('notification_history_notify')
+                      : ''}
                   </Text>
                 </View>
               </View>

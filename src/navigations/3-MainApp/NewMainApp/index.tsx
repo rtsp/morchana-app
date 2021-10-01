@@ -39,7 +39,8 @@ import VaccineCard from './VaccineCard'
 import WorkFromHomeCard from './WorkFromHomeCard'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const carouselItems = ['qr', 'vaccine'] //, 'wfh']
+// const carouselItems = ['qr', 'vaccine'] //, 'wfh']
+const carouselItems = ['qr']
 
 // Can change up to 3 picture a week.
 export const MAX_CHANGE_PROFILE_LIMIT = 3

@@ -12,7 +12,7 @@ export const OnboardPhone = ({ route }) => {
   const handleSubmit = () => {
     navigation.navigate('AuthPhone')
   }
-  const onBack = route.params.onBack
+  // const onBack = route.params.onBack
 
   return (
     <>
@@ -84,7 +84,7 @@ export const OnboardPhone = ({ route }) => {
               fontFamily: FONT_FAMILY,
               color: COLORS.SECONDARY_NORMAL,
             }}
-            onPress={onBack}
+            // onPress={onBack}
           />
         </View>
       </SafeAreaView>
