@@ -33,12 +33,11 @@ export const OnboardEnterQuestion = () => {
 
   const onSubmit = () => {
     if (selected) {
-      console.log('selected:', selected)
       navigation.navigate('OnboardCoeChecking')
       return
     }
-    applicationState.setData('isPassedOnboarding', true)
-    navigation.navigate('MainApp')
+    // applicationState.setData('isPassedOnboarding', true)
+    navigation.navigate('AuthPhone')
   }
 
   const selectOptions = [

@@ -18,6 +18,7 @@ import { WebviewScreen } from './Webview'
 import { EditCoePersonalInformation } from './EditCoePersonalInformation'
 import { OnboardRefIdEx } from './OnboardRefIdEx'
 import { OnboardCoeEx } from './OnboardCoeEx'
+import { AuthStack } from './1-Auth/AuthStack'
 
 const Root = () => {
   const resetTo = useResetTo()
@@ -77,6 +78,7 @@ export const Navigator = () => {
       <Stack.Screen name='SetLocationStack' component={SetLocationStack} />
       <Stack.Screen name='OnboardRefIdEx' component={OnboardRefIdEx} />
       <Stack.Screen name='OnboardCoeEx' component={OnboardCoeEx} />
+      <Stack.Screen name='AuthPhone' component={AuthStack} />
     </Stack.Navigator>
   )
 }

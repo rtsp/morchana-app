@@ -12,6 +12,7 @@ import { useHUD } from '../../HudView'
 import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_SIZES } from '../../styles'
 import { useResetTo } from '../../utils/navigation'
+import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
 
 export const AuthPhone = ({ route }) => {
   const navigation = useNavigation()
@@ -19,19 +20,16 @@ export const AuthPhone = ({ route }) => {
   const [phone, setPhone] = useState('')
   const isValidPhone = useMemo(() => phone.replace(/-/g, '').match(/^(0|1)[0-9]{9}$/), [phone])
   const resetTo = useResetTo()
-  const onBack = route.params.onBack
-  const backIcon = route.params.backIcon
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={{ flex: 1, width: '100%' }}>
         <StatusBar backgroundColor={COLORS.WHITE} barStyle='dark-content' />
-        <FormHeader onBack={onBack} backIcon={backIcon}>
-          <View style={styles.header}>
-            <Text style={styles.title}>{I18n.t('pls_input_phone_no')}</Text>
-            <Text style={styles.subtitle}>{I18n.t('confirm_otp_from_sms')}</Text>
-          </View>
-        </FormHeader>
+        <PageBackButton label={I18n.t('research')} />
+        <View style={styles.header}>
+          <Text style={styles.title}>{I18n.t('pls_input_phone_no')}</Text>
+          <Text style={styles.subtitle}>{I18n.t('confirm_otp_from_sms')}</Text>
+        </View>
         <View style={styles.content}>
           <View
             style={{
@@ -65,12 +63,15 @@ export const AuthPhone = ({ route }) => {
               }}
             />
           </View>
+          <Text style={{ fontSize: FONT_SIZES[300], marginTop: 5, color: COLORS.GRAY_4 }}>
+            {I18n.t('thailand_number_only')}
+          </Text>
         </View>
         <View style={styles.footer}>
           <PrimaryButton
             disabled={!isValidPhone}
-            title={I18n.t('next')}
-            style={{ width: '100%' }}
+            title={I18n.t('send')}
+            style={styles.primaryButton}
             containerStyle={{ width: '100%' }}
             onPress={async () => {
               showSpinner()
@@ -89,24 +90,6 @@ export const AuthPhone = ({ route }) => {
               }
             }}
           />
-          <TouchableOpacity
-            onPress={() => {
-              applicationState.setData('skipRegistration', true)
-              if (applicationState.getData('isPassedOnboarding')) {
-                resetTo({ name: 'MainApp' })
-              } else {
-                navigation.navigate({
-                  name: 'Onboarding',
-                  params: { phone },
-                })
-              }
-            }}
-            style={{ marginTop: 8 }}
-          >
-            <Link style={{ fontSize: FONT_SIZES[500], color: '#576675', textDecorationLine: 'underline' }}>
-              {I18n.t('use_without_iden_confirm')}
-            </Link>
-          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -115,16 +98,21 @@ export const AuthPhone = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.WHITE },
+  primaryButton: {
+    width: '100%',
+    borderColor: COLORS.DARK_BLUE,
+    backgroundColor: COLORS.DARK_BLUE,
+  },
   header: {
     alignItems: 'flex-start',
     marginBottom: 16,
     marginHorizontal: 24,
   },
   title: {
+    color: COLORS.DARK_BLUE,
     fontFamily: FONT_BOLD,
     fontSize: FONT_SIZES[700],
     alignItems: 'center',
-    color: COLORS.BLACK_1,
     textAlign: 'center',
   },
   subtitle: {
@@ -132,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES[600],
     lineHeight: 24,
     alignItems: 'center',
-    color: COLORS.SECONDARY_DIM,
+    color: COLORS.DARK_BLUE,
     textAlign: 'center',
   },
   errorText: {
@@ -140,7 +128,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
     backgroundColor: COLORS.LIGHT_BLUE,
