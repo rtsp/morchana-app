@@ -1,6 +1,6 @@
 import I18n from 'i18n-js'
 import React, { useCallback, useState, useEffect } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { PrimaryButton } from '../../components/Button'
@@ -19,7 +19,7 @@ const SelectLanguageOption = [
     value: 'th',
     title: 'เลือกภาษา',
   },
-] as const
+]
 
 type LangOptions = 'th' | 'en'
 

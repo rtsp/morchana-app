@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Alert,
   Dimensions,
@@ -25,7 +25,7 @@ import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../styl
 import { useResetTo } from '../../utils/navigation'
 import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
 
-function formatPhoneNumber(phoneNumberString) {
+function formatPhoneNumber(phoneNumberString: string) {
   var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
   var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
   if (match) {
@@ -37,12 +37,12 @@ function formatPhoneNumber(phoneNumberString) {
 export const AuthOTP = ({ route }) => {
   const { showSpinner, hide } = useHUD()
   const [modalValue, setModalValue] = useState<boolean>(false)
-  const navigation = useNavigation()
   const phone = route.params?.phone
   const triggerOTP = route.params?.triggerOTP
   const [otp, setOtp] = useState('')
   const resetTo = useResetTo()
-  const onSubmit = async () => {
+
+  const onSubmit = useCallback(async () => {
     showSpinner()
     try {
       const bool = await mobileParing(phone.replace(/-/g, ''), otp)
@@ -52,7 +52,6 @@ export const AuthOTP = ({ route }) => {
         return
       }
       hide()
-      applicationState.setData('isRegistered', true)
       applicationState.setData('isPassedOnboarding', true)
       resetTo({ name: 'MainApp' })
     } catch (err) {
@@ -60,7 +59,7 @@ export const AuthOTP = ({ route }) => {
       console.log(err)
       hide()
     }
-  }
+  }, [hide, otp, phone, resetTo, showSpinner])
 
   const onCloseModal = () => {
     setModalValue(false)
@@ -70,7 +69,7 @@ export const AuthOTP = ({ route }) => {
     if (otp.length === 4) {
       onSubmit()
     }
-  }, [otp])
+  }, [otp, onSubmit])
 
   const sendOTP = async () => {
     showSpinner()

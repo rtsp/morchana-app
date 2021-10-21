@@ -57,7 +57,6 @@ class App extends React.Component {
 
     const appVersion = await AsyncStorage.getItem('appVersion')
     if (appVersion !== APP_VERSION) {
-      await this.purgeAll()
       await AsyncStorage.setItem('appVersion', APP_VERSION)
     }
 

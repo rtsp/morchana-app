@@ -20,7 +20,7 @@ export const OnboardThailandPassConsent = () => {
 
   return (
     <WhiteBackground style={styles.background}>
-      <View style={styles.contentContainer}>
+      <View style={[styles.contentContainer, { top: inset.top }]}>
         <Text style={styles.title}>{I18n.t('policy_notice')}</Text>
         <Text style={styles.content}>{I18n.t('thailand_pass_consent_message')}</Text>
       </View>
@@ -61,7 +61,6 @@ export const OnboardThailandPassConsent = () => {
 const styles = StyleSheet.create({
   background: {
     backgroundColor: '#F9F9F9',
-    padding,
   },
   title: {
     fontFamily: FONT_BOLD,
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
   },
   contentContainer: {
-    paddingVertical: padding,
+    padding,
   },
   imageStyle: {
     marginVertical: 32,
@@ -96,6 +95,7 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
     width: '100%',
+    paddingHorizontal: padding,
   },
   fullWidth: {
     width: '100%',

@@ -12,6 +12,7 @@ export const ChangeLanguageScreen = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={'white'} barStyle='dark-content' />
       <View style={styles.header}>
         <Text style={styles.title}>{I18n.t('change_lang')} </Text>
       </View>

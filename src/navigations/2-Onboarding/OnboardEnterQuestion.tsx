@@ -52,26 +52,26 @@ export const OnboardEnterQuestion = () => {
   ]
 
   return (
-    <View style={{ flex: 1 }}>
-      <WhiteBackground>
+    <WhiteBackground>
+      <View style={{ top: inset.top }}>
         <PageBackButton label={I18n.t('select_image_profile')} />
-        <View style={styles.contentContainer}>
-          <View style={{ ...styles.flexRow, padding }}>
-            <Text style={styles.textQuestion}>{I18n.t('planning_to_enter_thailand_question')}</Text>
-          </View>
-          {selectOptions.map((option) => {
-            return (
-              <RadioButton
-                key={`key-${option.value}`}
-                isSelected={selected === option.value}
-                value={option.value}
-                label={option.label}
-                onSelect={(itemValue: SelectValueType) => onSelect(itemValue)}
-              />
-            )
-          })}
+      </View>
+      <View style={styles.contentContainer}>
+        <View style={{ ...styles.flexRow, padding }}>
+          <Text style={styles.textQuestion}>{I18n.t('planning_to_enter_thailand_question')}</Text>
         </View>
-      </WhiteBackground>
+        {selectOptions.map((option) => {
+          return (
+            <RadioButton
+              key={`key-${option.value}`}
+              isSelected={selected === option.value}
+              value={option.value}
+              label={option.label}
+              onSelect={(itemValue: SelectValueType) => onSelect(itemValue)}
+            />
+          )
+        })}
+      </View>
       <View style={[styles.footer, { bottom: inset.bottom }]}>
         <PrimaryButton
           style={styles.primaryButton}
@@ -80,7 +80,7 @@ export const OnboardEnterQuestion = () => {
           onPress={onSubmit}
         />
       </View>
-    </View>
+    </WhiteBackground>
   )
 }
 
