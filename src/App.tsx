@@ -21,6 +21,7 @@ import { COLORS } from './styles'
 import { compose } from './utils/compose'
 import { refetchDDCPublicKey } from './utils/crypto'
 import { refetchJWKs } from './utils/jwt'
+import { APP_VERSION } from './constants'
 
 // const AppContainer = createAppContainer(Navigator)
 const Stack = createStackNavigator()
@@ -52,6 +53,12 @@ class App extends React.Component {
   async load() {
     if (__DEV__) {
       // await this.purgeAll()
+    }
+
+    const appVersion = await AsyncStorage.getItem('appVersion')
+    if (appVersion !== APP_VERSION) {
+      await this.purgeAll()
+      await AsyncStorage.setItem('appVersion', APP_VERSION)
     }
 
     AppState.addEventListener('change', this.handleAppStateChange)
@@ -131,7 +138,7 @@ class App extends React.Component {
       <ThemeProvider theme={theme}>
         <ContactTracerProvider
           anonymousId={userPrivateData.getAnonymousId()}
-          isPassedOnboarding={applicationState.getData('isPassedOnboarding')}
+          isPassedOnboarding={!!applicationState.getData('isPassedOnboarding')}
           notificationTriggerNumber={this.state.notificationTriggerNumber ?? 0}
         >
           <SafeAreaProvider>

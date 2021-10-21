@@ -14,19 +14,16 @@ import {
 } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import AntIcon from 'react-native-vector-icons/AntDesign'
-import { CountdownTime } from '../../components/CountdownTimer'
+import FeatherIcon from 'react-native-vector-icons/Feather'
 import I18n from '../../../i18n/i18n'
 import { mobileParing, requestOTP } from '../../api'
-import { Link } from '../../components/Base'
 import { PrimaryButton } from '../../components/Button'
-import { FormHeader } from '../../components/Form/FormHeader'
+import { CountdownTime } from '../../components/CountdownTimer'
 import { useHUD } from '../../HudView'
 import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../styles'
 import { useResetTo } from '../../utils/navigation'
 import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
-import FeatherIcon from 'react-native-vector-icons/Feather'
 
 function formatPhoneNumber(phoneNumberString) {
   var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
@@ -56,11 +53,8 @@ export const AuthOTP = ({ route }) => {
       }
       hide()
       applicationState.setData('isRegistered', true)
-      if (applicationState.getData('isPassedOnboarding')) {
-        resetTo({ name: 'MainApp' })
-      } else {
-        resetTo({ name: 'MainApp' })
-      }
+      applicationState.setData('isPassedOnboarding', true)
+      resetTo({ name: 'MainApp' })
     } catch (err) {
       setModalValue(true)
       console.log(err)

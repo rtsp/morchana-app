@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { Image, ImageURISource, StatusBar, StyleSheet, TouchableOpacity, View, Button, Text } from 'react-native'
+import { Image, ImageURISource, StatusBar, StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import RNFS from 'react-native-fs'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -9,7 +9,6 @@ import { PrimaryButton } from '../../components/Button'
 import Texts from '../../components/Texts'
 import { userPrivateData } from '../../state/userPrivateData'
 import { COLORS, FONT_SIZES, FONT_BOLD } from '../../styles'
-import { PageBackButton } from './components/PageBackButton'
 
 const ListItem = ({ source, label, onPress }: { source: ImageURISource; label: string; onPress: () => void }) => {
   return (
@@ -221,6 +220,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   footerPopup: {
+    backgroundColor: COLORS.WHITE,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     shadowColor: '#000',

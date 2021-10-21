@@ -11,8 +11,8 @@ type valueof<T> = T[keyof T]
 interface UserData {
   id: string
   anonymousId: string
-  coeNo: string
-  coeRfNo: string
+  coeNo?: string
+  coeRfNo?: string
   faceURI?: string
   version?: number
   authToken?: string
@@ -31,11 +31,14 @@ class UserPrivateData extends HookState {
     // @ts-ignore
     this.data = {}
   }
-  save() {
+
+  async save() {
     super.save()
-    return SInfo.setItem(USER_DATA_KEY, JSON.stringify(this.data), SINFO_OPTIONS).catch(() => {
+    try {
+      return SInfo.setItem(USER_DATA_KEY, JSON.stringify(this.data), SINFO_OPTIONS)
+    } catch (e) {
       console.log('save failed')
-    })
+    }
   }
   async load() {
     const userDataString = await SInfo.getItem(USER_DATA_KEY, SINFO_OPTIONS)
@@ -49,24 +52,19 @@ class UserPrivateData extends HookState {
         id: '',
       }
     }
-    const register = () => {
-      return registerDevice().then(({ userId, anonymousId, token }) => {
-        this.data.id = userId
-        this.data.anonymousId = anonymousId
-        this.data.version = LATEST_VERSION
-        this.data.authToken = token
-        return this.save()
-      })
+
+    try {
+      const { userId, anonymousId, token } = await registerDevice()
+      this.data.id = userId
+      this.data.anonymousId = anonymousId
+      this.data.version = LATEST_VERSION
+      this.data.authToken = token
+      return this.save()
+    } catch (e) {
+      console.error('ERROR REGISTER :', e)
     }
-    if (this.data.version !== LATEST_VERSION) {
-      /* wait to register */
-      await register()
-    } else {
-      /* just sync, if failed, stil fine  */
-      await register().catch((err) => {
-        console.log('register failed', err)
-      })
-    }
+
+    return null
   }
 
   getId = () => {
@@ -86,10 +84,10 @@ class UserPrivateData extends HookState {
     return dataPath
   }
   setData(key: keyof UserData, value: valueof<UserData>) {
-    this.data[key.toString()] = value
+    ;(this.data as any)[key] = value
     return this.save()
   }
-  setFace(uri, { isTempUri }) {
+  setFace(uri: string, { isTempUri }: { isTempUri: boolean }) {
     if (!uri) {
       throw new Error('Uri not found')
     }

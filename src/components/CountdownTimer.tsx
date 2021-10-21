@@ -21,8 +21,11 @@ export const CountdownTime = (props) => {
     props.onClose()
   }
 
-  useEffect(() => {
-    countDown()
+  useEffect(function countDown() {
+    const interval = setInterval(() => {
+      setCountdownTime((second) => (second >= 1 ? second - 1 : 0))
+    }, 1000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -30,13 +33,6 @@ export const CountdownTime = (props) => {
       setModalValue(true)
     }
   }, [countdownTimer])
-
-  function countDown() {
-    const interval = setInterval(() => {
-      setCountdownTime((second) => (second >= 1 ? second - 1 : 0))
-    }, 1000)
-    return () => clearInterval(interval)
-  }
 
   function timer() {
     let minutes = Math.floor(countdownTimer / 60).toString()

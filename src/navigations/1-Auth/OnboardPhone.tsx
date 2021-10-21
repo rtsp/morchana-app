@@ -1,11 +1,11 @@
-import React from 'react'
-import { Image, StatusBar, Text, View, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import React from 'react'
+import { Image, SafeAreaView, StatusBar, Text, View } from 'react-native'
+import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
 import { COLORS, FONT_FAMILY } from '../../styles'
 import { doctorSize, styles } from '../2-Onboarding/const'
 import { OnboardHeader } from '../2-Onboarding/OnboadHeader'
-import I18n from '../../../i18n/i18n'
 
 export const OnboardPhone = ({ route }) => {
   const navigation = useNavigation()

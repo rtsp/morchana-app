@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native'
 import { WhiteBackground } from '../../components/WhiteBackground'
 import { PageBackButton } from './components/PageBackButton'
 import { applicationState } from '../../state/app-state'
+import { COE_ENABLED } from '../../constants'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type SelectValueType = boolean | string
 
@@ -26,6 +28,7 @@ export const OnboardEnterQuestion = () => {
   const [selected, setSelected] = useState<SelectValueType>(true)
   const onChange = (value: SelectValueType) => setSelected(value)
   const navigation = useNavigation()
+  const inset = useSafeAreaInsets()
 
   const onSelect = useCallback((itemValue: SelectValueType) => {
     onChange(itemValue)
@@ -33,10 +36,13 @@ export const OnboardEnterQuestion = () => {
 
   const onSubmit = () => {
     if (selected) {
-      navigation.navigate('OnboardCoeChecking')
+      if (COE_ENABLED) {
+        navigation.navigate('OnboardCoeChecking')
+      } else {
+        navigation.navigate('OnboardThailandPassConsent')
+      }
       return
     }
-    // applicationState.setData('isPassedOnboarding', true)
     navigation.navigate('AuthPhone')
   }
 
@@ -46,25 +52,27 @@ export const OnboardEnterQuestion = () => {
   ]
 
   return (
-    <WhiteBackground>
-      <PageBackButton label={I18n.t('select_image_profile')} />
-      <View style={styles.contentContainer}>
-        <View style={{ ...styles.flexRow, padding }}>
-          <Text style={styles.textQuestion}>{I18n.t('planning_to_enter_thailand_question')}</Text>
+    <View style={{ flex: 1 }}>
+      <WhiteBackground>
+        <PageBackButton label={I18n.t('select_image_profile')} />
+        <View style={styles.contentContainer}>
+          <View style={{ ...styles.flexRow, padding }}>
+            <Text style={styles.textQuestion}>{I18n.t('planning_to_enter_thailand_question')}</Text>
+          </View>
+          {selectOptions.map((option) => {
+            return (
+              <RadioButton
+                key={`key-${option.value}`}
+                isSelected={selected === option.value}
+                value={option.value}
+                label={option.label}
+                onSelect={(itemValue: SelectValueType) => onSelect(itemValue)}
+              />
+            )
+          })}
         </View>
-        {selectOptions.map((option) => {
-          return (
-            <RadioButton
-              key={`key-${option.value}`}
-              isSelected={selected === option.value}
-              value={option.value}
-              label={option.label}
-              onSelect={(itemValue: SelectValueType) => onSelect(itemValue)}
-            />
-          )
-        })}
-      </View>
-      <View style={styles.footer}>
+      </WhiteBackground>
+      <View style={[styles.footer, { bottom: inset.bottom }]}>
         <PrimaryButton
           style={styles.primaryButton}
           containerStyle={styles.fullWidth}
@@ -72,7 +80,7 @@ export const OnboardEnterQuestion = () => {
           onPress={onSubmit}
         />
       </View>
-    </WhiteBackground>
+    </View>
   )
 }
 
@@ -98,6 +106,9 @@ const RadioButton = (props: RadioButtonType) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   flexRow: {
     flexDirection: 'row',
   },
@@ -106,8 +117,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: 'center',
     padding,
+    paddingTop: 180,
   },
   buttonContainerIsSelected: {
     borderColor: PRIMARY_COLOR,
@@ -145,6 +156,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.DARK_BLUE,
   },
   footer: {
+    width: '100%',
+    position: 'absolute',
     alignItems: 'center',
     marginBottom: 12,
     paddingHorizontal: padding,

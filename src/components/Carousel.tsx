@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef, useState, useEffect } from 'react'
+import React, { memo, useCallback, useEffect, useRef } from 'react'
 import { Dimensions, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 const { width: windowWidth } = Dimensions.get('window')
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   paginationDotActive: { backgroundColor: '#10A7DC' },
   paginationDotInactive: { backgroundColor: '#C1C1C1' },
 
-  carousel: { flex: 1, marginTop: 4 },
+  carousel: { flex: 1, marginTop: 4, backgroundColor: 'red' },
   carouselView: { flex: 1 },
 })
 
@@ -42,7 +42,7 @@ function Pagination({
 }: {
   index: number
   data: unknown[]
-  setPageIndex: (index: number) => void
+  setPageIndex: ($index: number) => void
 }) {
   return (
     <View style={styles.pagination} pointerEvents='none'>
@@ -107,33 +107,41 @@ export default function Carousel<T>({ renderItem, data, pageIndex, setPageIndex 
     listRef.current?.scrollToOffset({ offset: pageIndex * windowWidth })
   }, [pageIndex])
 
+  const getItemLayout = useCallback(
+    (_, index: number) => ({
+      index,
+      length: windowWidth,
+      offset: index * windowWidth,
+    }),
+    [],
+  )
+
   return (
     <View style={styles.carouselView}>
-      <Pagination index={pageIndex} data={data} setPageIndex={setPageIndex} />
-      <FlatList
-        ref={listRef}
-        data={data}
-        style={styles.carousel}
-        renderItem={render}
-        pagingEnabled
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        onScroll={onScroll}
-        initialNumToRender={0}
-        maxToRenderPerBatch={1}
-        removeClippedSubviews={true}
-        scrollEventThrottle={16}
-        windowSize={2}
-        getItemLayout={useCallback(
-          (_, index: number) => ({
-            index,
-            length: windowWidth,
-            offset: index * windowWidth,
-          }),
-          [],
-        )}
-      />
+      {data.length > 1 ? (
+        <>
+          <Pagination index={pageIndex} data={data} setPageIndex={setPageIndex} />
+          <FlatList
+            ref={listRef}
+            data={data}
+            style={styles.carousel}
+            renderItem={render}
+            pagingEnabled
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            bounces={false}
+            onScroll={onScroll}
+            initialNumToRender={0}
+            maxToRenderPerBatch={1}
+            removeClippedSubviews={true}
+            scrollEventThrottle={16}
+            windowSize={2}
+            getItemLayout={getItemLayout}
+          />
+        </>
+      ) : (
+        data && render({ item: data[0] })
+      )}
     </View>
   )
 }

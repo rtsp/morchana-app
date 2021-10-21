@@ -7,6 +7,7 @@ import { applicationState } from '../../state/app-state'
 import { PrimaryButton } from '../../components/Button'
 import { useResetTo } from '../../utils/navigation'
 import { userPrivateData } from '../../state/userPrivateData'
+import { WhiteBackground } from '../../components/WhiteBackground'
 
 const padding = normalize(16)
 
@@ -20,15 +21,15 @@ export const OnboardCoeLanding = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <WhiteBackground style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.imageContainer}>
           <Image
             source={{ uri: faceURI }}
             style={{
-              width: 50,
-              height: 50,
-              borderRadius: 50,
+              width: 58,
+              height: 58,
+              borderRadius: 999,
             }}
           />
         </View>
@@ -41,16 +42,12 @@ export const OnboardCoeLanding = () => {
           title={I18n.t('start')}
           titleStyle={{
             color: COLORS.DARK_BLUE,
-            width: 240,
           }}
-          buttonStyle={{
-            backgroundColor: 'white',
-          }}
-          containerStyle={styles.fullWidth}
+          style={{ width: '100%', backgroundColor: 'white' }}
           onPress={onFinishLanding}
         />
       </View>
-    </View>
+    </WhiteBackground>
   )
 }
 
@@ -80,7 +77,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.DARK_BLUE,
     height: Dimensions.get('window').height,
-    padding: padding,
+    padding,
   },
   contentContainer: {
     paddingVertical: padding,
@@ -90,14 +87,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 36,
   },
   footer: {
+    alignContent: 'center',
     position: 'absolute',
     bottom: (Dimensions.get('window').height * 10) / 100,
     left: 0,
     right: 0,
-    alignItems: 'center',
-    paddingHorizontal: 16,
-  },
-  fullWidth: {
-    width: '100%',
   },
 })
