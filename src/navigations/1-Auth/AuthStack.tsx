@@ -1,8 +1,7 @@
-import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
+import React from 'react'
 import { AuthOTP } from './AuthOTP'
 import { AuthPhone } from './AuthPhone'
-import { OnboardPhone } from './OnboardPhone'
 
 const Stack = createStackNavigator()
 

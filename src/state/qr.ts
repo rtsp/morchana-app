@@ -318,8 +318,8 @@ type TagMeta = {
 
 class TagManager {
   tagMeta?: TagMeta
-  mapRoles?: { [name: string]: TagRole }
-  mapTags?: { [name: string]: Tag }
+  mapRoles: { [name: string]: TagRole } = {}
+  mapTags: { [name: string]: Tag } = {}
   constructor() {
     this.load()
   }
@@ -337,7 +337,7 @@ class TagManager {
 
     AsyncStorage.setItem('TagMeta', JSON.stringify(this.tagMeta))
   }
-  getTag(tagId) {
+  getTag(tagId: string) {
     if (!this.tagMeta) {
       return
     }
@@ -345,12 +345,12 @@ class TagManager {
       if (tag) {
         const r = {
           ...tag,
-          tagRole: this.mapRoles[tag.tagRoleId] || this.mapRoles.GEN,
+          tagRole: this.mapRoles[tag.tagRoleId + ''] || this.mapRoles.GEN,
         }
         delete r.tagRoleId
         return r
       }
-      return null
+      return tag
     }
     const tag = this.mapTags[tagId]
     return resolveTag(tag)

@@ -392,8 +392,13 @@ export default {
   did_not_receive_an_otp: 'ไม่ได้รับรหัส OTP?',
   send: 'ส่ง',
   verify: 'ยืนยัน',
+  allow: 'ยินยอม',
+  decline: 'ไม่ยินยอม',
   change_number: 'เปลี่ยนเบอร์',
   message_timeout_otp: 'รหัส OTP ของหมายเลข %{numberPhone} หมดเวลาแล้ว กรุณาทำรายการใหม่อีกครั้ง',
   title_timeout_otp: 'ลองใหม่อีกครั้ง',
   incorrect_otp_code: 'กรุณาตรวจสอบรหัส OTP ใหม่อีกครั้ง',
+  policy_notice: 'นโยบายความเป็นส่วนตัว',
+  thailand_pass_consent_message:
+    'ยินยอมให้มีการดึงข้อมูล ไทยแลนด์พาสไอดี ชื่อ และ นามสกุล จาก Thailand pass เพื่อใช้งานที่แอปพลิเคชันหมอชนะ',
 }

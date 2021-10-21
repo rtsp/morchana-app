@@ -8,7 +8,8 @@
     "start": "react-native start",
     "link": "react-native link",
     "test": "jest",
-    "lint": "eslint .",
+    "lint": "eslint --cache .",
+    "fix": "eslint --cache --fix .",
     "format": "prettier --write \"./**/*.{js,ts,jsx,tsx}\"",
     "postinstall": "node scripts/postinstall.js",
     "prepare": "husky install"
@@ -167,8 +168,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "prettier --write",
-      "eslint --cache --fix"
+      "eslint --cache --fix",
+      "prettier --write"
     ],
     "*.{json,css,scss,md}": [
       "prettier --write"

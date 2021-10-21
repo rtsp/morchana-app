@@ -38,6 +38,7 @@ import { UpdateProfileButton } from './UpdateProfileButton'
 import VaccineCard from './VaccineCard'
 import WorkFromHomeCard from './WorkFromHomeCard'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { COE_ENABLED } from '../../../constants'
 
 // const carouselItems = ['qr', 'vaccine'] //, 'wfh']
 const carouselItems = ['qr']
@@ -101,7 +102,7 @@ export const MainApp = () => {
         setTriggerGps(status)
       }
     }
-    initALertData()
+    COE_ENABLED && initALertData()
     updateGPS()
     const timer = setInterval(updateGPS, 2000)
     return () => clearInterval(timer)
@@ -298,6 +299,7 @@ export const MainApp = () => {
                 applicationState.setData('card', index)
               }}
               renderItem={(index) => {
+                console.log('index', index)
                 switch (index) {
                   case 'qr':
                     return <QRCard key={index} />

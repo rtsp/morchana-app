@@ -38,6 +38,7 @@ export const fetchJWKs = async () => {
 }
 
 export const registerDevice = async (): Promise<{
+  userId: string
   anonymousId: string
   token: string
 }> => {

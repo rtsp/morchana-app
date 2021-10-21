@@ -399,8 +399,13 @@ export default {
   did_not_receive_an_otp: 'Did not receive an OTP?',
   send: 'Send',
   verify: 'Verify',
+  allow: 'Allow',
+  decline: 'Decline',
   change_number: 'Change number',
   message_timeout_otp: 'You did not enter OTP within time limit please try again',
   title_timeout_otp: 'Try again',
   incorrect_otp_code: 'Incorrect OTP code',
+  policy_notice: 'Policy Notice',
+  thailand_pass_consent_message:
+    'Allow to share Thailand pass ID firstname and surname from Thailand pass for using in application Morchana.',
 }

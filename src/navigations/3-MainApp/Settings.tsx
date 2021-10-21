@@ -6,6 +6,7 @@ import { useContactTracer } from '../../services/contact-tracing-provider'
 import { useNavigation } from '@react-navigation/native'
 import { userPrivateData } from '../../state/userPrivateData'
 import I18n from '../../../i18n/i18n'
+import { COE_ENABLED } from '../../constants'
 
 export const Settings = () => {
   const navigation = useNavigation()
@@ -54,11 +55,13 @@ export const Settings = () => {
             <Text style={styles.sectionHeaderText}>{I18n.t('general')}</Text>
           </View>
           <View style={styles.settingsSection}>
-            <TouchableHighlight onPress={_onEditCoePersonalInformationClicked}>
-              <View style={styles.section}>
-                <Text style={styles.sectionText}>{I18n.t('personal_information')}</Text>
-              </View>
-            </TouchableHighlight>
+            {COE_ENABLED ? (
+              <TouchableHighlight onPress={_onEditCoePersonalInformationClicked}>
+                <View style={styles.section}>
+                  <Text style={styles.sectionText}>{I18n.t('personal_information')}</Text>
+                </View>
+              </TouchableHighlight>
+            ) : null}
             <TouchableHighlight onPress={_onPrivacyPolicyClicked}>
               <View style={styles.section}>
                 <Text style={styles.sectionText}>{I18n.t('privacy_policy')}</Text>

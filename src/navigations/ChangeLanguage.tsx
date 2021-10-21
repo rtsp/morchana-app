@@ -1,18 +1,18 @@
-import React from 'react'
-import { StyleSheet, View, Text, TouchableHighlight } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { FONT_SIZES, FONT_FAMILY, COLORS, FONT_BOLD } from '../styles'
-import { changeLangTo } from '../utils/change-lang'
-import { FormHeader } from '../components/Form/FormHeader'
+import React from 'react'
+import { StatusBar, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import { normalize } from 'react-native-elements'
-import { PrimaryButton } from '../components/Button'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import I18n from '../../i18n/i18n'
+import { PrimaryButton } from '../components/Button'
+import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_SIZES } from '../styles'
+import { changeLangTo } from '../utils/change-lang'
 
 export const ChangeLanguageScreen = () => {
   const navigation = useNavigation()
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={'white'} barStyle='dark-content' />
       <View style={styles.header}>
         <Text style={styles.title}>{I18n.t('change_lang')} </Text>
       </View>
@@ -52,6 +52,10 @@ export const ChangeLanguageScreen = () => {
 
 const padding = normalize(16)
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
   section: {
     backgroundColor: '#ffffff',
     padding: 24,

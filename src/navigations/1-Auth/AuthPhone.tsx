@@ -1,17 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useMemo, useState } from 'react'
-import { Alert, KeyboardAvoidingView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import moment from 'moment'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Alert, AsyncStorage, KeyboardAvoidingView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { TextInputMask } from 'react-native-masked-text'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import I18n from '../../../i18n/i18n'
 import { requestOTP } from '../../api'
-import { Link } from '../../components/Base'
 import { PrimaryButton } from '../../components/Button'
-import { FormHeader } from '../../components/Form/FormHeader'
 import { useHUD } from '../../HudView'
-import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_SIZES } from '../../styles'
-import { useResetTo } from '../../utils/navigation'
 import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
 
 export const AuthPhone = ({ route }) => {
@@ -19,7 +16,6 @@ export const AuthPhone = ({ route }) => {
   const { showSpinner, hide } = useHUD()
   const [phone, setPhone] = useState('')
   const isValidPhone = useMemo(() => phone.replace(/-/g, '').match(/^(0|1)[0-9]{9}$/), [phone])
-  const resetTo = useResetTo()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -74,7 +70,6 @@ export const AuthPhone = ({ route }) => {
             style={styles.primaryButton}
             containerStyle={{ width: '100%' }}
             onPress={async () => {
-              showSpinner()
               const mobileNumber = phone.replace(/-/g, '')
               try {
                 await requestOTP(mobileNumber)
