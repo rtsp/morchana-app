@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
@@ -34,12 +33,15 @@ function formatPhoneNumber(phoneNumberString: string) {
   return null
 }
 
+const RESEND_TIME = 60
+
 export const AuthOTP = ({ route }) => {
   const { showSpinner, hide } = useHUD()
   const [modalValue, setModalValue] = useState<boolean>(false)
   const phone = route.params?.phone
   const triggerOTP = route.params?.triggerOTP
   const [otp, setOtp] = useState('')
+  const [resendTimer, setResendTimer] = useState(0)
   const resetTo = useResetTo()
 
   const onSubmit = useCallback(async () => {
@@ -71,8 +73,24 @@ export const AuthOTP = ({ route }) => {
     }
   }, [otp, onSubmit])
 
-  const sendOTP = async () => {
+  function countDownResend() {
+    setResendTimer(RESEND_TIME)
+    const interval = setInterval(() => {
+      setResendTimer((second) => {
+        if (second - 1 < 0) {
+          clearInterval(interval)
+          return 0
+        }
+        return second - 1
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }
+
+  const sendOTP = useCallback(async () => {
+    countDownResend()
     showSpinner()
+
     try {
       await requestOTP(phone)
       hide()
@@ -80,13 +98,13 @@ export const AuthOTP = ({ route }) => {
       Alert.alert(I18n.t('error'))
       hide()
     }
-  }
+  }, [hide, phone, showSpinner])
 
   useEffect(() => {
     if (triggerOTP) {
       sendOTP()
     }
-  }, [])
+  }, [sendOTP, triggerOTP])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -138,14 +156,18 @@ export const AuthOTP = ({ route }) => {
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.textotp}> {I18n.t('did_not_receive_an_otp')} </Text>
-            <TouchableOpacity
-              onPress={sendOTP}
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <Text style={styles.text}> {I18n.t('resend_the_code')} </Text>
-            </TouchableOpacity>
+            {resendTimer ? (
+              <Text style={styles.text}>{resendTimer}s</Text>
+            ) : (
+              <TouchableOpacity
+                onPress={sendOTP}
+                style={{
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={styles.text}> {I18n.t('resend_the_code')} </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View style={styles.footer}>

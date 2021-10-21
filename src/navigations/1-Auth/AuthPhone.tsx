@@ -11,24 +11,11 @@ import { useHUD } from '../../HudView'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_SIZES } from '../../styles'
 import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
 
-const OTP_RETRY_LIMIT = 10
-
 export const AuthPhone = ({ route }) => {
   const navigation = useNavigation()
   const { showSpinner, hide } = useHUD()
   const [phone, setPhone] = useState('')
   const isValidPhone = useMemo(() => phone.replace(/-/g, '').match(/^(0|1)[0-9]{9}$/), [phone])
-  const [retryOTPCount, setRetryOTPCount] = useState(0)
-
-  useEffect(() => {
-    Promise.all([AsyncStorage.getItem('retryOTPCount'), AsyncStorage.getItem('retryOTPTime')]).then(([count, time]) => {
-      if (time && moment(time).diff(moment(), 'minutes') > 10) {
-        setRetryOTPCount(0)
-      } else {
-        count && setRetryOTPCount(+count)
-      }
-    })
-  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -83,18 +70,6 @@ export const AuthPhone = ({ route }) => {
             style={styles.primaryButton}
             containerStyle={{ width: '100%' }}
             onPress={async () => {
-              const isExceeded = retryOTPCount > OTP_RETRY_LIMIT
-              if (isExceeded) {
-                Alert.alert(I18n.t('wrong_pwd'))
-                return
-              }
-              showSpinner()
-
-              await Promise.all([
-                AsyncStorage.setItem('retryOTPCount', retryOTPCount + 1 + ''),
-                AsyncStorage.setItem('retryOTPTime', moment().toString()),
-              ])
-
               const mobileNumber = phone.replace(/-/g, '')
               try {
                 await requestOTP(mobileNumber)
