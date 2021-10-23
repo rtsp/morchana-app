@@ -1,16 +1,15 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Button, normalize } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Row, Table } from 'react-native-table-component'
 import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
 import { FormHeader } from '../../components/Form/FormHeader'
 import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../styles'
 import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
-import { getAgreementTextBody1, getAgreementTextBody2, getAgreementTextBody3 } from '../const'
+import ConsentPolicy from '../../components/ConsentPolicy'
 
 export const AgreementPolicy = () => {
   const navigation = useNavigation()
@@ -25,39 +24,7 @@ export const AgreementPolicy = () => {
           <Text style={styles.subtitle}>{I18n.t('please_accept_terms')}</Text>
         </View>
       </FormHeader>
-      <View style={styles.content}>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingVertical: 16,
-          }}
-        >
-          <View style={{ paddingHorizontal: 24 }}>
-            <Text style={styles.agreement}>{getAgreementTextBody1()} </Text>
-            <ConsentTable
-              key={1}
-              row={2}
-              headerData={[I18n.t('privacy_policy_table_01_header_01'), I18n.t('privacy_policy_table_01_header_02')]}
-              rowData={[
-                [I18n.t('privacy_policy_table_01_body_01_01'), I18n.t('privacy_policy_table_01_body_01_02')],
-                [I18n.t('privacy_policy_table_01_body_02_01'), I18n.t('privacy_policy_table_01_body_02_02')],
-              ]}
-            />
-            <Text style={styles.agreement}>{getAgreementTextBody2()} </Text>
-            <ConsentTable
-              key={2}
-              row={2}
-              headerData={[I18n.t('privacy_policy_table_02_header_01'), I18n.t('privacy_policy_table_02_header_02')]}
-              rowData={[
-                [I18n.t('privacy_policy_table_02_body_01_01'), I18n.t('privacy_policy_table_02_body_01_02')],
-                [I18n.t('privacy_policy_table_02_body_02_01'), I18n.t('privacy_policy_table_02_body_02_02')],
-                [I18n.t('privacy_policy_table_02_body_03_01'), I18n.t('privacy_policy_table_02_body_03_02')],
-              ]}
-            />
-            <Text style={styles.agreement}>{getAgreementTextBody3()} </Text>
-          </View>
-        </ScrollView>
-      </View>
+      <ConsentPolicy />
       {/* <CheckBox
           title="ฉันยอมรับ{I18n.t('term_and_conditions')}"
           containerStyle={{
@@ -100,23 +67,6 @@ fontFamily={FONT_BOLD}
     </SafeAreaView>
   )
 }
-type ConsentTablePropsType = {
-  row: number
-  rowData: string[][]
-  headerData: string[]
-}
-const ConsentTable = (props: ConsentTablePropsType) => {
-  return (
-    <View style={styles.tableContainer}>
-      <Table>
-        <Row style={styles.tableHead} data={props.headerData} />
-        {props.rowData.map((data, i) => {
-          return <Row key={i} textStyle={styles.tableText} data={data} style={styles.tableRow} />
-        })}
-      </Table>
-    </View>
-  )
-}
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
@@ -125,10 +75,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginHorizontal: 24,
   },
-  tableContainer: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  tableHead: { padding: 8, backgroundColor: '#f1f8ff' },
-  tableText: { margin: 6 },
-  tableRow: { alignItems: 'flex-start' },
   title: {
     fontFamily: FONT_BOLD,
     fontSize: FONT_SIZES[700],
