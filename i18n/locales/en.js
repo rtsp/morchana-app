@@ -335,7 +335,7 @@ export default {
     '    If you have any problems with the App, please call: 1111 (Government Contact Center: GCC)  ',
   privacy_policy_ending01: '    We will try our best to help or resolve your problems.',
   privacy_policy_ending02: 'This Data Protection Policy became effective on 27 April 2020',
-  privacy_policy_version: 'Document Version: 2564.08',
+  privacy_policy_version: 'Document Version: 2564.10',
   back: 'BACK',
   back_lower: 'Back',
   change_lang: 'Change Language',
