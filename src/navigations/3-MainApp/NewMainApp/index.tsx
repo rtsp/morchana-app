@@ -299,7 +299,6 @@ export const MainApp = () => {
                 applicationState.setData('card', index)
               }}
               renderItem={(index) => {
-                console.log('index', index)
                 switch (index) {
                   case 'qr':
                     return <QRCard key={index} />

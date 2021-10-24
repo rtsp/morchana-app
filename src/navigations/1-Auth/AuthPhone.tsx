@@ -79,7 +79,6 @@ export const AuthPhone = ({ route }) => {
                   params: { phone: mobileNumber },
                 })
               } catch (err) {
-                console.log(err)
                 Alert.alert(I18n.t('error'))
                 hide()
               }

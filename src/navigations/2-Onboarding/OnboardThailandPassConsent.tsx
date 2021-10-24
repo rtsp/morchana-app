@@ -51,7 +51,7 @@ export const OnboardThailandPassConsent = () => {
             marginTop: padding,
           }}
           containerStyle={styles.fullWidth}
-          onPress={onFinishLanding}
+          onPress={() => navigation.pop()}
         />
       </View>
     </WhiteBackground>
