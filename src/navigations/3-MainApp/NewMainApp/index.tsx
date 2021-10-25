@@ -39,6 +39,7 @@ import VaccineCard from './VaccineCard'
 import WorkFromHomeCard from './WorkFromHomeCard'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { COE_ENABLED } from '../../../constants'
+import AsyncStorage from '@react-native-community/async-storage'
 
 // const carouselItems = ['qr', 'vaccine'] //, 'wfh']
 const carouselItems = ['qr']
@@ -59,7 +60,7 @@ export const MainApp = () => {
   const [location, setLocation] = useState('')
   const popupRef = useRef<NotificationPopup | any>()
   const activeDotAnim = useRef(new Animated.Value(0)).current
-  const { vaccineList, getVaccineUserName } = useVaccine()
+  const { getName, vaccineList } = useVaccine()
   const [{ updateProfileDate, changeCount, card }] = useApplicationState()
   const navigation = useNavigation()
   const [modalValue, setModalValue] = useState<boolean>(false)
@@ -67,6 +68,7 @@ export const MainApp = () => {
     title: '',
     text: '',
   })
+  const [[firstName, lastName], setName] = useState<string[]>([])
 
   const windowWidth = Dimensions.get('window').width
 
@@ -140,16 +142,9 @@ export const MainApp = () => {
     startAnimated()
   }, [startAnimated])
 
-  const vac = vaccineList && vaccineList[0]
-  let firstName = null
-  let lastName = null
-  if (vac) {
-    const name = getVaccineUserName ? getVaccineUserName(vac) : ''
-    const names = name.split(' ')
-
-    lastName = names.pop() || ''
-    firstName = names.join(' ')
-  }
+  useEffect(() => {
+    getName && getName().then(setName)
+  }, [getName])
 
   let profileStyle = { justifyContent: firstName || lastName ? 'flex-start' : 'center' } as const
 

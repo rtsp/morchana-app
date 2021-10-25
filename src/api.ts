@@ -15,7 +15,7 @@ import { fetch } from 'react-native-ssl-pinning'
 export const getAnonymousHeaders = () => {
   const authToken = userPrivateData.getData('authToken')
   return {
-    Authorization: authToken ? 'Bearer ' + authToken : void 0,
+    Authorization: 'Bearer ' + authToken,
     'X-TH-ANONYMOUS-ID': userPrivateData.getAnonymousId(),
     'Content-Type': 'application/json',
   }
@@ -57,7 +57,7 @@ export const registerDevice = async (): Promise<{
     throw new Error('RegisterDevice failed')
   }
 
-  return { anonymousId: result.anonymousId, token: result.token }
+  return { anonymousId: result.anonymousId, token: result.token, userId: '' }
 }
 
 export const requestOTP = async (mobileNo: string) => {

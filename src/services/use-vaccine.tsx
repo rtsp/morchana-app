@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import axios from 'axios'
 import { get } from 'lodash'
 import moment, { Moment } from 'moment'
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { fetch } from 'react-native-ssl-pinning'
 import I18n from '../../i18n/i18n'
 import { getAnonymousHeaders } from '../api'
@@ -23,6 +23,7 @@ export type Vaccination = {
 
 type VaccineContextType = Partial<{
   cid: string
+  getName: () => Promise<string[]>
   vaccineList: Vaccination[]
   requestVaccine: (url: string) => Promise<{ status: 'ERROR' | 'SUCCESS'; errorTitle?: string; errorMessage?: string }>
   getUpdateTime: () => Moment | null
@@ -31,6 +32,40 @@ type VaccineContextType = Partial<{
   isVaccineURL: (url: string) => void
   getVaccineUserName: (vaccine: Vaccination) => string
 }>
+
+interface ThailandPassVaccine {
+  vacc_date: string
+  vacc_disease: string
+  vacc_id: number
+  vacc_lotno: string
+  vacc_manufac: string
+  vacc_name: string
+  vacc_place: string
+}
+
+interface ThailandPass {
+  _id: string
+  authorize_by: string
+  authorize_date: string
+  birth_date: string
+  certificate_no: string
+  citizen_no: string
+  email: string
+  f_name: string
+  gender: string
+  id: number
+  is_moph: number
+  is_thai: number
+  l_name: string
+  l_nmae: string
+  nation: string
+  passport_no: string
+  pre_name: string
+  remark: string
+  vaccine_book_no: string
+  vaccines: ThailandPassVaccine[]
+  verification_data: string
+}
 
 const VACCINE_DATA_KEY = 'vaccineData'
 const VACCINE_CONFIG_KEY = 'vaccineConfig'
@@ -178,40 +213,43 @@ export const VaccineProvider: React.FC = ({ children }) => {
     [config],
   )
 
-  const getVaccineUserName = (vac: Vaccination) => {
-    let unusedString = [',', '.']
+  const getVaccineUserName = useCallback(
+    (vac: Vaccination) => {
+      let unusedString = [',', '.']
 
-    function removePrefixName(name: string, prefixNames: string[]) {
-      function compare(pf: string) {
-        return name.toLocaleLowerCase().indexOf(pf.toLocaleLowerCase()) === 0
+      function removePrefixName(name: string, prefixNames: string[]) {
+        function compare(pf: string) {
+          return name.toLocaleLowerCase().indexOf(pf.toLocaleLowerCase()) === 0
+        }
+        const prefix = prefixNames.find(compare)
+        if (prefix) {
+          name = name.replace(prefix, '')
+        }
+        for (let char of unusedString) {
+          name = name.replace(char, '')
+        }
+        return name.trim()
       }
-      const prefix = prefixNames.find(compare)
-      if (prefix) {
-        name = name.replace(prefix, '')
-      }
-      for (let char of unusedString) {
-        name = name.replace(char, '')
-      }
-      return name.trim()
-    }
 
-    const thaiName = removePrefixName(vac.fullThaiName || '', config.thPrefixName)
-    const engName = removePrefixName(vac.fullEngName || '', config.enPrefixName)
+      const thaiName = removePrefixName(vac.fullThaiName || '', config.thPrefixName)
+      const engName = removePrefixName(vac.fullEngName || '', config.enPrefixName)
 
-    if (I18n.locale === 'th') {
-      if (thaiName) {
-        return thaiName
+      if (I18n.locale === 'th') {
+        if (thaiName) {
+          return thaiName
+        } else {
+          return engName
+        }
       } else {
-        return engName
+        if (engName) {
+          return engName
+        } else {
+          return thaiName
+        }
       }
-    } else {
-      if (engName) {
-        return engName
-      } else {
-        return thaiName
-      }
-    }
-  }
+    },
+    [config.enPrefixName, config.thPrefixName],
+  )
 
   const resetVaccine = React.useCallback(() => {
     // sendVaccineLog({ event: 'CLEAR', cid })
@@ -246,6 +284,26 @@ export const VaccineProvider: React.FC = ({ children }) => {
     [requestAndSave, cid, config],
   )
 
+  const getName = async () => {
+    const vac = vaccineList && vaccineList[0]
+    if (vac) {
+      const name = getVaccineUserName ? getVaccineUserName(vac) : ''
+      const names = name.split(' ')
+
+      const lName = names.pop() || ''
+      const fName = names.join(' ')
+      return [fName, lName]
+    }
+
+    const thPass = await AsyncStorage.getItem('th-pass')
+    if (thPass) {
+      const { f_name, l_name } = JSON.parse(thPass) as ThailandPass
+      return [f_name, l_name]
+    }
+
+    return ['', '']
+  }
+
   const getUpdateTime = React.useCallback(() => {
     return updateTime ? moment(updateTime).locale(I18n.locale || 'th') : null
   }, [updateTime])
@@ -254,6 +312,7 @@ export const VaccineProvider: React.FC = ({ children }) => {
     <VaccineContext.Provider
       value={{
         cid,
+        getName,
         vaccineList,
         requestVaccine,
         getUpdateTime,
@@ -270,4 +329,16 @@ export const VaccineProvider: React.FC = ({ children }) => {
 
 export const useVaccine = () => {
   return useContext(VaccineContext)
+}
+
+export const getThailandPass = async (param: { uri: string; aid: string }) => {
+  const resp = await fetch(API_URL + '/th-pass', {
+    method: 'POST',
+    sslPinning: {
+      certs: [SSL_PINNING_CERT_NAME],
+    },
+    headers: getAnonymousHeaders(),
+    body: JSON.stringify(param),
+  })
+  return (await resp.json()) as ThailandPass
 }

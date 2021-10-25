@@ -1,6 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import { COE_ENABLED } from '../../constants'
 import { OnboardBluetooth } from './OnboardBluetooth'
 import { OnboardCoeChecking } from './OnboardCoeChecking'
 import { OnboardCoeLanding } from './OnboardCoeLanding'

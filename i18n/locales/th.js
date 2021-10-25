@@ -403,4 +403,6 @@ export default {
   policy_notice: 'นโยบายความเป็นส่วนตัว',
   thailand_pass_consent_message:
     'ยินยอมให้มีการดึงข้อมูล ไทยแลนด์พาสไอดี ชื่อ และ นามสกุล จาก Thailand pass เพื่อใช้งานที่แอปพลิเคชันหมอชนะ',
+  privacy_notice: 'Privacy Notice',
+  select_image_from_gallery: 'Select image from gallery',
 }

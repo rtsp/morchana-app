@@ -14,10 +14,6 @@ export const OnboardThailandPassConsent = () => {
   const inset = useSafeAreaInsets()
   const navigation = useNavigation()
 
-  const onFinishLanding = () => {
-    navigation.navigate('OnboardCoeLanding')
-  }
-
   return (
     <WhiteBackground style={styles.background}>
       <View style={[styles.contentContainer, { top: inset.top }]}>
@@ -27,31 +23,17 @@ export const OnboardThailandPassConsent = () => {
       <View style={[styles.footer, { bottom: inset.bottom + padding * 2, left: inset.left, right: inset.right }]}>
         <PrimaryButton
           title={I18n.t('allow')}
-          titleStyle={{
-            color: 'white',
-          }}
-          style={{
-            backgroundColor: COLORS.DARK_BLUE,
-            width: '100%',
-          }}
+          titleStyle={styles.buttonTitle1}
+          style={styles.button1}
           containerStyle={styles.fullWidth}
-          onPress={onFinishLanding}
+          onPress={() => navigation.navigate('OnboardQrScanner')}
         />
         <PrimaryButton
           title={I18n.t('decline')}
-          titleStyle={{
-            color: COLORS.DARK_BLUE,
-          }}
-          style={{
-            backgroundColor: 'white',
-            borderColor: COLORS.DARK_BLUE,
-            borderWidth: 1,
-            borderRadius: 4,
-            width: '100%',
-            marginTop: padding,
-          }}
+          titleStyle={styles.buttonTitle2}
+          style={styles.button2}
           containerStyle={styles.fullWidth}
-          onPress={onFinishLanding}
+          onPress={() => navigation.pop()}
         />
       </View>
     </WhiteBackground>
@@ -99,5 +81,23 @@ const styles = StyleSheet.create({
   },
   fullWidth: {
     width: '100%',
+  },
+  button1: {
+    backgroundColor: COLORS.DARK_BLUE,
+    width: '100%',
+  },
+  buttonTitle1: {
+    color: 'white',
+  },
+  button2: {
+    backgroundColor: 'white',
+    borderColor: COLORS.DARK_BLUE,
+    borderWidth: 1,
+    borderRadius: 4,
+    width: '100%',
+    marginTop: padding,
+  },
+  buttonTitle2: {
+    color: COLORS.DARK_BLUE,
   },
 })

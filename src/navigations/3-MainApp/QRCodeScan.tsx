@@ -20,7 +20,7 @@ export const QRCodeScan = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const { requestVaccine, resetVaccine, isVaccineURL } = useVaccine()
   const isFocused = useIsFocused()
-  const [qrResult, setQRResult] = useState<QRResult>(null)
+  const [qrResult, setQRResult] = useState<QRResult | null>(null)
   const popupRef = useRef<NotificationPopup>()
   const [, setData] = useApplicationState()
 
@@ -57,7 +57,7 @@ export const QRCodeScan = ({ navigation }) => {
           onRead={async (e) => {
             try {
               const url = e?.data
-              if (url?.startsWith('https://qr.thaichana.com/?appId')) {
+              if (url && (url + '').startsWith('https://qr.thaichana.com/?appId')) {
                 const closeStr = 'closeBtn=true'
                 const uri = e?.data?.includes('?') ? e?.data + '&' + closeStr : e?.data + '?' + closeStr
                 navigation.navigate('Webview', {
