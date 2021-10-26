@@ -410,7 +410,7 @@ export default {
   incorrect_otp_code: 'Incorrect OTP code',
   policy_notice: 'Policy Notice',
   thailand_pass_consent_message:
-    'Allow to share Thailand pass ID firstname and surname from Thailand pass for using in application Morchana.',
+    'Allow to share Thailand Pass ID firstname and surname from Thailand Pass for using in application Morchana.',
   privacy_notice: 'Privacy Notice',
   select_image_from_gallery: 'Select image from gallery',
 }
