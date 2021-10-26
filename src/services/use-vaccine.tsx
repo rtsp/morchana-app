@@ -43,7 +43,8 @@ interface ThailandPassVaccine {
   vacc_place: string
 }
 
-interface ThailandPass {
+export interface ThailandPass {
+  error?: string
   _id: string
   authorize_by: string
   authorize_date: string
@@ -331,7 +332,7 @@ export const useVaccine = () => {
   return useContext(VaccineContext)
 }
 
-export const getThailandPass = async (param: { uri: string; aid: string }) => {
+export const getThailandPass = async (param: { uri: string }) => {
   const resp = await fetch(API_URL + '/th-pass', {
     method: 'POST',
     sslPinning: {
