@@ -405,4 +405,13 @@ export default {
     'ยินยอมให้มีการดึงข้อมูล ไทยแลนด์พาสไอดี ชื่อ และ นามสกุล จาก Thailand Pass เพื่อใช้งานที่แอปพลิเคชันหมอชนะ',
   privacy_notice: 'Privacy Notice',
   select_image_from_gallery: 'Select image from gallery',
+  proceed: 'ดำเนินการ',
+  fill_information_by_yourself: 'กรอกข้อมูลด้วยตัวเอง',
+  firstname_lastname: 'ชื่อ-นามสกุล',
+  first_name: 'ชื่อ',
+  last_name: 'นามสกุล',
+  nationality: 'สัญชาติ',
+  thailand_pass_id: 'Thailand pass ID',
+  passport_no: 'หมายเลขพาสปอร์ต',
+  import: 'นำเข้าข้อมูล',
 }

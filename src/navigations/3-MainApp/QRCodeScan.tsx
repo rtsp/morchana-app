@@ -18,11 +18,14 @@ import { QRPopupContent } from './QRPopupContent'
 
 export const QRCodeScan = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const { requestVaccine, resetVaccine, isVaccineURL } = useVaccine()
+  const { requestVaccine, resetVaccine, isVaccineURL, vaccineList, getVaccineUserName } = useVaccine()
   const isFocused = useIsFocused()
   const [qrResult, setQRResult] = useState<QRResult | null>(null)
   const popupRef = useRef<NotificationPopup>()
   const [, setData] = useApplicationState()
+  const vaccine = vaccineList && vaccineList[0]
+
+  const name = vaccine && getVaccineUserName ? getVaccineUserName(vaccine) : ''
 
   useEffect(() => {
     tagManager.update()
@@ -111,6 +114,10 @@ export const QRCodeScan = ({ navigation }) => {
       />
       {modalVisible ? (
         <PopupImportVaccine
+          title={I18n.t('record_found')}
+          message={`${I18n.t('vaccination_record_of')}\n\n${name}\n\n${I18n.t('vaccination_found')}\n\n${I18n.t(
+            'import_this_record',
+          )}`}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           onSelect={(status) => {

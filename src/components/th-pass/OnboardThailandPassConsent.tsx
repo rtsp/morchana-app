@@ -4,8 +4,8 @@ import React from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { PrimaryButton } from '../../components/Button'
-import { WhiteBackground } from '../../components/WhiteBackground'
+import { PrimaryButton } from '../Button'
+import { WhiteBackground } from '../WhiteBackground'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
 
 const padding = normalize(16)
@@ -22,18 +22,11 @@ export const OnboardThailandPassConsent = () => {
       </View>
       <View style={[styles.footer, { bottom: inset.bottom + padding * 2, left: inset.left, right: inset.right }]}>
         <PrimaryButton
-          title={I18n.t('allow')}
+          title={I18n.t('proceed')}
           titleStyle={styles.buttonTitle1}
           style={styles.button1}
           containerStyle={styles.fullWidth}
           onPress={() => navigation.navigate('OnboardQrScanner')}
-        />
-        <PrimaryButton
-          title={I18n.t('decline')}
-          titleStyle={styles.buttonTitle2}
-          style={styles.button2}
-          containerStyle={styles.fullWidth}
-          onPress={() => navigation.pop()}
         />
       </View>
     </WhiteBackground>

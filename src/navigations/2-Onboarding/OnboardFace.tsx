@@ -59,7 +59,7 @@ export const OnboardFace = () => {
 
   const footerButtonStyle = popupCamera
     ? {
-        backgroundColor: COLORS.WHITE,
+        backgroundColor: COLORS.BACKGROUND,
       }
     : {
         backgroundColor: COLORS.DARK_BLUE,
@@ -70,7 +70,7 @@ export const OnboardFace = () => {
         color: COLORS.DARK_BLUE,
       }
     : {
-        color: COLORS.WHITE,
+        color: COLORS.BACKGROUND,
       }
 
   return (
@@ -143,8 +143,8 @@ export const OnboardFace = () => {
 }
 
 const styles = StyleSheet.create({
-  background: { flex: 1, backgroundColor: COLORS.WHITE },
-  container: { flex: 1, backgroundColor: COLORS.WHITE },
+  background: { flex: 1, backgroundColor: COLORS.BACKGROUND },
+  container: { flex: 1, backgroundColor: COLORS.BACKGROUND },
   button: {
     borderStyle: 'dashed',
     borderWidth: 1,
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: COLORS.DARK_BLUE,
-    backgroundColor: COLORS.WHITE,
+    backgroundColor: COLORS.BACKGROUND,
   },
   nextButton: {
     width: '100%',
@@ -220,9 +220,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   footerPopup: {
-    backgroundColor: COLORS.WHITE,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    backgroundColor: COLORS.BACKGROUND,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderColor: '#E7E7E7',
+    borderWidth: 1,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

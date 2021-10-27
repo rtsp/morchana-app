@@ -11,7 +11,7 @@ import { OnboardLocation } from './OnboardLocation'
 import { OnboardNotification } from './OnboardNotification'
 import { OnboardProgressing } from './OnboardProgressing'
 import { OnboardQrScanner } from './OnboardQrScanner'
-import { OnboardThailandPassConsent } from './OnboardThailandPassConsent'
+import { OnboardThailandPassConsent } from '../../components/th-pass/OnboardThailandPassConsent'
 
 const Stack1 = createStackNavigator()
 const OnboardFaceStack = () => {

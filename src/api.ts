@@ -1,16 +1,18 @@
-import DeviceInfo from 'react-native-device-info'
-import { userPrivateData } from './state/userPrivateData'
 import nanoid from 'nanoid'
+import DeviceInfo from 'react-native-device-info'
+import { fetch } from 'react-native-ssl-pinning'
+import i18n from '../i18n/i18n'
 import {
   API_URL,
-  SSL_PINNING_CERT_NAME,
   SHOP_API_KEY,
   SHOP_API_NAME,
   SHOP_API_URL,
   SHOP_QR_PINNING_CERT,
+  SSL_PINNING_CERT_NAME,
 } from './config'
+import { DEFAULT_NATIONALITIES, DEFAULT_PREFIX_NAME } from './navigations/const'
+import { userPrivateData } from './state/userPrivateData'
 import { encryptMessage, refetchDDCPublicKey } from './utils/crypto'
-import { fetch } from 'react-native-ssl-pinning'
 
 export const getAnonymousHeaders = () => {
   const authToken = userPrivateData.getData('authToken')
@@ -198,4 +200,40 @@ export const beaconinfo = async (uuid: string, major: string, minor: string) => 
   )
   const result = await resp.json()
   return result as any
+}
+
+export const getPrefixNameList = async () => {
+  const resp = await fetch(API_URL + `/prefix_name/${i18n.locale}`, {
+    method: 'GET',
+    sslPinning: {
+      certs: [SSL_PINNING_CERT_NAME],
+    },
+    headers: getAnonymousHeaders(),
+  })
+
+  if (resp.status !== 200) return DEFAULT_PREFIX_NAME[i18n.locale]
+  try {
+    return await resp.json()
+  } catch (e) {
+    console.error('error_get_prefix_name', e)
+  }
+  return DEFAULT_PREFIX_NAME[i18n.locale]
+}
+
+export const getNationalityList = async () => {
+  const resp = await fetch(API_URL + `/nationality/${i18n.locale}`, {
+    method: 'GET',
+    sslPinning: {
+      certs: [SSL_PINNING_CERT_NAME],
+    },
+    headers: getAnonymousHeaders(),
+  })
+
+  if (resp.status !== 200) return DEFAULT_NATIONALITIES[i18n.locale]
+  try {
+    return await resp.json()
+  } catch (e) {
+    console.error('error_get_nationality', e)
+  }
+  return DEFAULT_NATIONALITIES[i18n.locale]
 }

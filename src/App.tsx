@@ -52,7 +52,7 @@ class App extends React.Component {
 
   async load() {
     if (__DEV__) {
-      // await this.purgeAll()
+      await this.purgeAll()
     }
 
     const appVersion = await AsyncStorage.getItem('appVersion')

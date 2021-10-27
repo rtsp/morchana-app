@@ -106,7 +106,7 @@ export const useSelfQR = () => {
 class QR {
   code: StatusCode
   constructor(code: keyof typeof STATUS_COLORS) {
-    this.code = code
+    this.code = 'yellow'
   }
   getStatusColor() {
     return STATUS_COLORS[this.code]
@@ -138,7 +138,7 @@ type TagRole = {
 
 export class SelfQR extends QR {
   qrData: QRData
-  code: StatusCode = STATUS_CODE.GREEN
+  code: StatusCode = STATUS_CODE.YELLOW
   tag?: Tag
   timestamp: number
 

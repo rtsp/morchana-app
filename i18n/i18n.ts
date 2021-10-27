@@ -1,4 +1,4 @@
-import I18n from 'react-native-i18n'
+import i18n from 'react-native-i18n'
 import th from './locales/th'
 import en from './locales/en'
 // import ma from './locales/ma'
@@ -29,11 +29,11 @@ function getSystemLocale() {
 
 export const systemLocale = getSystemLocale()
 
-I18n.locale = systemLocale
-I18n.defaultLocale = systemLocale
-I18n.fallbacks = true
+i18n.locale = systemLocale
+i18n.defaultLocale = systemLocale
+i18n.fallbacks = true
 
-I18n.translations = {
+i18n.translations = {
   th,
   en,
   // ma,
@@ -42,4 +42,4 @@ I18n.translations = {
   // id
 }
 
-export default I18n
+export default i18n
