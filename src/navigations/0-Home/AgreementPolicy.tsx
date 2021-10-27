@@ -42,21 +42,22 @@ fontFamily={FONT_BOLD}
         <PrimaryButton
           // disabled={!agree}
           title={I18n.t('accept')}
-          style={{ width: '100%' }}
+          style={{ width: '100%', backgroundColor: COLORS.DARK_BLUE }}
           containerStyle={{ width: '100%', marginTop: normalize(16) }}
           onPress={() => {
             applicationState.setData('skipRegistration', true)
             navigation.navigate('Onboarding')
           }}
         />
-        <Button
+        <PrimaryButton
           type='outline'
           title={I18n.t('deny')}
-          style={{ width: '100%' }}
+          style={{ width: '100%', borderWidth: 1, borderColor: COLORS.DARK_BLUE, backgroundColor: COLORS.BACKGROUND }}
           titleStyle={{
             fontFamily: FONT_MED,
             fontSize: FONT_SIZES[600],
             lineHeight: 30,
+            color: COLORS.DARK_BLUE,
           }}
           containerStyle={{ width: '100%', marginTop: 8 }}
           onPress={() => {

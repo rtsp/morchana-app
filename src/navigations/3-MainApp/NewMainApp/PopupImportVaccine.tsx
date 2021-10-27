@@ -4,14 +4,14 @@ import I18n from '../../../../i18n/i18n'
 import { FONT_BOLD, FONT_FAMILY } from '../../../styles'
 
 const PopupImportVaccine: React.FC<{
-  title: React.ReactNode
-  onSelect: (status: 'ok' | 'cancel') => void
   modalVisible: boolean
-  setModalVisible: (visible: boolean) => void
-  okLabel?: string
   cancelLabel?: string
-  noOkButton?: boolean
   noCancelButton?: boolean
+  noOkButton?: boolean
+  okLabel?: string
+  onSelect?: (status: 'ok' | 'cancel') => void
+  setModalVisible: (visible: boolean) => void
+  title?: React.ReactNode
 }> = ({
   onSelect,
   modalVisible,
@@ -24,48 +24,46 @@ const PopupImportVaccine: React.FC<{
   noCancelButton,
 }) => {
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
-          setModalVisible(false)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.description}>{children}</Text>
-            <View style={styles.buttonSection}>
-              {!noCancelButton && (
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonCancel]}
-                  onPress={() => {
-                    setModalVisible(false)
-                    onSelect('cancel')
-                  }}
-                >
-                  <Text style={[styles.textStyle, styles.textCancelButton]}>{cancelLabel || I18n.t('cancel')}</Text>
-                </TouchableOpacity>
-              )}
-              {!noOkButton && (
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonOk]}
-                  onPress={() => {
-                    setModalVisible(false)
-                    onSelect('ok')
-                  }}
-                >
-                  <Text style={[styles.textStyle, styles.textOkButton]}>{okLabel || I18n.t('ok')}</Text>
-                </TouchableOpacity>
-              )}
-            </View>
+    <Modal
+      animationType='slide'
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert('Modal has been closed.')
+        setModalVisible(false)
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{children}</Text>
+          <View style={styles.buttonSection}>
+            {!noCancelButton && (
+              <TouchableOpacity
+                style={[styles.button, styles.buttonCancel]}
+                onPress={() => {
+                  setModalVisible(false)
+                  onSelect && onSelect('cancel')
+                }}
+              >
+                <Text style={[styles.textStyle, styles.textCancelButton]}>{cancelLabel || I18n.t('cancel')}</Text>
+              </TouchableOpacity>
+            )}
+            {!noOkButton && (
+              <TouchableOpacity
+                style={[styles.button, styles.buttonOk]}
+                onPress={() => {
+                  setModalVisible(false)
+                  onSelect && onSelect('ok')
+                }}
+              >
+                <Text style={[styles.textStyle, styles.textOkButton]}>{okLabel || I18n.t('ok')}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   )
 }
 
@@ -76,6 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
+    width: '77.7%',
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: 'white',

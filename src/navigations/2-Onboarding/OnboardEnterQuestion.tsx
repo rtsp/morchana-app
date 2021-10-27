@@ -1,16 +1,15 @@
+import { useNavigation } from '@react-navigation/native'
 import I18n from 'i18n-js'
 import React, { useCallback, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { normalize } from 'react-native-elements'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { PrimaryButton } from '../../components/Button'
-import { FONT_BOLD, FONT_MED, FONT_SIZES, COLORS } from '../../styles'
-import { useNavigation } from '@react-navigation/native'
 import { WhiteBackground } from '../../components/WhiteBackground'
-import { PageBackButton } from './components/PageBackButton'
-import { applicationState } from '../../state/app-state'
 import { COE_ENABLED } from '../../constants'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
+import { PageBackButton } from './components/PageBackButton'
 
 type SelectValueType = boolean | string
 
@@ -53,24 +52,25 @@ export const OnboardEnterQuestion = () => {
 
   return (
     <WhiteBackground>
-      <View style={{ top: inset.top }}>
+      <View style={[styles.container, inset]}>
         <PageBackButton label={I18n.t('select_image_profile')} />
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={{ ...styles.flexRow, padding }}>
-          <Text style={styles.textQuestion}>{I18n.t('planning_to_enter_thailand_question')}</Text>
+
+        <View style={styles.contentContainer}>
+          <View style={{ ...styles.flexRow, padding }}>
+            <Text style={styles.textQuestion}>{I18n.t('planning_to_enter_thailand_question')}</Text>
+          </View>
+          {selectOptions.map((option) => {
+            return (
+              <RadioButton
+                key={`key-${option.value}`}
+                isSelected={selected === option.value}
+                value={option.value}
+                label={option.label}
+                onSelect={(itemValue: SelectValueType) => onSelect(itemValue)}
+              />
+            )
+          })}
         </View>
-        {selectOptions.map((option) => {
-          return (
-            <RadioButton
-              key={`key-${option.value}`}
-              isSelected={selected === option.value}
-              value={option.value}
-              label={option.label}
-              onSelect={(itemValue: SelectValueType) => onSelect(itemValue)}
-            />
-          )
-        })}
       </View>
       <View style={[styles.footer, { bottom: inset.bottom }]}>
         <PrimaryButton
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 6,
     paddingHorizontal: padding,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.BACKGROUND,
     borderRadius: 5,
     shadowOffset: { width: 1, height: 2 },
     shadowColor: 'black',
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: padding,
     paddingHorizontal: padding,
   },
 })

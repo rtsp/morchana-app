@@ -408,10 +408,12 @@ export default {
   proceed: 'ดำเนินการ',
   fill_information_by_yourself: 'กรอกข้อมูลด้วยตัวเอง',
   firstname_lastname: 'ชื่อ-นามสกุล',
+  prefix_name: 'คำนำหน้า',
   first_name: 'ชื่อ',
   last_name: 'นามสกุล',
   nationality: 'สัญชาติ',
   thailand_pass_id: 'Thailand pass ID',
   passport_no: 'หมายเลขพาสปอร์ต',
   import: 'นำเข้าข้อมูล',
+  fill_error_message: 'กรุณากรอกข้อมูลให้ถูกต้อง',
 }

@@ -15,8 +15,6 @@ export const Settings = () => {
   const _onPrivacyPolicyClicked = () => {
     navigation.navigate('PrivacyPolicy')
   }
-  const _onEditCoePersonalInformationClicked = () => navigation.navigate('EditCoePersonalInformation')
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F9F9F9' }}>
       <StatusBar barStyle='dark-content' backgroundColor={COLORS.PRIMARY_LIGHT} />
@@ -55,8 +53,13 @@ export const Settings = () => {
             <Text style={styles.sectionHeaderText}>{I18n.t('general')}</Text>
           </View>
           <View style={styles.settingsSection}>
+            <TouchableHighlight onPress={() => navigation.navigate('EditThailandPassConsent')}>
+              <View style={styles.section}>
+                <Text style={styles.sectionText}>{I18n.t('personal_information')}</Text>
+              </View>
+            </TouchableHighlight>
             {COE_ENABLED ? (
-              <TouchableHighlight onPress={_onEditCoePersonalInformationClicked}>
+              <TouchableHighlight onPress={() => navigation.navigate('EditCoePersonalInformation')}>
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>{I18n.t('personal_information')}</Text>
                 </View>

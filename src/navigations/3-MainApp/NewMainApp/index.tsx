@@ -7,27 +7,29 @@ import {
   Animated,
   Dimensions,
   Easing,
+  Modal,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
-  Modal,
 } from 'react-native'
-import { Button } from 'react-native-elements'
+import { Button, normalize } from 'react-native-elements'
 import RNFS from 'react-native-fs'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import GPSState from 'react-native-gps-state'
 import NotificationPopup from 'react-native-push-notification-popup'
 import { useSafeArea } from 'react-native-safe-area-view'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Carousel from '../../../../src/components/Carousel'
 import { CircularProgressAvatar } from '../../../../src/components/CircularProgressAvatar'
 import { useVaccine } from '../../../../src/services/use-vaccine'
 import { applicationState, useApplicationState } from '../../../../src/state/app-state'
 import { userPrivateData } from '../../../../src/state/userPrivateData'
 import { useResetTo } from '../../../../src/utils/navigation'
+import { COE_ENABLED } from '../../../constants'
 import { useContactTracer } from '../../../services/contact-tracing-provider'
 import { pushNotification } from '../../../services/notification'
 import { QR_STATE, SelfQR, useSelfQR } from '../../../state/qr'
@@ -37,10 +39,8 @@ import QRCard from './QRCard'
 import { UpdateProfileButton } from './UpdateProfileButton'
 import VaccineCard from './VaccineCard'
 import WorkFromHomeCard from './WorkFromHomeCard'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { COE_ENABLED } from '../../../constants'
-import AsyncStorage from '@react-native-community/async-storage'
 
+const padding = normalize(16)
 // const carouselItems = ['qr', 'vaccine'] //, 'wfh']
 const carouselItems = ['qr']
 
@@ -243,7 +243,7 @@ export const MainApp = () => {
                   />
                   {isLeftAvatar() ? (
                     <>
-                      <View style={{ marginLeft: 8 }}>
+                      <View style={{ marginLeft: padding / 2 }}>
                         <View style={styles.flexRow}>
                           <Text style={styles.textDarkBlue}>COE CODE</Text>
                           <TouchableOpacity onPress={() => setModalValue(true)}>
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
     flex: 1,
   },
-  iconStatusContainer: { flexDirection: 'row', paddingTop: 16, height: 45 },
+  iconStatusContainer: { flexDirection: 'row', paddingTop: padding, height: 45 },
   iconStatusButton: { marginRight: 10 },
   containerTop: { flex: 1, flexDirection: 'column' },
   containerHeader: {
@@ -359,8 +359,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
     paddingTop: 0,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: padding,
+    paddingRight: padding,
     height: 0,
   },
   circularButton: {
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2.84,
   },
   textHeader: {
-    marginTop: 10,
+    marginTop: padding / 2,
     lineHeight: FONT_SIZES[600],
     fontFamily: FONT_FAMILY,
     fontSize: FONT_SIZES[600],
@@ -415,20 +415,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    borderRadius: 20,
+    borderRadius: padding / 2,
     borderColor: COLORS.GRAY_3,
     borderWidth: 1,
     backgroundColor: '#fff',
     width: Dimensions.get('window').width - 64,
     height: Dimensions.get('window').height / 2,
   },
-  iconPadding: { marginLeft: 4, marginTop: 4 },
+  iconPadding: { marginLeft: padding / 4, marginTop: padding / 4 },
   profileHeader: {
     height: 180,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 15,
-    marginTop: 5,
+    marginLeft: padding,
+    marginRight: padding,
+    marginBottom: padding,
+    marginTop: padding,
     alignItems: 'center',
   },
   profileContainer: {

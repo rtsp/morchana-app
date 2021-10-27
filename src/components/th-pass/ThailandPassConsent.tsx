@@ -7,26 +7,30 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { PrimaryButton } from '../Button'
 import { WhiteBackground } from '../WhiteBackground'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
+import { PageBackButton } from '../../navigations/2-Onboarding/components/PageBackButton'
 
 const padding = normalize(16)
 
-export const OnboardThailandPassConsent = () => {
+const ThailandPassConsent: React.FC<{ next: string; backLabel: string }> = ({ next, backLabel }) => {
   const inset = useSafeAreaInsets()
   const navigation = useNavigation()
 
   return (
-    <WhiteBackground style={styles.background}>
-      <View style={[styles.contentContainer, { top: inset.top }]}>
-        <Text style={styles.title}>{I18n.t('policy_notice')}</Text>
-        <Text style={styles.content}>{I18n.t('thailand_pass_consent_message')}</Text>
+    <WhiteBackground>
+      <View style={[styles.background, inset]}>
+        <PageBackButton label={I18n.t(backLabel)} />
+        <View style={styles.contentContainer}>
+          <Text style={styles.title}>{I18n.t('policy_notice')}</Text>
+          <Text style={styles.content}>{I18n.t('thailand_pass_consent_message')}</Text>
+        </View>
       </View>
-      <View style={[styles.footer, { bottom: inset.bottom + padding * 2, left: inset.left, right: inset.right }]}>
+      <View style={[styles.footer, { bottom: inset.bottom, left: inset.left, right: inset.right }]}>
         <PrimaryButton
           title={I18n.t('proceed')}
           titleStyle={styles.buttonTitle1}
           style={styles.button1}
           containerStyle={styles.fullWidth}
-          onPress={() => navigation.navigate('OnboardQrScanner')}
+          onPress={() => navigation.navigate(next)}
         />
       </View>
     </WhiteBackground>
@@ -35,7 +39,8 @@ export const OnboardThailandPassConsent = () => {
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: '#F9F9F9',
+    backgroundColor: COLORS.BACKGROUND,
+    flex: 1,
   },
   title: {
     fontFamily: FONT_BOLD,
@@ -65,11 +70,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 36,
   },
   footer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    alignItems: 'center',
     width: '100%',
+    position: 'absolute',
+    alignItems: 'center',
+    paddingBottom: padding,
     paddingHorizontal: padding,
   },
   fullWidth: {
@@ -94,3 +98,5 @@ const styles = StyleSheet.create({
     color: COLORS.DARK_BLUE,
   },
 })
+
+export default ThailandPassConsent

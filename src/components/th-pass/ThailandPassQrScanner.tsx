@@ -1,36 +1,37 @@
+import { useNavigation } from '@react-navigation/core'
 import React, { useState } from 'react'
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import I18n from '../../../i18n/i18n'
+import { getThailandPass } from '../../api'
 import { PrimaryButton } from '../../components/Button'
 import { WhiteBackground } from '../../components/WhiteBackground'
+import { PageBackButton } from '../../navigations/2-Onboarding/components/PageBackButton'
+import PopupImportVaccine from '../../navigations/3-MainApp/NewMainApp/PopupImportVaccine'
+import { ThailandPassProfile } from '../../services/use-vaccine'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
-import { PageBackButton } from './components/PageBackButton'
-import { SelectImageButton } from '../../components/Camera'
-import { getThailandPass, ThailandPass } from '../../services/use-vaccine'
-import AsyncStorage from '@react-native-community/async-storage'
-import { useNavigation } from '@react-navigation/native'
-import PopupImportVaccine from '../3-MainApp/NewMainApp/PopupImportVaccine'
-import I18n from '../../../i18n/i18n'
 
 const padding = normalize(4)
 
-export const OnboardQrScanner = () => {
-  const [modalMode, setModalMode] = useState<'error' | 'ok' | ''>('')
+const ThailandPassQrScanner: React.FC<{
+  next: string
+}> = ({ next }) => {
   const navigation = useNavigation()
-  const [thPass, setThPass] = useState<ThailandPass | null>(null)
+  const [modalMode, setModalMode] = useState<'error' | 'ok' | ''>('')
+  const [thPass, setThPass] = useState<ThailandPassProfile | null>(null)
   const validateThailandPass = (uri: string) => {
     getThailandPass({ uri })
       .then((res) => {
-        if (!res || res.error) {
+        if (!res || res.error || !res.data) {
           console.error('thailand pass error', res.error)
           setModalMode('error')
           return
         }
 
-        setThPass(res)
+        setThPass(res.data)
         setModalMode('ok')
       })
       .catch((e) => {
@@ -71,7 +72,7 @@ export const OnboardQrScanner = () => {
           title={I18n.t('fill_information_by_yourself')}
           style={styles.button}
           titleStyle={styles.titleButton}
-          onPress={async () => {}}
+          onPress={() => navigation.navigate(next, { data: null })}
         />
       </View>
       <PopupImportVaccine
@@ -82,36 +83,43 @@ export const OnboardQrScanner = () => {
             return
           }
 
-          console.log('onSelect')
-          await AsyncStorage.setItem('th-pass', JSON.stringify(thPass))
-          navigation.navigate('OnboardCoeLanding')
+          // console.log('onSelect')
+          // await AsyncStorage.setItem('th-pass', JSON.stringify(thPass))
+          if (next) {
+            navigation.navigate(next, { data: thPass })
+          } else {
+            navigation.reset({ index: 0, routes: [{ name: 'MainApp' }] })
+          }
         }}
         title={
           modalMode === 'ok' ? (
             <Text style={styles.titleModal}>{I18n.t('record_found')}</Text>
           ) : (
-            <Text style={styles.errorTitleModal}>{I18n.t('error')}</Text>
+            <View style={styles.errorTitleViewModal}>
+              <Icon name='alert-circle-outline' size={32} color={COLORS.RED_WARNING} />
+              <Text style={styles.errorTitleModal}>{I18n.t('error')}</Text>
+            </View>
           )
         }
         modalVisible={!!modalMode}
         setModalVisible={() => setModalMode('')}
-        noOkButton={modalMode === ''}
+        noOkButton={modalMode === 'error'}
         okLabel={I18n.t('import')}
       >
-        {thPass ? (
+        {thPass && modalMode === 'ok' ? (
           <>
             <Text style={{}}>
               {I18n.t('firstname_lastname')}
               <Text style={styles.textBold}>
                 {'  '}
-                {thPass.f_name + ' ' + thPass.l_nmae}
+                {thPass.first_name + ' ' + thPass.last_name}
               </Text>
               {'\n\n'}
             </Text>
             <Text>
               {I18n.t('thailand_pass_id')}
               {'  '}
-              <Text style={styles.textBold}>{thPass.id}</Text>
+              <Text style={styles.textBold}>{thPass.thailand_pass_id}</Text>
               {'\n\n'}
             </Text>
           </>
@@ -171,8 +179,17 @@ const styles = StyleSheet.create({
   },
   titleModal: {
     color: COLORS.DARK_BLUE,
+    fontFamily: FONT_BOLD,
+    fontSize: FONT_SIZES[700],
   },
   errorTitleModal: {
     color: COLORS.RED_WARNING,
+    fontFamily: FONT_BOLD,
+    fontSize: FONT_SIZES[700],
+  },
+  errorTitleViewModal: {
+    alignItems: 'center',
   },
 })
+
+export default ThailandPassQrScanner

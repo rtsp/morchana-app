@@ -33,39 +33,21 @@ type VaccineContextType = Partial<{
   getVaccineUserName: (vaccine: Vaccination) => string
 }>
 
-interface ThailandPassVaccine {
-  vacc_date: string
-  vacc_disease: string
-  vacc_id: number
-  vacc_lotno: string
-  vacc_manufac: string
-  vacc_name: string
-  vacc_place: string
+export interface ThailandPassProfile {
+  prefix_name: string
+  first_name: string
+  last_name: string
+  nationality: string
+  thailand_pass_id: string
+  passport_no: string
+  status?: 'ok' | 'error'
+  error?: string
 }
 
-export interface ThailandPass {
+export interface ThailandPassResponse {
+  status: 'ok' | 'error'
   error?: string
-  _id: string
-  authorize_by: string
-  authorize_date: string
-  birth_date: string
-  certificate_no: string
-  citizen_no: string
-  email: string
-  f_name: string
-  gender: string
-  id: number
-  is_moph: number
-  is_thai: number
-  l_name: string
-  l_nmae: string
-  nation: string
-  passport_no: string
-  pre_name: string
-  remark: string
-  vaccine_book_no: string
-  vaccines: ThailandPassVaccine[]
-  verification_data: string
+  data?: ThailandPassProfile
 }
 
 const VACCINE_DATA_KEY = 'vaccineData'
@@ -298,8 +280,8 @@ export const VaccineProvider: React.FC = ({ children }) => {
 
     const thPass = await AsyncStorage.getItem('th-pass')
     if (thPass) {
-      const { f_name, l_name } = JSON.parse(thPass) as ThailandPass
-      return [f_name, l_name]
+      const { first_name, last_name } = JSON.parse(thPass) as ThailandPassProfile
+      return [first_name, last_name]
     }
 
     return ['', '']
@@ -330,16 +312,4 @@ export const VaccineProvider: React.FC = ({ children }) => {
 
 export const useVaccine = () => {
   return useContext(VaccineContext)
-}
-
-export const getThailandPass = async (param: { uri: string }) => {
-  const resp = await fetch(API_URL + '/th-pass', {
-    method: 'POST',
-    sslPinning: {
-      certs: [SSL_PINNING_CERT_NAME],
-    },
-    headers: getAnonymousHeaders(),
-    body: JSON.stringify(param),
-  })
-  return (await resp.json()) as ThailandPass
 }

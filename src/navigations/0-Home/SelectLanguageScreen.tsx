@@ -7,6 +7,7 @@ import { PrimaryButton } from '../../components/Button'
 import { FONT_BOLD, FONT_MED, FONT_SIZES, COLORS } from '../../styles'
 import { useNavigation } from '@react-navigation/native'
 import { WhiteBackground } from '../../components/WhiteBackground'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const SelectLanguageOption = [
   {
@@ -34,6 +35,7 @@ const padding = normalize(16)
 const PRIMARY_COLOR = COLORS.BLUE_BUTTON
 
 export const SelectLanguageScreen = () => {
+  const inset = useSafeAreaInsets()
   const [selected, setSelected] = useState<LangOptions>('en')
   const [confirmButtonLabel, setConfirmButtonLabel] = useState(I18n.t('next'))
   const navigation = useNavigation()
@@ -52,8 +54,8 @@ export const SelectLanguageScreen = () => {
   }, [selected])
 
   return (
-    <WhiteBackground key={selected}>
-      <View style={styles.contentContainer}>
+    <WhiteBackground>
+      <View style={[styles.contentContainer, inset]}>
         <View style={{ padding }}>
           <Text style={styles.textQuestion}>Choose Language</Text>
           <Text style={styles.textQuestion}>เลือกภาษา</Text>
@@ -70,7 +72,7 @@ export const SelectLanguageScreen = () => {
           )
         })}
       </View>
-      <View style={styles.footer}>
+      <View style={[styles.footer, { bottom: inset.bottom, left: inset.left, right: inset.right }]}>
         <PrimaryButton
           style={styles.primaryButton}
           containerStyle={styles.fullWidth}
@@ -149,8 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.DARK_BLUE,
   },
   footer: {
-    alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: padding,
     paddingHorizontal: padding,
   },
 })

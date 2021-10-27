@@ -10,8 +10,11 @@ import { OnboardFaceCamera } from './OnboardFaceCamera'
 import { OnboardLocation } from './OnboardLocation'
 import { OnboardNotification } from './OnboardNotification'
 import { OnboardProgressing } from './OnboardProgressing'
-import { OnboardQrScanner } from './OnboardQrScanner'
-import { OnboardThailandPassConsent } from '../../components/th-pass/OnboardThailandPassConsent'
+import {
+  OnboardThailandPassConsent,
+  OnboardThailandPassForm,
+  OnboardThailandPassQrScanner,
+} from './OnboardThailandPass'
 
 const Stack1 = createStackNavigator()
 const OnboardFaceStack = () => {
@@ -40,7 +43,8 @@ export const OnboardingStack = () => {
         options={{ gesturesEnabled: false }}
       />
       <Stack.Screen name='OnboardCoeChecking' component={OnboardCoeChecking} />
-      <Stack.Screen name='OnboardQrScanner' component={OnboardQrScanner} />
+      <Stack.Screen name='OnboardThailandPassQrScanner' component={OnboardThailandPassQrScanner} />
+      <Stack.Screen name='OnboardThailandPassForm' component={OnboardThailandPassForm} />
       <Stack.Screen name='OnboardCoeLanding' component={OnboardCoeLanding} />
     </Stack.Navigator>
   )

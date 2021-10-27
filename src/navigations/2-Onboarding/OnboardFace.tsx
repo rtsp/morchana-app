@@ -1,14 +1,17 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { Image, ImageURISource, StatusBar, StyleSheet, TouchableOpacity, View, Text } from 'react-native'
-import { Avatar } from 'react-native-elements'
+import { Image, ImageURISource, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Avatar, normalize } from 'react-native-elements'
 import RNFS from 'react-native-fs'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
 import Texts from '../../components/Texts'
+import { WhiteBackground } from '../../components/WhiteBackground'
 import { userPrivateData } from '../../state/userPrivateData'
-import { COLORS, FONT_SIZES, FONT_BOLD } from '../../styles'
+import { COLORS, FONT_BOLD, FONT_SIZES } from '../../styles'
+
+const padding = normalize(16)
 
 const ListItem = ({ source, label, onPress }: { source: ImageURISource; label: string; onPress: () => void }) => {
   return (
@@ -52,9 +55,9 @@ export const OnboardFace = () => {
   }
 
   const footerStyle = {
-    paddingBottom: area.bottom,
-    paddingLeft: area.left,
-    paddingRight: area.right,
+    bottom: area.bottom,
+    left: area.left,
+    right: area.right,
   }
 
   const footerButtonStyle = popupCamera
@@ -74,8 +77,8 @@ export const OnboardFace = () => {
       }
 
   return (
-    <View style={styles.background}>
-      <SafeAreaView style={styles.container}>
+    <WhiteBackground>
+      <View style={[styles.container, area]}>
         <StatusBar backgroundColor={COLORS.WHITE} barStyle='dark-content' />
         {/* <PageBackButton label={I18n.t('term_and_conditions')} /> */}
         <View style={styles.header}>
@@ -89,7 +92,7 @@ export const OnboardFace = () => {
             <Texts.Normal style={styles.photoDescription}>{I18n.t('photo_description')}</Texts.Normal>
           </View>
         </TouchableOpacity>
-      </SafeAreaView>
+      </View>
       <View style={[styles.footer, footerStyle]}>
         {popupCamera ? (
           <View style={styles.footerPopup}>
@@ -138,7 +141,7 @@ export const OnboardFace = () => {
           </React.Fragment>
         )}
       </View>
-    </View>
+    </WhiteBackground>
   )
 }
 
@@ -150,31 +153,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: padding / 2,
     borderColor: COLORS.BLUE,
-    paddingHorizontal: 16,
-    marginTop: 12,
-    borderRadius: 8,
+    paddingHorizontal: padding,
+    marginTop: padding,
+    borderRadius: padding / 2,
   },
   contentContainer: {
     flex: 1,
-    marginBottom: 20,
+    marginBottom: padding,
   },
   content: {
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: padding * 2,
   },
   profileImage: {
-    marginBottom: 25,
+    marginBottom: padding * 2,
   },
   footer: {
-    marginBottom: 12,
+    marginBottom: padding,
+    position: 'absolute',
+    width: '100%',
   },
   header: {
     textAlign: 'left',
-    marginTop: 24,
-    marginBottom: 16,
-    marginHorizontal: 24,
+    marginTop: padding,
+    marginBottom: padding,
+    marginHorizontal: padding,
   },
   title: {
     fontSize: FONT_SIZES[600],
@@ -194,9 +199,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   footerButtonContainer: {
-    marginTop: 24,
-    paddingLeft: 20,
-    paddingRight: 20,
+    marginTop: padding,
+    paddingLeft: padding,
+    paddingRight: padding,
   },
   primaryButton: {
     width: '100%',
@@ -217,7 +222,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: COLORS.DARK_BLUE,
     backgroundColor: COLORS.DARK_BLUE,
-    marginTop: 8,
+    marginTop: padding,
   },
   footerPopup: {
     backgroundColor: COLORS.BACKGROUND,
