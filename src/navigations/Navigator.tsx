@@ -5,6 +5,7 @@ import { applicationState } from '../state/app-state'
 import { COLORS } from '../styles'
 import { useResetTo } from '../utils/navigation'
 import { HomeStack } from './0-Home/HomeStack'
+import { AuthStack } from './1-Auth/AuthStack'
 import { OnboardingStack } from './2-Onboarding/OnboardingStack'
 import { MainAppFaceCamera } from './3-MainApp/MainAppFaceCamera'
 import MainAppTab from './3-MainApp/MainAppTab'
@@ -12,13 +13,17 @@ import { QuestionaireStack } from './4-Questionaire/QuestionaireStack'
 import { SetLocationHome } from './5-SetLocation/SetLocationHome'
 import { SetLocationMapWebView } from './5-SetLocation/SetLocationMapWebView'
 import { SetLocationStack } from './5-SetLocation/SetLocationStack'
+import {
+  EditThailandPassConsent,
+  EditThailandPassForm,
+  EditThailandPassQRScanner,
+} from './6-ThailandPass/EditThailandPassNavigation'
 import { ChangeLanguageScreen } from './ChangeLanguage'
+import { EditCoePersonalInformation } from './EditCoePersonalInformation'
+import { OnboardCoeEx } from './OnboardCoeEx'
+import { OnboardRefIdEx } from './OnboardRefIdEx'
 import { PrivacyPolicy } from './PrivacyPolicy'
 import { WebviewScreen } from './Webview'
-import { EditCoePersonalInformation } from './EditCoePersonalInformation'
-import { OnboardRefIdEx } from './OnboardRefIdEx'
-import { OnboardCoeEx } from './OnboardCoeEx'
-import { AuthStack } from './1-Auth/AuthStack'
 
 const Root = () => {
   const resetTo = useResetTo()
@@ -79,6 +84,9 @@ export const Navigator = () => {
       <Stack.Screen name='OnboardRefIdEx' component={OnboardRefIdEx} />
       <Stack.Screen name='OnboardCoeEx' component={OnboardCoeEx} />
       <Stack.Screen name='AuthPhone' component={AuthStack} />
+      <Stack.Screen name='EditThailandPassConsent' component={EditThailandPassConsent} />
+      <Stack.Screen name='EditThailandPassForm' component={EditThailandPassForm} />
+      <Stack.Screen name='EditThailandPassQRScanner' component={EditThailandPassQRScanner} />
     </Stack.Navigator>
   )
 }

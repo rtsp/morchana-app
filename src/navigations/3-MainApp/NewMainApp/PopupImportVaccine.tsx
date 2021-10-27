@@ -1,64 +1,69 @@
 import React from 'react'
 import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import I18n from '../../../../i18n/i18n'
-import { useVaccine } from '../../../services/use-vaccine'
 import { FONT_BOLD, FONT_FAMILY } from '../../../styles'
 
 const PopupImportVaccine: React.FC<{
-  onSelect: (status: 'ok' | 'cancel') => void
   modalVisible: boolean
+  cancelLabel?: string
+  noCancelButton?: boolean
+  noOkButton?: boolean
+  okLabel?: string
+  onSelect?: (status: 'ok' | 'cancel') => void
   setModalVisible: (visible: boolean) => void
-}> = ({ onSelect, modalVisible, setModalVisible }) => {
-  const { vaccineList, getVaccineUserName } = useVaccine()
-  const vaccine = vaccineList && vaccineList[0]
-
-  const name = vaccine && getVaccineUserName ? getVaccineUserName(vaccine) : ''
-
+  title?: React.ReactNode
+}> = ({
+  onSelect,
+  modalVisible,
+  setModalVisible,
+  title,
+  okLabel,
+  cancelLabel,
+  children,
+  noOkButton,
+  noCancelButton,
+}) => {
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
-          setModalVisible(false)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.title}>{I18n.t('record_found')}</Text>
-            <Text style={styles.description}>
-              {I18n.t('vaccination_record_of')}
-              {`\n${name}\n`}
-              {I18n.t('vaccination_found')}
-              {'\n\n'}
-              {I18n.t('import_this_record')}
-            </Text>
-            <View style={styles.buttonSection}>
+    <Modal
+      animationType='slide'
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert('Modal has been closed.')
+        setModalVisible(false)
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{children}</Text>
+          <View style={styles.buttonSection}>
+            {!noCancelButton && (
               <TouchableOpacity
                 style={[styles.button, styles.buttonCancel]}
                 onPress={() => {
                   setModalVisible(false)
-                  onSelect('cancel')
+                  onSelect && onSelect('cancel')
                 }}
               >
-                <Text style={[styles.textStyle, styles.textCancelButton]}>{I18n.t('cancel')}</Text>
+                <Text style={[styles.textStyle, styles.textCancelButton]}>{cancelLabel || I18n.t('cancel')}</Text>
               </TouchableOpacity>
+            )}
+            {!noOkButton && (
               <TouchableOpacity
                 style={[styles.button, styles.buttonOk]}
                 onPress={() => {
                   setModalVisible(false)
-                  onSelect('ok')
+                  onSelect && onSelect('ok')
                 }}
               >
-                <Text style={[styles.textStyle, styles.textOkButton]}>{I18n.t('ok')}</Text>
+                <Text style={[styles.textStyle, styles.textOkButton]}>{okLabel || I18n.t('ok')}</Text>
               </TouchableOpacity>
-            </View>
+            )}
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   )
 }
 
@@ -69,6 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
+    width: '77.7%',
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: 'white',

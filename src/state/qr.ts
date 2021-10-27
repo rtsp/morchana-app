@@ -127,8 +127,8 @@ export const useSelfQR = () => {
 
 class QR {
   code: StatusCode
-  constructor(code: keyof typeof STATUS_COLORS) {
-    this.code = code
+  constructor(_code: keyof typeof STATUS_COLORS) {
+    this.code = _code
   }
   getStatusColor() {
     return STATUS_COLORS[this.code]
@@ -160,7 +160,6 @@ type TagRole = {
 
 export class SelfQR extends QR {
   qrData: QRData
-  code: StatusCode = STATUS_CODE.GREEN
   tag?: Tag
   timestamp: number
 
@@ -201,6 +200,7 @@ export class SelfQR extends QR {
   }
 
   constructor(qrData: QRData) {
+    console.log('SelfQR', qrData)
     super(qrData.data.code)
     this.qrData = qrData
     this.timestamp = Date.now()
@@ -318,6 +318,7 @@ const SCORES = {
 } as const
 
 const getLabel = (code: keyof typeof LEVELS) => {
+  console.log('getLabel', code)
   return {
     green: I18n.t('very_low_risk'),
     yellow: I18n.t('low_risk'),

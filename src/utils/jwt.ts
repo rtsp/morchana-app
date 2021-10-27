@@ -4,7 +4,7 @@ import { fetchJWKs } from '../api'
 
 import I18n from '../../i18n/i18n'
 
-let jwks
+let jwks: { x: any; y: any } = null
 export const refetchJWKs = async () => {
   const result = await fetchJWKs()
   if (result) {
@@ -13,7 +13,7 @@ export const refetchJWKs = async () => {
 }
 
 export const verifyToken = (token) => {
-  return JwtUtils.verify(token, jwks.x, jwks.y)
+  return jwks && JwtUtils.verify(token, jwks.x, jwks.y)
 }
 
 export const decodeJWT = (token) => {

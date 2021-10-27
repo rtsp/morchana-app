@@ -1,23 +1,27 @@
-import DeviceInfo from 'react-native-device-info'
-import { userPrivateData } from './state/userPrivateData'
 import nanoid from 'nanoid'
+import DeviceInfo from 'react-native-device-info'
+import { fetch } from 'react-native-ssl-pinning'
+import i18n from '../i18n/i18n'
 import {
   API_URL,
-  SSL_PINNING_CERT_NAME,
   SHOP_API_KEY,
   SHOP_API_NAME,
   SHOP_API_URL,
   SHOP_QR_PINNING_CERT,
+  SSL_PINNING_CERT_NAME,
 } from './config'
+import { DEFAULT_NATIONALITIES, DEFAULT_PREFIX_NAME } from './navigations/const'
+import { userPrivateData } from './state/userPrivateData'
 import { encryptMessage, refetchDDCPublicKey } from './utils/crypto'
-import { fetch } from 'react-native-ssl-pinning'
+import { ThailandPassProfile, ThailandPassResponse } from './services/use-vaccine'
 
 export const getAnonymousHeaders = () => {
   const authToken = userPrivateData.getData('authToken')
   return {
-    Authorization: authToken ? 'Bearer ' + authToken : void 0,
+    Authorization: 'Bearer ' + authToken,
     'X-TH-ANONYMOUS-ID': userPrivateData.getAnonymousId(),
     'Content-Type': 'application/json',
+    'Content-Language': i18n.locale === 'th' ? 'th-TH' : 'en-US',
   }
 }
 
@@ -57,7 +61,7 @@ export const registerDevice = async (): Promise<{
     throw new Error('RegisterDevice failed')
   }
 
-  return { anonymousId: result.anonymousId, token: result.token }
+  return { anonymousId: result.anonymousId, token: result.token, userId: '' }
 }
 
 export const requestOTP = async (mobileNo: string) => {
@@ -77,8 +81,8 @@ export const requestOTP = async (mobileNo: string) => {
 }
 
 /*
-  verify otp and save encryptedMobileNo
-*/
+   verify otp and save encryptedMobileNo
+ */
 export const mobileParing = async (mobileNo: string, otpCode: string) => {
   await refetchDDCPublicKey()
   const encryptedMobileNo = await encryptMessage(mobileNo)
@@ -198,4 +202,80 @@ export const beaconinfo = async (uuid: string, major: string, minor: string) => 
   )
   const result = await resp.json()
   return result as any
+}
+
+export const getPrefixNameList = async () => {
+  try {
+    const resp = await fetch(`${API_URL}/prefix-name`, {
+      method: 'GET',
+      sslPinning: {
+        certs: [SSL_PINNING_CERT_NAME],
+      },
+      headers: getAnonymousHeaders(),
+    })
+
+    if (resp.status !== 200) return DEFAULT_PREFIX_NAME[i18n.locale]
+    const items = (await resp.json()) as { label: string; value: string }[]
+    if (!Array.isArray(items)) return []
+    return items
+  } catch (e) {
+    console.error('error_get_prefix_name', e)
+  }
+  return DEFAULT_PREFIX_NAME[i18n.locale]
+}
+
+export const getNationalityList = async () => {
+  try {
+    const resp = await fetch(`${API_URL}/nationalities`, {
+      method: 'GET',
+      sslPinning: {
+        certs: [SSL_PINNING_CERT_NAME],
+      },
+      headers: getAnonymousHeaders(),
+    })
+
+    if (resp.status !== 200) return DEFAULT_NATIONALITIES
+    const items = (await resp.json()) as { label: string; value: string }[]
+    if (!Array.isArray(items)) return []
+    return items
+  } catch (e) {
+    console.error('error_get_nationality', e)
+  }
+  return DEFAULT_NATIONALITIES
+}
+
+export const sendThailandPassForm = async (data: ThailandPassProfile): Promise<ThailandPassResponse> => {
+  try {
+    const resp = await fetch(`${API_URL}/th-pass-form`, {
+      method: 'POST',
+      sslPinning: {
+        certs: [SSL_PINNING_CERT_NAME],
+      },
+      headers: getAnonymousHeaders(),
+      body: JSON.stringify(data),
+    })
+
+    return (await resp.json()) as ThailandPassResponse
+  } catch (e) {
+    console.error('error_send_th_pass_form', e)
+  }
+  return { status: 'error', error: i18n.t('system_error') }
+}
+
+export const getThailandPass = async (param: { uri: string }): Promise<ThailandPassResponse> => {
+  try {
+    const resp = await fetch(`${API_URL}/th-pass`, {
+      method: 'POST',
+      sslPinning: {
+        certs: [SSL_PINNING_CERT_NAME],
+      },
+      headers: getAnonymousHeaders(),
+      body: JSON.stringify(param),
+    })
+    return (await resp.json()) as ThailandPassResponse
+  } catch (e) {
+    console.error(e)
+  }
+
+  return { status: 'error', error: i18n.t('system_error') }
 }

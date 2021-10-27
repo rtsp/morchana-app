@@ -55,6 +55,7 @@ const RiskLabel = ({ qr, qrState }: { qr: SelfQR; qrState: QR_STATE; onRefreshQR
   //   : qrState === QR_STATE.NOT_VERIFIED || qrState === QR_STATE.FAILED
   //   ? COLORS.ORANGE_2
   //   : COLORS.GRAY_2
+  console.log('RiskLabel', qr, qrState)
   const label = qr
     ? qr.getLabel()
     : qrState === QR_STATE.NOT_VERIFIED

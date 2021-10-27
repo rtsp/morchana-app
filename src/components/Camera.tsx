@@ -102,7 +102,7 @@ const DEFAULT_OPTIONS = {
 }
 
 const isImagePickerAvailable = Boolean(NativeModules.ImagePickerManager)
-const SelectImageButton = ({ onSelectImage }) => {
+export const SelectImageButton = ({ onSelectImage }) => {
   const { showSpinner, hide } = useHUD()
 
   if (!isImagePickerAvailable) {
