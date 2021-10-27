@@ -64,28 +64,50 @@ export const useSelfQR = () => {
 
   const refreshQR = useCallback(async () => {
     clearTimeout(tlRef.current)
+    dispatch({
+      type: QR_ACTION.LOADING,
+    })
+
+    let error = null
+    let isLinked = false
+    let qrData = null
+    let qrState
     try {
-      dispatch({
-        type: QR_ACTION.LOADING,
-      })
       const _qrData = (await getQRData()) as QRData
+      qrData = _qrData ? await SelfQR.setCurrentQRFromQRData(_qrData) : null
+    } catch (e) {
+      console.error('cannot load qr', error)
+      error = e
+    }
+
+    try {
       const {
-        data: { linked: isLinked },
+        data: { linked },
       } = await getUserLinkedStatus(userPrivateData.getAnonymousId())
-      const qrData = await SelfQR.setCurrentQRFromQRData(_qrData)
-      const qrState = SelfQR.getCurrentState()
+      isLinked = linked
+    } catch (e) {
+      console.error('cannot linked error', e)
+    }
+
+    try {
+      qrState = SelfQR.getCurrentState()
+    } catch (e) {
+      console.error('Cannot get qr', error)
+      error = e
+    }
+
+    if (error) {
       dispatch({
         type: QR_ACTION.UPDATE,
-        payload: { qrData, qrState, error: null, isLinked },
-      })
-      tlRef.current = +setTimeout(refreshQR, 2 * 60 * 1000) // Update after 2 min
-    } catch (error) {
-      const qrState = SelfQR.getCurrentState()
-      dispatch({
-        type: QR_ACTION.UPDATE,
-        payload: { qrState, error, isLinked: false },
+        payload: { qrState, error, isLinked },
       })
       tlRef.current = +setTimeout(refreshQR, 10 * 1000) // Retry after 10 sec
+    } else {
+      dispatch({
+        type: QR_ACTION.UPDATE,
+        payload: { qrData, qrState, error, isLinked },
+      })
+      tlRef.current = +setTimeout(refreshQR, 2 * 60 * 1000) // Update after 2 min
     }
   }, [])
 
