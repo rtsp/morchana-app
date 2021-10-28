@@ -9,8 +9,8 @@ buildscript {
         removeBackgroundGeolocationDebugSoundsInRelease = false
         buildToolsVersion = "29.0.3"
         minSdkVersion = 21
-        compileSdkVersion = 29
-        targetSdkVersion = 29
+        compileSdkVersion = 30
+        targetSdkVersion = 30
         supportLibVersion = "1.0.2"
         appCompatVersion = "1.0.2"
         supportV4Version = "1.0.0"
@@ -58,7 +58,7 @@ subprojects {
         project ->
             if (project.hasProperty("android")) {
                 android {
-                    compileSdkVersion = 28
+                    compileSdkVersion = 30
                     buildToolsVersion = "28.0.3"
                 }
             }
