@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
@@ -21,7 +22,6 @@ import { CountdownTime } from '../../components/CountdownTimer'
 import { useHUD } from '../../HudView'
 import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../styles'
-import { useResetTo } from '../../utils/navigation'
 import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
 
 function formatPhoneNumber(phoneNumberString: string) {
@@ -42,7 +42,7 @@ export const AuthOTP = ({ route }) => {
   const triggerOTP = route.params?.triggerOTP
   const [otp, setOtp] = useState('')
   const [resendTimer, setResendTimer] = useState(0)
-  const resetTo = useResetTo()
+  const navigation = useNavigation()
 
   const onSubmit = useCallback(async () => {
     showSpinner()
@@ -55,13 +55,14 @@ export const AuthOTP = ({ route }) => {
       }
       hide()
       applicationState.setData('isPassedOnboarding', true)
-      resetTo({ name: 'MainApp' })
+      // resetTo({ name: 'MainApp' })
+      navigation.navigate('OnboardLocation')
     } catch (err) {
       setModalValue(true)
       console.log(err)
       hide()
     }
-  }, [hide, otp, phone, resetTo, showSpinner])
+  }, [hide, otp, phone, navigation, showSpinner])
 
   const onCloseModal = () => {
     setModalValue(false)

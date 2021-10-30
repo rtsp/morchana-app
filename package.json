@@ -5,6 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --scheme 'ThaiAlert Debug'",
+    "ios13": "react-native run-ios --scheme 'ThaiAlert Debug' --simulator='iPhone 13 Pro Max'",
+    "ios8": "react-native run-ios --scheme 'ThaiAlert Debug' --simulator='iPhone 8'",
     "start": "react-native start",
     "link": "react-native link",
     "test": "jest",
