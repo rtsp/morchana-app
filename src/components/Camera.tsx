@@ -1,22 +1,14 @@
-import React, { useState, useRef } from 'react'
-import styled, { css } from '@emotion/native'
-
-import { RNCamera, TakePictureResponse } from 'react-native-camera'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
-import RNFS from 'react-native-fs'
-import RNFetchBlob from 'rn-fetch-blob'
+import styled from '@emotion/native'
+import { useIsFocused } from '@react-navigation/native'
+import React, { useRef, useState } from 'react'
 // import ImagePicker from 'react-native-image-picker';
-import { StyleSheet, View, TouchableOpacity, StatusBar, NativeModules, Platform } from 'react-native'
-import { COLORS } from '../styles'
+import { NativeModules, TouchableOpacity, View } from 'react-native'
+import { RNCamera } from 'react-native-camera'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useIsFocused } from '@react-navigation/native'
-import EntypoIcon from 'react-native-vector-icons/Entypo'
-import { request, PERMISSIONS } from 'react-native-permissions'
-import { useHUD } from '../HudView'
-
-export type { TakePictureResponse, RNCamera }
+import { COLORS } from '../styles'
+import useCamera from '../utils/use-camera'
 
 const ShutterButtonOuter = styled.View`
   width: 72px;
@@ -45,7 +37,10 @@ const ShutterButton = styled.TouchableOpacity`
   aspect-ratio: 1;
 `
 
-const FlashButton = ({ flashMode, setFlashMode }) => (
+const FlashButton: React.FC<{
+  flashMode: keyof typeof RNCamera.Constants.FlashMode
+  setFlashMode: (mode: keyof typeof RNCamera.Constants.FlashMode) => void
+}> = ({ flashMode, setFlashMode }) => (
   <TouchableOpacity
     activeOpacity={0.8}
     // style={{ padding: 16 }}
@@ -71,7 +66,11 @@ const FlashButton = ({ flashMode, setFlashMode }) => (
     />
   </TouchableOpacity>
 )
-const CameraDirectionButton = ({ setCameraType, cameraType }) => (
+
+const CameraDirectionButton: React.FC<{
+  cameraType: keyof typeof RNCamera.Constants.Type
+  setCameraType: (type: keyof typeof RNCamera.Constants.Type) => void
+}> = ({ setCameraType, cameraType }) => (
   <TouchableOpacity
     activeOpacity={0.8}
     style={{ position: 'absolute', left: 0, padding: 16, alignSelf: 'center' }}
@@ -84,7 +83,8 @@ const CameraDirectionButton = ({ setCameraType, cameraType }) => (
     <EvilIcons name='refresh' color='white' size={48} />
   </TouchableOpacity>
 )
-const CloseButton = ({ onClose }) => (
+
+const CloseButton = ({ onClose }: { onClose: () => void }) => (
   <TouchableOpacity
     activeOpacity={0.8}
     // style={{ padding: 16 }}
@@ -96,75 +96,37 @@ const CloseButton = ({ onClose }) => (
   </TouchableOpacity>
 )
 
-const DEFAULT_OPTIONS = {
-  mediaType: 'photo',
-  quality: 1.0,
-}
-
 const isImagePickerAvailable = Boolean(NativeModules.ImagePickerManager)
-export const SelectImageButton = ({ onSelectImage }) => {
-  const { showSpinner, hide } = useHUD()
+export const SelectImageButton: React.FC<{ onSelectImage: (uri: string) => void }> = ({ onSelectImage }) => {
+  const { openGallery } = useCamera()
 
   if (!isImagePickerAvailable) {
     return null
   }
-  const ImagePicker = require('react-native-image-picker')
-  const options = {
-    ...DEFAULT_OPTIONS,
-    title: 'Select Avatar',
-  }
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       style={{ position: 'absolute', right: 0, padding: 16, alignSelf: 'center' }}
-      onPress={async () => {
-        showSpinner()
-        ImagePicker.launchImageLibrary(options, (response) => {
-          hide()
-          // console.log({ response })
-          if (Platform.OS == 'android' && 'data' in response) {
-            const newFilePath = `${Date.now()}-tmp`
-            let tmpPath = `${RNFS.CachesDirectoryPath}/${newFilePath}`
-            RNFetchBlob.fs
-              .writeFile(tmpPath, response.data, 'base64')
-              .then(() => {})
-              .finally(() => {
-                const uri = 'file://' + tmpPath
-                onSelectImage(uri)
-              })
-          } else {
-            const uri = response.uri
-            onSelectImage(uri)
-          }
-        })
-      }}
+      onPress={() => openGallery().then(onSelectImage)}
     >
       <EntypoIcon name='images' color='white' size={32} />
     </TouchableOpacity>
   )
 }
 
-export const Camera = ({
-  onCapture,
-  onClose,
-  onSelectImage,
-  defaultType = 'back',
-  children,
-}: {
-  onCapture: (camera: RNCamera) => any
-  onSelectImage?: (uri: string) => any
-  onClose?: any
+export const Camera: React.FC<{
   defaultType: 'front' | 'back'
-  children
-}) => {
-  const cameraRef = useRef()
-  const handleShutter = () => {
-    onCapture(cameraRef.current)
-  }
+  onCapture: (camera: RNCamera) => any
+  onClose?: any
+  onSelectImage?: (uri: string) => any
+}> = ({ onCapture, onClose, onSelectImage, defaultType = 'back', children }) => {
+  const cameraRef = useRef<RNCamera | undefined>()
+  const handleShutter = () => cameraRef.current && onCapture(cameraRef.current)
   const isFocused = useIsFocused()
-  console.log('Camera', isFocused)
-  const [cameraType, setCameraType] = useState(RNCamera.Constants.Type[defaultType])
-  const [flashMode, setFlashMode] = useState(RNCamera.Constants.FlashMode.auto)
+
+  const [cameraType, setCameraType] = useState<keyof typeof RNCamera.Constants.Type>(defaultType)
+  const [flashMode, setFlashMode] = useState<keyof typeof RNCamera.Constants.FlashMode>('auto')
 
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
@@ -172,7 +134,7 @@ export const Camera = ({
         <RNCamera
           ref={cameraRef}
           flashMode={flashMode}
-          type={cameraType}
+          type={defaultType}
           ratio='4:3'
           style={{ flex: 1, aspectRatio: 3 / 4 }}
           captureAudio={false}

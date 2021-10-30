@@ -10,6 +10,7 @@ import Texts from '../../components/Texts'
 import { WhiteBackground } from '../../components/WhiteBackground'
 import { userPrivateData } from '../../state/userPrivateData'
 import { COLORS, FONT_BOLD, FONT_SIZES } from '../../styles'
+import useCamera from '../../utils/use-camera'
 
 const padding = normalize(16)
 
@@ -29,6 +30,7 @@ export const OnboardFace = () => {
   const [popupCamera, setPopupCamera] = React.useState(false)
   const area = useSafeAreaInsets()
   const navigation = useNavigation()
+  const { openGallery } = useCamera()
 
   React.useEffect(() => {
     if (uri) {
@@ -38,7 +40,7 @@ export const OnboardFace = () => {
         }
       })
     }
-  }, [])
+  }, [uri])
 
   const navigateToCamera = () => {
     setPopupCamera(false)
@@ -47,7 +49,7 @@ export const OnboardFace = () => {
 
   const navigateToGallery = () => {
     setPopupCamera(false)
-    navigation.navigate('OnboardFaceCamera', { setUri })
+    openGallery().then(setUri)
   }
 
   const setPopupCameraSelector = () => {
@@ -60,21 +62,8 @@ export const OnboardFace = () => {
     right: area.right,
   }
 
-  const footerButtonStyle = popupCamera
-    ? {
-        backgroundColor: COLORS.BACKGROUND,
-      }
-    : {
-        backgroundColor: COLORS.DARK_BLUE,
-      }
-
-  const footerTitleButtonStyle = popupCamera
-    ? {
-        color: COLORS.DARK_BLUE,
-      }
-    : {
-        color: COLORS.BACKGROUND,
-      }
+  const footerButtonStyle = popupCamera ? { backgroundColor: COLORS.BACKGROUND } : { backgroundColor: COLORS.DARK_BLUE }
+  const footerTitleButtonStyle = popupCamera ? { color: COLORS.DARK_BLUE } : { color: COLORS.BACKGROUND }
 
   return (
     <WhiteBackground>

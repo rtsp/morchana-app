@@ -1,17 +1,15 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Image, Platform, SafeAreaView, StatusBar, Text, View } from 'react-native'
+import { normalize } from 'react-native-elements'
 import { check, PERMISSIONS, request } from 'react-native-permissions'
-import { useNavigation } from '@react-navigation/native'
+import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
 import { useHUD } from '../../HudView'
 import { backgroundTracking } from '../../services/background-tracking'
 import { COLORS } from '../../styles'
-import { isSmallDevice } from '../../utils/responsive'
 import { doctorSize, styles } from './const'
 import { OnboardHeader } from './OnboadHeader'
-import { normalize } from 'react-native-elements'
-
-import I18n from '../../../i18n/i18n'
 
 const LOCATION_PERMISSION = Platform.select({
   ios: PERMISSIONS.IOS.LOCATION_ALWAYS,
@@ -31,35 +29,36 @@ export const OnboardLocation = () => {
 
   const { showSpinner, hide } = useHUD()
 
-  const checkPerms = async () => {
-    const perms = await Promise.all([check(LOCATION_PERMISSION), check(ACTIVITY_PERMISSION)])
-    if (perms[0] === 'granted' && perms[1] === 'granted') {
-      await backgroundTracking.start()
-      navigation.navigate('OnboardProgressing')
-    } else {
-      setLocationPerm(perms[0])
-      setActivityPerm(perms[1])
-    }
-  }
-
   useEffect(() => {
-    checkPerms()
-  }, [])
+    Promise.all([
+      LOCATION_PERMISSION && check(LOCATION_PERMISSION),
+      ACTIVITY_PERMISSION && check(ACTIVITY_PERMISSION),
+    ]).then((perms) => {
+      if (perms[0] === 'granted' && perms[1] === 'granted') {
+        backgroundTracking.start().then(() => navigation.navigate('OnboardProgressing'))
+      } else {
+        perms[0] && setLocationPerm(perms[0])
+        perms[1] && setActivityPerm(perms[1])
+      }
+    })
+  }, [navigation])
 
   const handleSubmit = async () => {
     showSpinner()
 
-    await request(LOCATION_PERMISSION)
-    await request(ACTIVITY_PERMISSION)
+    LOCATION_PERMISSION && (await request(LOCATION_PERMISSION))
+    setTimeout(async () => {
+      ACTIVITY_PERMISSION && (await request(ACTIVITY_PERMISSION))
+      hide()
 
-    hide()
+      backgroundTracking.start()
 
-    backgroundTracking.start()
-
-    setTimeout(() => {
-      navigation.navigate('OnboardBluetooth')
-    }, 1000)
+      setTimeout(() => {
+        navigation.navigate('OnboardBluetooth')
+      }, 1000)
+    }, 2000)
   }
+
   if (locationPerm === 'checking' || activityPerm === 'checking') {
     return (
       <View

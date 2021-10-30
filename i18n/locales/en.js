@@ -38,7 +38,7 @@ export default {
   camera: 'Camera',
   gallery: 'Gallery',
   photo_description:
-    'Please take your photo or select your \nformal image. This will be used for \ncreating engagement feeling and being \nself-proven that the app is yours.',
+    'Please select your profile photo. This will be use for personalization purpose and will be stored locally on this device.',
   add_image: 'Add image',
   change_profile_image: 'Change profile image',
   pls_grant_permission: 'Please grant permission',
@@ -364,7 +364,7 @@ export default {
   vaccine_connection_failed_message: 'Try again later',
   planning_to_enter_thailand_question:
     'Are you planing to enter, entering to \nThailand or have just arrived in \nThailand?',
-  select_image_profile: 'Set profile image',
+  select_image_profile: 'Set profile photo',
   research: 'Research',
   personal_information: 'Personal Information',
   personal_information_low_i: 'Personal information',

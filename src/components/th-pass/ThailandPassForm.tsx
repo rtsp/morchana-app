@@ -50,16 +50,6 @@ const InputBox: React.FC<{
     }
   }, [type])
 
-  // useEffect(() => {
-  //   if (type === 'select_national' || type === 'select_prefix_name') {
-  //     const sel = items && items.find((it) => it.value === value)
-  //     console.log('sel', sel)
-  //     setSelect(sel || null)
-  //   }
-  // }, [items, value, type])
-
-  if (type === 'select_national' || type === 'select_prefix_name') console.log('val ->', value)
-
   return (
     <View style={{ paddingBottom: padding / 2 }}>
       {type === 'select_national' || type === 'select_prefix_name' ? (
@@ -78,20 +68,18 @@ const InputBox: React.FC<{
               items={items || []}
               itemKey='value'
               style={{
-                inputIOS: { ...styles.textSelect, ...(disabled && styles.disabledText) },
-                inputAndroid: { ...styles.textSelect, ...(disabled && styles.disabledText) },
+                inputIOS: { ...styles.textSelect, ...(disabled && styles.disabledTextPicker) },
+                inputAndroid: { ...styles.textSelect, ...(disabled && styles.disabledTextPicker) },
               }}
               placeholder={{ value: '', label: '' }}
               onValueChange={(value) => {
                 if (timerRef.current) clearTimeout(timerRef.current)
                 timerRef.current = setTimeout(() => {
                   timerRef.current = 0
-                  console.log('onChange', value)
                   onChange && onChange(value)
                 }, 200)
               }}
               disabled={disabled}
-              Icon={() => <Icon name='chevron-down' color={COLORS.DARK_BLUE} />}
             />
           </View>
         </View>
@@ -160,60 +148,58 @@ const ThailandPassForm: React.FC<{
                   />
                 )
               })}
-            </View>
-          </View>
-          <View style={{ marginLeft: inset.left, marginRight: inset.right, paddingHorizontal: padding }}>
-            {warnEmpty ? <Text style={styles.errorText}>{I18n.t('fill_error_message')}</Text> : null}
-            <PrimaryButton
-              title={formMode === 'edit' ? I18n.t('scan_qr_button') : I18n.t('edit')}
-              titleStyle={styles.buttonTitle1}
-              style={styles.button1}
-              containerStyle={styles.fullWidth}
-              onPress={() => {
-                if (formMode === 'edit') {
-                  navigation.pop()
-                } else {
-                  setFormMode('edit')
-                }
-              }}
-            />
-            <PrimaryButton
-              title={formMode === 'edit' ? I18n.t('save') : I18n.t('confirm')}
-              titleStyle={styles.buttonTitle2}
-              style={styles.button2}
-              containerStyle={styles.fullWidth}
-              onPress={async () => {
-                switch (formMode) {
-                  case 'edit':
-                    for (let item of thPassFieldInfo) {
-                      if (item.required && !formData[item.id] && (!initData || initData[item.id])) {
-                        setWarnEmpty(true)
+              {warnEmpty ? <Text style={styles.errorText}>{I18n.t('fill_error_message')}</Text> : null}
+              <PrimaryButton
+                title={formMode === 'edit' ? I18n.t('scan_qr_button') : I18n.t('edit')}
+                titleStyle={styles.buttonTitle1}
+                style={styles.button1}
+                containerStyle={styles.fullWidth}
+                onPress={() => {
+                  if (formMode === 'edit') {
+                    navigation.pop()
+                  } else {
+                    setFormMode('edit')
+                  }
+                }}
+              />
+              <PrimaryButton
+                title={formMode === 'edit' ? I18n.t('save') : I18n.t('confirm')}
+                titleStyle={styles.buttonTitle2}
+                style={styles.button2}
+                containerStyle={styles.fullWidth}
+                onPress={async () => {
+                  switch (formMode) {
+                    case 'edit':
+                      for (let item of thPassFieldInfo) {
+                        if (item.required && !formData[item.id] && (!initData || initData[item.id])) {
+                          setWarnEmpty(true)
+                          return
+                        }
+                      }
+                      setWarnEmpty(false)
+                      setFormMode('submit')
+                      break
+
+                    case 'submit':
+                      let res = await sendThailandPassForm(formData as ThailandPassProfile)
+
+                      if (res.status === 'error' || res.error) {
+                        setErrorModalMessage(res.error || I18n.t('system_error'))
                         return
                       }
-                    }
-                    setWarnEmpty(false)
-                    setFormMode('submit')
-                    break
 
-                  case 'submit':
-                    let res = await sendThailandPassForm(formData as ThailandPassProfile)
+                      AsyncStorage.setItem('th-pass', JSON.stringify(res.data))
 
-                    if (res.status === 'error' || res.error) {
-                      setErrorModalMessage(res.error || I18n.t('system_error'))
-                      return
-                    }
-
-                    AsyncStorage.setItem('th-pass', JSON.stringify(res.data))
-
-                    if (next) {
-                      navigation.navigate(next)
-                    } else {
-                      navigation.reset({ index: 0, routes: [{ name: 'MainApp' }] })
-                    }
-                    break
-                }
-              }}
-            />
+                      if (next) {
+                        navigation.navigate(next)
+                      } else {
+                        navigation.reset({ index: 0, routes: [{ name: 'MainApp' }] })
+                      }
+                      break
+                  }
+                }}
+              />
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -261,6 +247,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding,
+    paddingBottom: padding * 2,
   },
   imageStyle: {
     marginVertical: 32,
@@ -326,6 +313,9 @@ const styles = StyleSheet.create({
   errorText: { fontFamily: FONT_MED, fontSize: FONT_SIZES[500], color: COLORS.RED_WARNING },
   disabledText: {
     color: '#5f5f5f',
+  },
+  disabledTextPicker: {
+    color: '#8A8A8A',
   },
   disabledView: {
     backgroundColor: COLORS.GRAY_6,

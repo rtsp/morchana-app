@@ -1,5 +1,6 @@
 import React from 'react'
 import { Dimensions, Image, StyleSheet, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface PropTypes {
   style?: any
@@ -9,6 +10,7 @@ interface PropTypes {
 }
 
 export const OnboardHeader = ({ style }: PropTypes) => {
+  const inset = useSafeAreaInsets()
   if (Dimensions.get('window').height < 600) {
     return null
   }
@@ -16,7 +18,7 @@ export const OnboardHeader = ({ style }: PropTypes) => {
   const logoWidth = (logoHeight * 101) / 54
   return (
     <View style={style}>
-      <View style={styles.header}>
+      <View style={[styles.header, { marginTop: Math.max(inset.top, 8) }]}>
         <Image
           source={require('../../assets/logo_white.png')}
           style={{ height: logoHeight, width: logoWidth }}
@@ -32,7 +34,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    marginTop: 8,
     marginBottom: 8,
     flexDirection: 'row',
   },

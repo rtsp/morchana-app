@@ -37,7 +37,8 @@ export default {
   take_photo: 'ถ่ายรูป',
   camera: 'กล้องถ่ายรูป',
   gallery: 'แกลเลอรี่',
-  photo_description: 'โปรดถ่ายรูปหรือเลือกภาพของคุณเพื่อง่ายต่อการยืนยันตัวตนต่อเจ้าหน้าที่',
+  photo_description:
+    'โปรดเลือกภาพสำหรับแสดงประกอบบัญชีผู้ใช้งาน ข้อมูลนี้จะไม่มีการส่งออกจากเครื่องที่ื่ท่านใช้งานอยู่',
   add_image: 'เพิ่มรูปภาพ',
   change_profile_image: 'เปลี่ยนรูปโปรไฟล์',
   pls_grant_permission: 'ขอสิทธิ์เข้าถึงข้อมูล',
@@ -357,7 +358,7 @@ export default {
   vaccine_connection_failed_title: 'เชื่อมต่อระบบไม่สำเร็จ',
   vaccine_connection_failed_message: 'กรุณาลองใหม่อีกครั้ง',
   planning_to_enter_thailand_question: 'คุณกำลังเดินทางไปประเทศไทยหรือเพิ่งถึงประเทศไทย ภายในไม่กี่วันนี้หรือไม่?',
-  select_image_profile: 'เลือกรูปโปรไฟล์',
+  select_image_profile: 'รูปประกอบบัญชีผู้ใช้งาน',
   research: 'แบบสำรวจ',
   personal_information: 'ข้อมูลผู้ใช้งาน',
   personal_information_low_i: 'ข้อมูลผู้ใช้งาน',

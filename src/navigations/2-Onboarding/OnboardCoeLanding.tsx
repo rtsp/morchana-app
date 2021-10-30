@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import I18n from 'i18n-js'
 import React, { useEffect } from 'react'
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
@@ -7,21 +8,21 @@ import { PrimaryButton } from '../../components/Button'
 import { applicationState } from '../../state/app-state'
 import { userPrivateData } from '../../state/userPrivateData'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
-import { useResetTo } from '../../utils/navigation'
 
 const padding = normalize(16)
 
 export const OnboardCoeLanding = () => {
   const faceURI = userPrivateData.getFace()
-  const resetTo = useResetTo()
   const inset = useSafeAreaInsets()
+  const navigation = useNavigation()
 
   useEffect(() => {
     applicationState.setData('isPassedOnboarding', true)
   }, [])
 
   const onFinishLanding = () => {
-    resetTo({ name: 'MainApp' })
+    // resetTo({ name: 'MainApp' })
+    navigation.navigate('OnboardLocation')
   }
 
   return (

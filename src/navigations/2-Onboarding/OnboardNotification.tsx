@@ -15,15 +15,11 @@ export const OnboardNotification = () => {
 
   const { showSpinner, hide } = useHUD()
 
-  const checkPerms = async () => {
-    if (pushNotification.isConfigured) {
-      navigation.navigate('OnboardProgressing')
-    }
-  }
-
   useEffect(() => {
-    checkPerms()
-  }, [])
+    if (pushNotification.isConfigured) {
+      navigation.navigate('OnboardComplete')
+    }
+  }, [navigation])
 
   const handleSubmit = async () => {
     showSpinner()
@@ -31,7 +27,7 @@ export const OnboardNotification = () => {
     pushNotification.requestPermissions()
     hide()
 
-    navigation.navigate('OnboardProgressing')
+    navigation.navigate('OnboardComplete')
   }
 
   return (

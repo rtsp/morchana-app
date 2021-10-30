@@ -17,13 +17,13 @@ export const OnboardBluetooth = () => {
 
   const { showSpinner, hide } = useHUD()
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     showSpinner()
-    await contactTracer?.enable()
+    contactTracer?.enable()
     hide()
 
     setTimeout(() => {
-      navigation.navigate('OnboardNotification')
+      navigation.navigate('OnboardComplete')
     }, 1000)
   }
 
