@@ -97,7 +97,7 @@ export default {
   but_sys_will_not_auto_trace: 'แต่ระบบจะไม่สามารถค้นหาอุปกรณ์อื่นโดยอัตโนมัติได้',
   general: 'ทั่วไป',
   privacy_policy: 'นโยบายความเป็นส่วนตัว',
-  do_questionaire_again: 'ทำแบบประเมินตนเองอีกครั้ง',
+  do_questionnaire_again: 'ทำแบบประเมินตนเองอีกครั้ง',
   identity_confirm: 'ยืนยันตัวตน',
   any_symptom: 'คุณมีอาการดังต่อไปนี้หรือไม่ ?',
   q_any_symptom: 'กรุณาเลือกอาการที่ตรงกับคุณ เลือกได้มากกว่า 1 อาการ',

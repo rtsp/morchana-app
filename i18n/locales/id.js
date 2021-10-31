@@ -91,7 +91,7 @@ export default {
   but_sys_will_not_auto_trace: 'tetapi sistem tidak akan dapat menemukan perangkat lain secara otomatis',
   general: 'umum',
   privacy_policy: 'Kebijakan Privasi',
-  do_questionaire_again: 'Lakukan Kuisioner Estimasi Risiko lagi',
+  do_questionnaire_again: 'Lakukan Kuisioner Estimasi Risiko lagi',
   identity_confirm: 'Konfirmasi Identitas',
   any_symptom: 'Apakah Anda memiliki gejala berikut?',
   q_any_symptom: 'Silakan pilih gejala yang Anda miliki. (dapat memilih lebih dari satu)',
