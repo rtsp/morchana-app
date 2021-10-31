@@ -4,23 +4,18 @@ import { fetchJWKs } from '../api'
 
 import I18n from '../../i18n/i18n'
 
-let jwks: { x: any; y: any } = null
-export const refetchJWKs = async () => {
-  const result = await fetchJWKs()
-  if (result) {
-    jwks = result
-  }
-}
+let jwks: { x: any; y: any } | undefined
 
-export const verifyToken = (token) => {
+export const verifyToken = async (token: string) => {
+  if (!jwks) jwks = (await fetchJWKs()) as { x: any; y: any }
   return jwks && JwtUtils.verify(token, jwks.x, jwks.y)
 }
 
-export const decodeJWT = (token) => {
+export const decodeJWT = (token: string) => {
   try {
     return jwtDecode(token)
   } catch (e) {
-    console.log(e)
+    console.error('decodeJWT', e, token)
     return { error: I18n.t('incorrect_qr') }
   }
 }

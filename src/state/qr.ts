@@ -1,12 +1,10 @@
-import { getQRData, getTagData, getUserLinkedStatus } from '../api'
-import { useEffect, useReducer, useRef, useCallback } from 'react'
-import moment from 'moment-timezone'
-import 'moment/locale/th'
 import AsyncStorage from '@react-native-community/async-storage'
 import _ from 'lodash'
-
+import moment from 'moment-timezone'
+import 'moment/locale/th'
+import { useCallback, useEffect, useReducer, useRef } from 'react'
 import I18n from '../../i18n/i18n'
-import { userPrivateData } from './userPrivateData'
+import { getQRData, getTagData } from '../api'
 
 interface QRData {
   data: {
@@ -80,14 +78,14 @@ export const useSelfQR = () => {
       error = e
     }
 
-    try {
-      const {
-        data: { linked },
-      } = await getUserLinkedStatus(userPrivateData.getAnonymousId())
-      isLinked = linked
-    } catch (e) {
-      console.error('cannot linked error', e)
-    }
+    // try {
+    //   const {
+    //     data: { linked },
+    //   } = await getUserLinkedStatus(userPrivateData.getAnonymousId())
+    //   isLinked = linked
+    // } catch (e) {
+    //   console.error('cannot linked error', e)
+    // }
 
     try {
       qrState = SelfQR.getCurrentState()
@@ -96,7 +94,7 @@ export const useSelfQR = () => {
       error = e
     }
 
-    if (error) {
+    if (error && !qrData) {
       dispatch({
         type: QR_ACTION.UPDATE,
         payload: { qrState, error, isLinked },
@@ -200,7 +198,7 @@ export class SelfQR extends QR {
   }
 
   constructor(qrData: QRData) {
-    console.log('SelfQR', qrData)
+    // console.log('SelfQR', qrData)
     super(qrData.data.code)
     this.qrData = qrData
     this.timestamp = Date.now()
@@ -318,7 +316,7 @@ const SCORES = {
 } as const
 
 const getLabel = (code: keyof typeof LEVELS) => {
-  console.log('getLabel', code)
+  // console.log('getLabel', code)
   return {
     green: I18n.t('very_low_risk'),
     yellow: I18n.t('low_risk'),
