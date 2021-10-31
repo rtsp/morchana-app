@@ -24,6 +24,7 @@ export default function ConsentPolicy() {
             rowData={[
               [I18n.t('privacy_policy_table_01_body_01_01'), I18n.t('privacy_policy_table_01_body_01_02')],
               [I18n.t('privacy_policy_table_01_body_02_01'), I18n.t('privacy_policy_table_01_body_02_02')],
+              [I18n.t('privacy_policy_table_01_body_03_01'), I18n.t('privacy_policy_table_01_body_03_02')],
             ]}
           />
           <Text style={styles.agreement}>{getAgreementTextBody2()} </Text>
@@ -36,6 +37,7 @@ export default function ConsentPolicy() {
               [I18n.t('privacy_policy_table_02_body_02_01'), I18n.t('privacy_policy_table_02_body_02_02')],
               [I18n.t('privacy_policy_table_02_body_03_01'), I18n.t('privacy_policy_table_02_body_03_02')],
               [I18n.t('privacy_policy_table_02_body_04_01'), I18n.t('privacy_policy_table_02_body_04_02')],
+              [I18n.t('privacy_policy_table_02_body_05_01'), I18n.t('privacy_policy_table_02_body_05_02')],
             ]}
           />
           <Text style={styles.agreement}>{getAgreementTextBody3()} </Text>

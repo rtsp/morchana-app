@@ -312,6 +312,8 @@ export default {
   privacy_policy_table_01_body_02_01: '2. Collect via GPS/Bluetooth/Motion tracking technology',
   privacy_policy_table_01_body_02_02:
     '• Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
+  privacy_policy_table_01_body_03_01: '3. Collect via Physical Activity',
+  privacy_policy_table_01_body_03_02: '• Classification of user’s activities.',
   privacy_policy_table_02_header_01: 'Purposes of Using Data',
   privacy_policy_table_02_header_02: 'List of Personal Data Used',
   privacy_policy_table_02_body_01_01:
@@ -326,6 +328,8 @@ export default {
   privacy_policy_table_02_body_04_01: '4. To analyze the risk or possibility of being in contact with COVID-19 disease',
   privacy_policy_table_02_body_04_02:
     '• Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
+  privacy_policy_table_02_body_05_01: '5. To preserve battery life',
+  privacy_policy_table_02_body_05_02: '• Classification of user’s activities',
   privacy_policy_dga_contact_name: '    Digital Government Development Agency (Public Organization) (DGA)',
   privacy_policy_dga_contact_address_01: '    17th Floor, Bangkok Thai Tower Building 108 Rangnam Rd. Phayathai, ',
   privacy_policy_dga_contact_address_02: '    Ratchatewi, Bangkok 10400',
