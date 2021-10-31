@@ -15,8 +15,8 @@ export default {
   resend_the_code: 'Resend',
   next: 'Next',
   use_without_iden_confirm: 'Use without Identity Confirmation',
-  pls_input_phone_no: 'Moblie verification',
-  confirm_otp_from_sms: 'Enter you mobile number to recieve an OTP',
+  pls_input_phone_no: 'Mobile verification',
+  confirm_otp_from_sms: 'Enter you mobile number to receive an OTP',
   your_phone_no: 'Your Phone No.',
   confirm_phone_no: 'Confirm Telephone No.',
   confirm_phone_no_so_we_can_take_care: 'Confirm your Telephone No. to let us take care of you',
@@ -98,7 +98,7 @@ export default {
   but_sys_will_not_auto_trace: 'but the system will not be able to locate other device(s) automatically',
   general: 'General',
   privacy_policy: 'Privacy Policy',
-  do_questionaire_again: 'Do Risk Estimation Questionaire Again',
+  do_questionnaire_again: 'Do Risk Estimation Questionnaire Again',
   identity_confirm: 'Identity Confirmation',
   any_symptom: 'Do you have any following symptom(s)?',
   q_any_symptom: 'Please select the symptom(s) that you have. (can select more than one)',
@@ -216,7 +216,7 @@ export default {
   privacy_policy_body_02_06:
     '    2.5 To alert the risked person as soon as the patient is found without wasting the time searching and give appropriate advices in time, for example, to come to the hospital to see the doctor as soon as possible.',
   privacy_policy_body_02_07:
-    '    2.6 For the benefits ineconomics, tourism orother activities according tothegovernment policies, forexample,Phuket Sandbox, SamuiPlus Model. However,once youreceive the permission toenter the areas designated as pilot provinces for tourism, there will be the data for monitoring or tracking you while staying in the area.',
+    '    2.6 For the benefits in economics, tourism or other activities according to the government policies, for example, Phuket Sandbox, Samui Plus Model. However,once you receive the permission to enter the areas designated as pilot provinces for tourism, there will be the data for monitoring or tracking you while staying in the area.',
   privacy_policy_body_03: '3. The Personal Data We Collect and Use',
   privacy_policy_body_03_00:
     '    We will collect and use your personal data for the purposes as mentioned in Item 2. However, we will collect and use the personal data as per necessity by mainly using the Anonymous ID in the data processing of the app according to their purposes.',
@@ -312,6 +312,8 @@ export default {
   privacy_policy_table_01_body_02_01: '2. Collect via GPS/Bluetooth/Motion tracking technology',
   privacy_policy_table_01_body_02_02:
     '• Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
+  privacy_policy_table_01_body_03_01: '3. Collect via Physical Activity',
+  privacy_policy_table_01_body_03_02: '• Classification of user’s activities.',
   privacy_policy_table_02_header_01: 'Purposes of Using Data',
   privacy_policy_table_02_header_02: 'List of Personal Data Used',
   privacy_policy_table_02_body_01_01:
@@ -326,6 +328,8 @@ export default {
   privacy_policy_table_02_body_04_01: '4. To analyze the risk or possibility of being in contact with COVID-19 disease',
   privacy_policy_table_02_body_04_02:
     '• Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
+  privacy_policy_table_02_body_05_01: '5. To preserve battery life',
+  privacy_policy_table_02_body_05_02: '• Classification of user’s activities',
   privacy_policy_dga_contact_name: '    Digital Government Development Agency (Public Organization) (DGA)',
   privacy_policy_dga_contact_address_01: '    17th Floor, Bangkok Thai Tower Building 108 Rangnam Rd. Phayathai, ',
   privacy_policy_dga_contact_address_02: '    Ratchatewi, Bangkok 10400',

@@ -12,7 +12,7 @@ import {
 } from './config'
 import { DEFAULT_NATIONALITIES, DEFAULT_PREFIX_NAME } from './navigations/const'
 import { userPrivateData } from './state/userPrivateData'
-import { encryptMessage, refetchDDCPublicKey } from './utils/crypto'
+import { encryptMessage } from './utils/crypto'
 import { ThailandPassProfile, ThailandPassResponse } from './services/use-vaccine'
 
 export const getAnonymousHeaders = () => {
@@ -84,7 +84,6 @@ export const requestOTP = async (mobileNo: string) => {
    verify otp and save encryptedMobileNo
  */
 export const mobileParing = async (mobileNo: string, otpCode: string) => {
-  await refetchDDCPublicKey()
   const encryptedMobileNo = await encryptMessage(mobileNo)
   const resp = await fetch(API_URL + `/mobileParing`, {
     method: 'POST',

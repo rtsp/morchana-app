@@ -184,7 +184,7 @@ const ThailandPassForm: React.FC<{
                       let res = await sendThailandPassForm(formData as ThailandPassProfile)
 
                       if (res.status === 'error' || res.error) {
-                        setErrorModalMessage(res.error || I18n.t('system_error'))
+                        setErrorModalMessage(res.error || res.message || I18n.t('system_error'))
                         return
                       }
 

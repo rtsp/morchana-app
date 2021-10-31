@@ -91,7 +91,7 @@ export default {
   but_sys_will_not_auto_trace: 'သို့သော်စနစ်သည် အခြားကိရိယာများကို အလိုအလျောက် ရှာဖွေနိုင်မည်မဟုတ်ပါ',
   general: 'အထွေထွေ',
   privacy_policy: 'သီးသန့်တည်ရှိမှု မူဝါဒ',
-  do_questionaire_again: 'အန္တရာယ် ခန့်မှန်းမေးခွန် ထပ်မံ ပြုလုပ်ပါ',
+  do_questionnaire_again: 'အန္တရာယ် ခန့်မှန်းမေးခွန် ထပ်မံ ပြုလုပ်ပါ',
   identity_confirm: 'အထောက်အထား အတည်ပြုပါ',
   any_symptom: 'သင့်တွင် အောက်ပါ လက္ခဏာများ ရှိပါသလား',
   q_any_symptom:

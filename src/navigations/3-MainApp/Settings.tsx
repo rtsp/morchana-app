@@ -75,7 +75,7 @@ export const Settings = () => {
               >
                 <View style={styles.section}>
                   <Text style={styles.sectionText}>
-                    {I18n.t('do_questionaire_again')}
+                    {I18n.t('do_questionnaire_again')}
                   </Text>
                 </View>
               </TouchableHighlight> */}

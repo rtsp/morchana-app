@@ -170,7 +170,7 @@ export const QuestionaireSummary = ({ navigation }) => {
                 }}
               />
               <Button
-                title={I18n.t('do_questionaire_again')}
+                title={I18n.t('do_questionnaire_again')}
                 style={{
                   width: '100%',
                 }}

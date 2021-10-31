@@ -19,8 +19,6 @@ import { applicationState } from './state/app-state'
 import { userPrivateData } from './state/userPrivateData'
 import { COLORS } from './styles'
 import { compose } from './utils/compose'
-import { refetchDDCPublicKey } from './utils/crypto'
-import { refetchJWKs } from './utils/jwt'
 import { APP_VERSION } from './constants'
 
 // const AppContainer = createAppContainer(Navigator)
@@ -65,13 +63,11 @@ class App extends React.Component {
     const locale = () => AsyncStorage.getItem('locale')
 
     const credential = () =>
-      Promise.all([applicationState.load(), userPrivateData.load(), refetchJWKs()]).catch((e) =>
-        console.log('CREDENTIAL ERROR', e),
-      )
+      Promise.all([applicationState.load(), userPrivateData.load()]).catch((e) => console.log('CREDENTIAL ERROR', e))
 
     const setUpId = () => NativeModules.ContactTracerModule.setUserId(userPrivateData.getAnonymousId())
 
-    return Promise.all([locale(), credential(), setUpId(), refetchDDCPublicKey()])
+    return Promise.all([locale(), credential(), setUpId()])
       .then((resp) => {
         const lng = resp[0]
         if (lng) I18n.locale = lng
@@ -85,11 +81,6 @@ class App extends React.Component {
       .catch(console.warn)
   }
   handleAppStateChange(state: AppStateStatus) {
-    if (this.appState !== state) {
-      if (state === 'active') {
-        refetchJWKs()
-      }
-    }
     this.appState = state
   }
   getTheme() {
