@@ -38,8 +38,8 @@ const ShutterButton = styled.TouchableOpacity`
 `
 
 const FlashButton: React.FC<{
-  flashMode: keyof typeof RNCamera.Constants.FlashMode
-  setFlashMode: (mode: keyof typeof RNCamera.Constants.FlashMode) => void
+  flashMode: typeof RNCamera.Constants.FlashMode
+  setFlashMode: (mode: typeof RNCamera.Constants.FlashMode) => void
 }> = ({ flashMode, setFlashMode }) => (
   <TouchableOpacity
     activeOpacity={0.8}
@@ -68,8 +68,8 @@ const FlashButton: React.FC<{
 )
 
 const CameraDirectionButton: React.FC<{
-  cameraType: keyof typeof RNCamera.Constants.Type
-  setCameraType: (type: keyof typeof RNCamera.Constants.Type) => void
+  cameraType: typeof RNCamera.Constants.Type
+  setCameraType: (type: typeof RNCamera.Constants.Type) => void
 }> = ({ setCameraType, cameraType }) => (
   <TouchableOpacity
     activeOpacity={0.8}
@@ -125,8 +125,8 @@ export const Camera: React.FC<{
   const handleShutter = () => cameraRef.current && onCapture(cameraRef.current)
   const isFocused = useIsFocused()
 
-  const [cameraType, setCameraType] = useState<keyof typeof RNCamera.Constants.Type>(defaultType)
-  const [flashMode, setFlashMode] = useState<keyof typeof RNCamera.Constants.FlashMode>('auto')
+  const [cameraType, setCameraType] = useState<typeof RNCamera.Constants.Type>(RNCamera.Constants.Type[defaultType])
+  const [flashMode, setFlashMode] = useState<typeof RNCamera.Constants.FlashMode>(RNCamera.Constants.FlashMode.auto)
 
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
