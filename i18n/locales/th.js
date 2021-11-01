@@ -425,4 +425,7 @@ export default {
   fill_error_message: 'กรุณากรอกข้อมูลให้ถูกต้อง',
   skip: 'ข้าม',
   access_camera: 'การเข้าถึงกล้อง',
+  access_location: 'Location',
+  location_description:
+    'To detect nearby MOCHANA users even when the app is in the background, we scan for nearby Bluetooth devices and your check-in or location data.  The data will be use with data from other sources, to determined the risk of being exposed to COVID-19 only',
 }

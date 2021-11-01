@@ -431,9 +431,8 @@ export default {
   import: 'Import',
   fill_error_message: 'Please fill all the fields',
   skip: 'Skip',
-  access_camera: 'Permission Camera',
-  access_location: 'Permission Location',
-  access_motion: 'Physical Activity',
+  access_camera: 'Camera',
+  access_location: 'Location',
   location_description:
     'To detect nearby MOCHANA users even when the app is in the background, we scan for nearby Bluetooth devices and your check-in or location data.  The data will be use with data from other sources, to determined the risk of being exposed to COVID-19 only',
 }
