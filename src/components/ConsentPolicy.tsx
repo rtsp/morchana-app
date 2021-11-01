@@ -1,10 +1,9 @@
+import I18n from 'i18n-js'
 import React from 'react'
-import { ScrollView, Text, View, StyleSheet } from 'react-native'
-import { normalize } from 'react-native-elements'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Row, Table } from 'react-native-table-component'
 import { getAgreementTextBody1, getAgreementTextBody2, getAgreementTextBody3 } from '../navigations/const'
-import I18n from 'i18n-js'
-import { FONT_BOLD, FONT_SIZES, COLORS, FONT_FAMILY } from '../styles'
+import { COLORS, FONT_SIZES } from '../styles'
 
 export default function ConsentPolicy() {
   return (

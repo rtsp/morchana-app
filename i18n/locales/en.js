@@ -309,7 +309,7 @@ export default {
   privacy_policy_table_01_body_01_01:
     '1. Directly collect data from you via registration and while using the application (Camera)',
   privacy_policy_table_01_body_01_02:
-    'In case of all users:\n • The photo of yourself by selfie without sending out from your smartphone. \n\n In case of general users:\n • Mobile number (within Thailand) which is registered through the application. \n\n In case of the users entering the areas designated as pilot provinces for tourism by air:\n • Thailand Pass ID \n • Name-surname related to Thailand Pass system. \n • Passport number (for ID verification only)',
+    'In case of all users:\n • The photo of yourself by selfie without sending out from your smartphone.\n • QR Code that you prefer to scan.\n\nIn case of general users:\n • Mobile number (within Thailand) which is registered through the application. \n\nIn case of the users entering the areas designated as pilot provinces for tourism by air:\n • Thailand Pass ID \n • Name-surname related to Thailand Pass system. \n • Passport number (for ID verification only)',
   privacy_policy_table_01_body_02_01: '2. Collect via GPS/Bluetooth/Physical Activity tracking technology',
   privacy_policy_table_01_body_02_02:
     '• Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
@@ -320,17 +320,18 @@ export default {
   privacy_policy_table_02_body_01_01:
     '1. To register and verify identity for the application log-in in case of the travelers',
   privacy_policy_table_02_body_01_02:
-    '• Thailand Pass ID \n • Name-surname related to Thailand Pass system. \n • Passport number (for ID verification only)',
+    ' • Thailand Pass ID \n • Name-surname related to Thailand Pass system. \n • Passport number (for ID verification only)',
   privacy_policy_table_02_body_02_01:
     '2. To register and verify identity for the application log-in in case of general users',
-  privacy_policy_table_02_body_02_02: '• Mobile number (within Thailand) which is registered through the application.',
+  privacy_policy_table_02_body_02_02: ' • Mobile number (within Thailand) which is registered through the application.',
   privacy_policy_table_02_body_03_01: '3. To build the participation and ownership of the application',
-  privacy_policy_table_02_body_03_02: '• The photo of yourself by selfie without sending out from your smartphone',
+  privacy_policy_table_02_body_03_02:
+    ' • The photo of yourself by selfie without sending out from your smartphone\n • QR Code that you prefer to scan.',
   privacy_policy_table_02_body_04_01: '4. To analyze the risk or possibility of being in contact with COVID-19 disease',
   privacy_policy_table_02_body_04_02:
-    '• Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
+    ' • Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
   privacy_policy_table_02_body_05_01: '5. To preserve battery life',
-  privacy_policy_table_02_body_05_02: '• Classification of user’s activities',
+  privacy_policy_table_02_body_05_02: ' • Classification of user’s activities',
   privacy_policy_dga_contact_name: '    Digital Government Development Agency (Public Organization) (DGA)',
   privacy_policy_dga_contact_address_01: '    17th Floor, Bangkok Thai Tower Building 108 Rangnam Rd. Phayathai, ',
   privacy_policy_dga_contact_address_02: '    Ratchatewi, Bangkok 10400',
