@@ -17,7 +17,7 @@ export const OnboardCoeLanding = () => {
   const navigation = useNavigation()
 
   useEffect(() => {
-    applicationState.setData('isPassedOnboarding', true)
+    applicationState.setData('isRegistered', true)
   }, [])
 
   const onFinishLanding = () => {

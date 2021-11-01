@@ -8,6 +8,11 @@ import GetLocation from 'react-native-get-location'
 import { API_URL } from '../config'
 import I18n from '../../i18n/i18n'
 
+export const canUseGeoLocation = () => {
+  const hasGMS = DeviceInfo.hasGmsSync()
+  return Platform.OS === 'ios' || hasGMS
+}
+
 class BackgroundTracking {
   setup(startImmediately?: boolean) {
     if (startImmediately) {
@@ -61,7 +66,7 @@ class BackgroundTracking {
   }
 
   start() {
-    if (!this.canUseGeoLocation) {
+    if (!canUseGeoLocation()) {
       return Promise.resolve()
     }
 
@@ -85,7 +90,7 @@ class BackgroundTracking {
   }
 
   stop() {
-    if (!this.canUseGeoLocation) {
+    if (!canUseGeoLocation()) {
       return Promise.resolve()
     }
     BackgroundGeolocation.removeAllListeners()
@@ -93,14 +98,14 @@ class BackgroundTracking {
   }
 
   destroyLocations() {
-    if (!this.canUseGeoLocation) {
+    if (!canUseGeoLocation()) {
       return Promise.resolve()
     }
     return BackgroundGeolocation.destroyLocations()
   }
 
   getLocation(extras: any = {}) {
-    if (!this.canUseGeoLocation) {
+    if (!canUseGeoLocation()) {
       return Promise.resolve({ ...extras })
     }
     return this.registerGeoLocation().then(() => {
@@ -115,11 +120,6 @@ class BackgroundTracking {
     StoreLocationHistoryService.calculateDistance(location.latitude, location.longitude).then((type) => {
       StoreLocationHistoryService.callStackData(type)
     })
-  }
-
-  get canUseGeoLocation() {
-    const hasGMS = DeviceInfo.hasGmsSync()
-    return Platform.OS === 'ios' || hasGMS
   }
 }
 

@@ -28,6 +28,7 @@ export default {
   consume_low_energy_and_can_detect_closed_contact:
     'Consume low level of energy to be able to scan people around you and notify you immediately if you are getting closed to people who have COVID-19 risk',
   grant_permission: 'Grant permission',
+  not_now: 'Not now',
   register_successfully: 'Registered successfully',
   can_start_using_now: 'Can start using now',
   start: 'Start',
@@ -38,15 +39,15 @@ export default {
   camera: 'Camera',
   gallery: 'Gallery',
   photo_description:
-    'Please select your profile photo. This will be use for personalization purpose and will be stored locally on this device.',
+    'Please select your profile photo (need access to your camera) This photo will use to build the participation and ownership of the application. The data will be stored locally without sending out from your smartphone.',
   add_image: 'Add image',
   change_profile_image: 'Change profile image',
   pls_grant_permission: 'Please grant permission',
   let_doc_estimate_your_risk: 'Let the doctor estimate your risk level',
-  your_position: 'Your position',
+  your_position: 'Location',
   help_notify_if_you_get_near_risky_person_or_area:
-    'To help notify you if you get near the high COVID-19 Risk person or in the risky area',
-  your_motion: 'Your motion',
+    'Need to access in the background to help notify the high COVID-19 Risk person or in the risky area',
+  your_motion: 'Physical Activity',
   to_manage_mobile_energy_efficiently: 'To efficiently manage mobile energy usage',
   let_doc_notify_you: 'Let the doctor notify you',
   when_you_are_closed_to_risky_ppl: 'When you are closed to people with COVID-19 risk',
@@ -309,7 +310,7 @@ export default {
     '1. Directly collect data from you via registration and while using the application (Camera)',
   privacy_policy_table_01_body_01_02:
     'In case of all users:\n • The photo of yourself by selfie without sending out from your smartphone. \n\n In case of general users:\n • Mobile number (within Thailand) which is registered through the application. \n\n In case of the users entering the areas designated as pilot provinces for tourism by air:\n • Thailand Pass ID \n • Name-surname related to Thailand Pass system. \n • Passport number (for ID verification only)',
-  privacy_policy_table_01_body_02_01: '2. Collect via GPS/Bluetooth/Motion tracking technology',
+  privacy_policy_table_01_body_02_01: '2. Collect via GPS/Bluetooth/Physical Activity tracking technology',
   privacy_policy_table_01_body_02_02:
     '• Your check-in or location data \n • Data of being physically close to others collected and calculated by the application',
   privacy_policy_table_01_body_03_01: '3. Collect via Physical Activity',
@@ -428,4 +429,10 @@ export default {
   passport_no: 'Passport No.',
   import: 'Import',
   fill_error_message: 'Please fill all the fields',
+  skip: 'Skip',
+  access_camera: 'Permission Camera',
+  access_location: 'Permission Location',
+  access_motion: 'Physical Activity',
+  location_description:
+    'To detect nearby MOCHANA users even when the app is in the background, we scan for nearby Bluetooth devices and your check-in or location data.  The data will be use with data from other sources, to determined the risk of being exposed to COVID-19 only',
 }

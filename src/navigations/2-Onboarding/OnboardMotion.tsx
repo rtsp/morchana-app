@@ -7,31 +7,32 @@ import I18n from '../../../i18n/i18n'
 import { Title } from '../../components/Base'
 import { PrimaryButton } from '../../components/Button'
 import { useHUD } from '../../HudView'
+import { backgroundTracking } from '../../services/background-tracking'
 import usePopup from '../../services/use-popup'
 import { COLORS } from '../../styles'
 import { doctorSize, styles } from './const'
 import { OnboardHeader } from './OnboadHeader'
 
-const LOCATION_PERMISSION = Platform.select({
-  ios: PERMISSIONS.IOS.LOCATION_ALWAYS,
-  android: PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+const ACTIVITY_PERMISSION = Platform.select({
+  ios: PERMISSIONS.IOS.MOTION, // NOT SURE
+  android: PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
 })
 
-export const OnboardLocation = () => {
+export const OnboardMotion = () => {
   const navigation = useNavigation()
-  const { showPopup } = usePopup()
 
-  const [locationPerm, setLocationPerm] = useState('checking')
+  const [activityPerm, setActivityPerm] = useState('checking')
+  const { showPopup } = usePopup()
 
   const { showSpinner, hide } = useHUD()
 
   useEffect(() => {
-    LOCATION_PERMISSION &&
-      check(LOCATION_PERMISSION).then((perms) => {
+    ACTIVITY_PERMISSION &&
+      check(ACTIVITY_PERMISSION).then((perms) => {
         if (perms === 'granted') {
-          navigation.navigate('OnboardMotion')
+          backgroundTracking.start().then(() => navigation.navigate('OnboardBluetooth'))
         } else {
-          perms && setLocationPerm(perms)
+          perms && setActivityPerm(perms)
         }
       })
   }, [navigation])
@@ -42,33 +43,33 @@ export const OnboardLocation = () => {
         if (status === 'ok') {
           showSpinner()
 
-          LOCATION_PERMISSION && (await request(LOCATION_PERMISSION))
+          ACTIVITY_PERMISSION && (await request(ACTIVITY_PERMISSION))
           hide()
 
           setTimeout(() => {
-            navigation.navigate('OnboardMotion')
+            navigation.navigate('OnboardBluetooth')
           }, 1000)
         } else {
           navigation.navigate('OnboardBluetooth')
         }
       },
       okLabel: I18n.t('grant_permission'),
-      cancelLabel: I18n.t('not_now'),
+      cancelLabel: I18n.t('skip'),
       title: (
         <View style={{ flexDirection: 'column', alignItems: 'center', paddingTop: 16, paddingBottom: 8 }}>
           <Image
-            source={require('../../assets/perm-location-icon.png')}
+            source={require('../../assets/perm-motion-icon.png')}
             resizeMode='contain'
-            style={{ width: normalize(32) }}
+            style={{ width: normalize(40) }}
           />
-          <Title>{I18n.t('access_location')}</Title>
+          <Title>{I18n.t('your_motion')}</Title>
         </View>
       ),
-      content: I18n.t('location_description'),
+      content: I18n.t('to_manage_mobile_energy_efficiently'),
     })
   }
 
-  if (locationPerm === 'checking') {
+  if (activityPerm === 'checking') {
     return (
       <View
         style={{
@@ -127,15 +128,15 @@ export const OnboardLocation = () => {
           <View style={{ flexDirection: 'row' }}>
             <View style={{ paddingRight: 16 }}>
               <Image
-                source={require('../../assets/perm-location-icon.png')}
+                source={require('../../assets/perm-motion-icon.png')}
                 resizeMode='contain'
                 style={{ width: normalize(40) }}
               />
             </View>
 
             <View style={{ flex: 1 }}>
-              <Text style={styles.itemTitle}>{I18n.t('your_position')}</Text>
-              <Text style={styles.description}>{I18n.t('help_notify_if_you_get_near_risky_person_or_area')}</Text>
+              <Text style={styles.itemTitle}>{I18n.t('your_motion')}</Text>
+              <Text style={styles.description}>{I18n.t('to_manage_mobile_energy_efficiently')}</Text>
             </View>
           </View>
           <PrimaryButton

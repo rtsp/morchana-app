@@ -29,8 +29,8 @@ type VaccineContextType = Partial<{
   getUpdateTime: () => Moment | null
   reloadVaccine: () => void
   resetVaccine: () => void
-  isVaccineURL: (url: string) => void
-  getVaccineUserName: (vaccine: Vaccination) => string
+  isVaccineURL: (url: string) => Promise<boolean>
+  getVaccineUserName: (vaccine: Vaccination) => Promise<string>
 }>
 
 export interface ThailandPassProfile {
@@ -148,91 +148,83 @@ const VaccineContext = createContext<VaccineContextType>({})
 
 export const VaccineProvider: React.FC = ({ children }) => {
   const [[vaccineList, cid, updateTime], setVaccineList] = useState<[Vaccination[], string, string]>([[], '', ''])
-  const [config, setConfig] = useState(defaultConfig)
 
   useEffect(() => {
     AsyncStorage.getItem(VACCINE_DATA_KEY).then((res) => {
       res && setVaccineList(JSON.parse(res))
     })
-    getConfig().then(setConfig)
   }, [])
 
-  const isVaccineURL = React.useCallback(
-    (url: string) => {
-      return url && url.includes(config.url)
-    },
-    [config],
-  )
+  const isVaccineURL = React.useCallback(async (url: string) => {
+    const config = await getConfig()
+    return url && url.includes(config.url)
+  }, [])
 
-  const requestAndSave = React.useCallback(
-    async (_cid: string) => {
-      try {
-        const list = await requestVaccineData(_cid, config)
-        const ts = new Date().toISOString()
-        if (!Array.isArray(list) || !list.length) {
-          sendVaccineLog({ event: 'PARSE', status: 'FAILED', cid: _cid })
-          return {
-            status: 'ERROR',
-            errorMessage: I18n.t('vaccine_record_not_found_title'),
-            errorTitle: I18n.t('vaccine_record_not_found_message'),
-          } as const
-        }
-
-        setVaccineList([list, _cid, ts])
-
-        AsyncStorage.setItem(VACCINE_DATA_KEY, JSON.stringify([list, _cid, ts]))
-      } catch (e) {
+  const requestAndSave = React.useCallback(async (_cid: string) => {
+    try {
+      const config = await getConfig()
+      const list = await requestVaccineData(_cid, config)
+      const ts = new Date().toISOString()
+      if (!Array.isArray(list) || !list.length) {
         sendVaccineLog({ event: 'PARSE', status: 'FAILED', cid: _cid })
         return {
           status: 'ERROR',
-          errorMessage: I18n.t('vaccine_connection_failed_title'),
-          errorTitle: I18n.t('vaccine_connection_failed_message'),
+          errorMessage: I18n.t('vaccine_record_not_found_title'),
+          errorTitle: I18n.t('vaccine_record_not_found_message'),
         } as const
       }
 
-      sendVaccineLog({ event: 'PARSE', status: 'SUCCESS', cid: _cid })
-      return { status: 'SUCCESS' } as const
-    },
-    [config],
-  )
+      setVaccineList([list, _cid, ts])
 
-  const getVaccineUserName = useCallback(
-    (vac: Vaccination) => {
-      let unusedString = [',', '.']
+      AsyncStorage.setItem(VACCINE_DATA_KEY, JSON.stringify([list, _cid, ts]))
+    } catch (e) {
+      sendVaccineLog({ event: 'PARSE', status: 'FAILED', cid: _cid })
+      return {
+        status: 'ERROR',
+        errorMessage: I18n.t('vaccine_connection_failed_title'),
+        errorTitle: I18n.t('vaccine_connection_failed_message'),
+      } as const
+    }
 
-      function removePrefixName(name: string, prefixNames: string[]) {
-        function compare(pf: string) {
-          return name.toLocaleLowerCase().indexOf(pf.toLocaleLowerCase()) === 0
-        }
-        const prefix = prefixNames.find(compare)
-        if (prefix) {
-          name = name.replace(prefix, '')
-        }
-        for (let char of unusedString) {
-          name = name.replace(char, '')
-        }
-        return name.trim()
+    sendVaccineLog({ event: 'PARSE', status: 'SUCCESS', cid: _cid })
+    return { status: 'SUCCESS' } as const
+  }, [])
+
+  const getVaccineUserName = useCallback(async (vac: Vaccination) => {
+    let unusedString = [',', '.']
+
+    function removePrefixName(name: string, prefixNames: string[]) {
+      function compare(pf: string) {
+        return name.toLocaleLowerCase().indexOf(pf.toLocaleLowerCase()) === 0
       }
+      const prefix = prefixNames.find(compare)
+      if (prefix) {
+        name = name.replace(prefix, '')
+      }
+      for (let char of unusedString) {
+        name = name.replace(char, '')
+      }
+      return name.trim()
+    }
 
-      const thaiName = removePrefixName(vac.fullThaiName || '', config.thPrefixName)
-      const engName = removePrefixName(vac.fullEngName || '', config.enPrefixName)
+    const config = await getConfig()
+    const thaiName = removePrefixName(vac.fullThaiName || '', config.thPrefixName)
+    const engName = removePrefixName(vac.fullEngName || '', config.enPrefixName)
 
-      if (I18n.locale === 'th') {
-        if (thaiName) {
-          return thaiName
-        } else {
-          return engName
-        }
+    if (I18n.locale === 'th') {
+      if (thaiName) {
+        return thaiName
       } else {
-        if (engName) {
-          return engName
-        } else {
-          return thaiName
-        }
+        return engName
       }
-    },
-    [config.enPrefixName, config.thPrefixName],
-  )
+    } else {
+      if (engName) {
+        return engName
+      } else {
+        return thaiName
+      }
+    }
+  }, [])
 
   const resetVaccine = React.useCallback(() => {
     // sendVaccineLog({ event: 'CLEAR', cid })
@@ -250,6 +242,7 @@ export const VaccineProvider: React.FC = ({ children }) => {
       sendVaccineLog({ event: 'QRSCAN', cid, data: url })
 
       let id = ''
+      const config = await getConfig()
       for (let matcher of config.matchers) {
         let idx = matcher[1]
         let m = url.match(new RegExp('' + matcher[0]))
@@ -264,7 +257,7 @@ export const VaccineProvider: React.FC = ({ children }) => {
 
       return await requestAndSave(id)
     },
-    [requestAndSave, cid, config],
+    [requestAndSave, cid],
   )
 
   const getName = async () => {

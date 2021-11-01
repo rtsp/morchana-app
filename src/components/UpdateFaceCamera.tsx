@@ -1,9 +1,10 @@
 import ImageEditor from '@react-native-community/image-editor'
 import React from 'react'
 import { Alert, Dimensions, NativeModules } from 'react-native'
+import { RNCamera, TakePictureResponse } from 'react-native-camera'
 import { useHUD } from '../HudView'
 import { applicationState } from '../state/app-state'
-import { Camera, RNCamera, TakePictureResponse } from './Camera'
+import { Camera } from './Camera'
 import { SelfieCaptureGuideline } from './SelfieCaptureGuideline'
 
 export const UpdateFaceCamera = ({ onCapture, ...props }) => {

@@ -1,9 +1,10 @@
 import React from 'react'
 import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import I18n from '../../../../i18n/i18n'
+import { Title } from '../../../components/Base'
 import { FONT_BOLD, FONT_FAMILY } from '../../../styles'
 
-const PopupImportVaccine: React.FC<{
+export interface PopupMessageProps {
   modalVisible: boolean
   cancelLabel?: string
   noCancelButton?: boolean
@@ -12,7 +13,9 @@ const PopupImportVaccine: React.FC<{
   onSelect?: (status: 'ok' | 'cancel') => void
   setModalVisible: (visible: boolean) => void
   title?: React.ReactNode
-}> = ({
+}
+
+const PopupMessage: React.FC<PopupMessageProps> = ({
   onSelect,
   modalVisible,
   setModalVisible,
@@ -35,8 +38,8 @@ const PopupImportVaccine: React.FC<{
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{children}</Text>
+          {typeof title === 'string' ? <Title>{title}</Title> : title}
+          {typeof children === 'string' ? <Text style={styles.description}>{children}</Text> : children}
           <View style={styles.buttonSection}>
             {!noCancelButton && (
               <TouchableOpacity
@@ -140,4 +143,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default PopupImportVaccine
+export default PopupMessage

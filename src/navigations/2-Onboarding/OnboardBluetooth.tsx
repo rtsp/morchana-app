@@ -1,15 +1,14 @@
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Image, SafeAreaView, StatusBar, Text, View } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { normalize } from 'react-native-elements'
+import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
 import { useHUD } from '../../HudView'
 import { useContactTracer } from '../../services/contact-tracing-provider'
 import { COLORS } from '../../styles'
 import { doctorSize, styles } from './const'
 import { OnboardHeader } from './OnboadHeader'
-import { normalize } from 'react-native-elements'
-
-import I18n from '../../../i18n/i18n'
 
 export const OnboardBluetooth = () => {
   const navigation = useNavigation()

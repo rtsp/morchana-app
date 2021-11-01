@@ -17,6 +17,9 @@ import { ThailandPassProfile, ThailandPassResponse } from './services/use-vaccin
 
 export const getAnonymousHeaders = () => {
   const authToken = userPrivateData.getData('authToken')
+  if (!authToken) {
+    throw new Error('no authToken')
+  }
   return {
     Authorization: 'Bearer ' + authToken,
     'X-TH-ANONYMOUS-ID': userPrivateData.getAnonymousId(),
@@ -102,6 +105,8 @@ export const mobileParing = async (mobileNo: string, otpCode: string) => {
 }
 
 export const updateUserData = async (data: { [key: string]: any }) => {
+  if (!userPrivateData.getData('authToken')) return null
+
   const resp = await fetch(API_URL + `/userdata`, {
     method: 'POST',
     sslPinning: {

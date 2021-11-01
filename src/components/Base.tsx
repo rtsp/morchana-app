@@ -1,7 +1,6 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { FONT_FAMILY, COLORS, FONT_BOLD, FONT_SIZES } from '../styles'
 import styled from '@emotion/native'
+import { Text, View } from 'react-native'
+import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_SIZES } from '../styles'
 
 export const Header = styled(View)({
   // flexDirection: 'row',
@@ -13,7 +12,7 @@ export const Title = styled(Text)({
   fontSize: FONT_SIZES[800],
   lineHeight: 36,
   alignItems: 'center',
-  color: COLORS.PRIMARY_DARK,
+  color: COLORS.DARK_BLUE,
   textAlign: 'center',
   width: '100%',
 })
