@@ -6,6 +6,9 @@ import { useCallback, useEffect, useReducer, useRef } from 'react'
 import I18n from '../../i18n/i18n'
 import { getQRData, getTagData } from '../api'
 
+type StatusCode = 'green' | 'yellow' | 'orange' | 'red'
+type DecodedStatusCode = 'G' | 'Y' | 'O' | 'R'
+
 interface QRData {
   data: {
     anonymousId: string
@@ -124,7 +127,7 @@ export const useSelfQR = () => {
 }
 
 class QR {
-  code: StatusCode
+  code: StatusCode = 'green'
   constructor(_code: keyof typeof STATUS_COLORS) {
     this.code = _code
   }
@@ -225,14 +228,13 @@ export class SelfQR extends QR {
 }
 
 interface DecodedResult {
-  _: [string, 'G' | 'Y' | 'O' | 'R', string | undefined, string | undefined]
+  _: [string, DecodedStatusCode, string | undefined, string | undefined]
   iat: number
   iss: string
 }
 
 export class QRResult extends QR {
   iat: number
-  code: StatusCode = STATUS_CODE.GREEN
   annonymousId: string
   tagId?: string
   age?: string
@@ -285,13 +287,11 @@ const resolveAge = (age: string) => {
   )
 }
 
-type StatusCode = 'green' | 'yellow' | 'orange' | 'red'
-
-enum STATUS_CODE {
-  GREEN = 'green',
-  YELLOW = 'yellow',
-  ORANGE = 'orange',
-  RED = 'red',
+const CODE_MAP: Record<DecodedStatusCode, StatusCode> = {
+  G: 'green',
+  Y: 'yellow',
+  O: 'orange',
+  R: 'red',
 }
 
 const STATUS_COLORS = {
@@ -323,13 +323,6 @@ const getLabel = (code: keyof typeof LEVELS) => {
     orange: I18n.t('medium_risk'),
     red: I18n.t('high_risk'),
   }[code]
-}
-
-const CODE_MAP = {
-  G: 'green',
-  Y: 'yellow',
-  O: 'orange',
-  R: 'red',
 }
 
 type TagMeta = {

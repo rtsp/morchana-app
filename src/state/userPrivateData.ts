@@ -77,7 +77,9 @@ class UserPrivateData extends HookState {
     return this.data && this.data[key]
   }
   getFace() {
-    const dataPath = `${RNFS.DocumentDirectoryPath}/${this.getData('faceURI')}`
+    const uri = this.getData('faceURI')
+    if (!uri) return null
+    const dataPath = `${RNFS.DocumentDirectoryPath}/${uri}`
     if (Platform.OS === 'android') {
       return 'file://' + dataPath
     }

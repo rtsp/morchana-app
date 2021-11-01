@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/AntDesign'
 import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
-import { backgroundTracking } from '../../services/background-tracking'
 import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_SIZES } from '../../styles'
 import { useResetTo } from '../../utils/navigation'
@@ -17,8 +16,6 @@ export const OnboardComplete = () => {
   }
 
   useEffect(() => {
-    backgroundTracking.start()
-
     applicationState.setData('isPassedOnboarding', true)
   }, [])
 

@@ -11,6 +11,7 @@ import usePopup from '../../services/use-popup'
 import { COLORS } from '../../styles'
 import { doctorSize, styles } from './const'
 import { OnboardHeader } from './OnboadHeader'
+import { backgroundTracking } from '../../services/background-tracking'
 
 const LOCATION_PERMISSION = Platform.select({
   ios: PERMISSIONS.IOS.LOCATION_ALWAYS,
@@ -61,10 +62,10 @@ export const OnboardLocation = () => {
             resizeMode='contain'
             style={{ width: normalize(32) }}
           />
-          <Title>{I18n.t('access_location')}</Title>
+          <Title>{I18n.t('your_position')}</Title>
         </View>
       ),
-      content: I18n.t('location_description'),
+      content: I18n.t('help_notify_if_you_get_near_risky_person_or_area'),
     })
   }
 

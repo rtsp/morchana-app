@@ -75,7 +75,7 @@ export const QRCodeScan = ({ navigation }) => {
                 backgroundTracking.getLocation({
                   extras: { triggerType: 'thaichana', url: e.data },
                 })
-              } else if (requestVaccine && isVaccineURL && isVaccineURL(url)) {
+              } else if (requestVaccine && isVaccineURL && (await isVaccineURL(url))) {
                 const result = await requestVaccine(url)
                 try {
                   if (result.status === 'ERROR') {

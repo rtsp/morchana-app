@@ -1,8 +1,7 @@
-import JwtUtils from 'react-native-jwt-verifier'
 import jwtDecode from 'jwt-decode'
-import { fetchJWKs } from '../api'
-
+import JwtUtils from 'react-native-jwt-verifier'
 import I18n from '../../i18n/i18n'
+import { fetchJWKs } from '../api'
 
 let jwks: { x: any; y: any } | undefined
 

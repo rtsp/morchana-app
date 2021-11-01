@@ -30,7 +30,7 @@ const ListItem = ({ source, label, onPress }: { source: ImageURISource; label: s
 }
 
 export const OnboardFace = () => {
-  const [uri, setUri] = React.useState<string>(userPrivateData.getFace())
+  const [uri, setUri] = React.useState<string>(userPrivateData.getFace() ?? '')
   const [popupCamera, setPopupCamera] = React.useState(false)
   const area = useSafeAreaInsets()
   const navigation = useNavigation()
@@ -82,7 +82,7 @@ export const OnboardFace = () => {
   const navigateToGallery = () => {
     setPopupCamera(false)
     openGallery().then((uri) => {
-      console.log('openGallery', uri)
+      // console.log('openGallery', uri)
       setUri(uri)
     })
   }

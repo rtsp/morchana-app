@@ -27,6 +27,7 @@ import { CircularProgressAvatar } from '../../../../src/components/CircularProgr
 import { applicationState, useApplicationState } from '../../../../src/state/app-state'
 import { userPrivateData } from '../../../../src/state/userPrivateData'
 import { COE_ENABLED } from '../../../constants'
+import { backgroundTracking } from '../../../services/background-tracking'
 import { useContactTracer } from '../../../services/contact-tracing-provider'
 import { pushNotification } from '../../../services/notification'
 import { useVaccine } from '../../../services/use-vaccine'
@@ -137,6 +138,10 @@ export const MainApp = () => {
 
   useEffect(() => {
     pushNotification.requestPermissions()
+    backgroundTracking.start()
+  }, [])
+
+  useEffect(() => {
     startAnimated()
   }, [startAnimated])
 

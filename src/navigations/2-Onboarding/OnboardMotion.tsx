@@ -30,7 +30,8 @@ export const OnboardMotion = () => {
     ACTIVITY_PERMISSION &&
       check(ACTIVITY_PERMISSION).then((perms) => {
         if (perms === 'granted') {
-          backgroundTracking.start().then(() => navigation.navigate('OnboardBluetooth'))
+          // backgroundTracking.start().then(() => navigation.navigate('OnboardBluetooth'))
+          navigation.navigate('OnboardBluetooth')
         } else {
           perms && setActivityPerm(perms)
         }

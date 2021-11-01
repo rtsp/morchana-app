@@ -134,7 +134,7 @@ export const Camera: React.FC<{
         <RNCamera
           ref={cameraRef}
           flashMode={flashMode}
-          type={defaultType}
+          type={cameraType}
           ratio='4:3'
           style={{ flex: 1, aspectRatio: 3 / 4 }}
           captureAudio={false}
