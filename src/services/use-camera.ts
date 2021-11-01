@@ -21,7 +21,7 @@ const useCamera = () => {
         const ImagePicker = require('react-native-image-picker')
         ImagePicker.launchImageLibrary({ ...DEFAULT_OPTIONS, ...options }, (response: any) => {
           hide()
-          // console.log({ response })
+          // console.log(response)
           if (Platform.OS === 'android' && 'data' in response) {
             const newFilePath = `${Date.now()}-tmp`
             let tmpPath = `${RNFS.CachesDirectoryPath}/${newFilePath}`

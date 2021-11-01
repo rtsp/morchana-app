@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { COLORS } from '../../../styles'
-import { View, TouchableWithoutFeedback, Dimensions } from 'react-native'
-import RNFS from 'react-native-fs'
+import React, { useState } from 'react'
+import { Dimensions, TouchableWithoutFeedback, View } from 'react-native'
 import { CircularProgressAvatar } from '../../../components/CircularProgressAvatar'
-import { userPrivateData } from '../../../state/userPrivateData'
 import { QR_STATE, SelfQR } from '../../../state/qr'
-import { useResetTo } from '../../../utils/navigation'
+import { userPrivateData } from '../../../state/userPrivateData'
+import { COLORS } from '../../../styles'
 import { UpdateProfileButton } from './UpdateProfileButton'
 
 export const QRAvatar = ({ qr, qrState }: { qr: SelfQR; qrState: QR_STATE }) => {
   const [faceURI, setFaceURI] = useState(userPrivateData.getFace())
-  const resetTo = useResetTo()
+  // const resetTo = useResetTo()
 
   const color = qr
     ? qr.getStatusColor()
@@ -20,16 +18,16 @@ export const QRAvatar = ({ qr, qrState }: { qr: SelfQR; qrState: QR_STATE }) => 
 
   const avatarWidth = Math.min(200, Math.floor((20 / 100) * Dimensions.get('screen').height))
 
-  useEffect(() => {
-    RNFS.exists(faceURI).then((exists) => {
-      console.log('exists', exists)
-      if (!exists) {
-        resetTo({
-          name: 'Onboarding',
-        })
-      }
-    })
-  }, [])
+  // useEffect(() => {
+  //   RNFS.exists(faceURI).then((exists) => {
+  //     console.log('exists', exists)
+  //     if (!exists) {
+  //       resetTo({
+  //         name: 'Onboarding',
+  //       })
+  //     }
+  //   })
+  // }, [])
   return (
     <TouchableWithoutFeedback>
       <View

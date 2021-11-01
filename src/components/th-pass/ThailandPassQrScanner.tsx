@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useState } from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, PermissionsAndroid, StyleSheet, Text, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -10,7 +10,8 @@ import { getThailandPass } from '../../api'
 import { PrimaryButton } from '../../components/Button'
 import { WhiteBackground } from '../../components/WhiteBackground'
 import { PageBackButton } from '../../navigations/2-Onboarding/components/PageBackButton'
-import PopupImportVaccine from '../../navigations/3-MainApp/NewMainApp/PopupImportVaccine'
+import PopupMessage from '../../navigations/3-MainApp/NewMainApp/PopupMessage'
+import usePopup from '../../services/use-popup'
 import { ThailandPassProfile } from '../../services/use-vaccine'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
 
@@ -20,6 +21,7 @@ const ThailandPassQrScanner: React.FC<{
   next: string
 }> = ({ next }) => {
   const navigation = useNavigation()
+  const { showPopup } = usePopup()
   const [modalMode, setModalMode] = useState<'error' | 'ok' | ''>('')
   const [thPass, setThPass] = useState<ThailandPassProfile | null>(null)
   const validateThailandPass = (uri: string) => {
@@ -39,6 +41,28 @@ const ThailandPassQrScanner: React.FC<{
       })
   }
   const inset = useSafeAreaInsets()
+
+  useEffect(() => {
+    const requestCameraPermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+          title: 'Cool Photo App Camera Permission',
+          message: 'Cool Photo App needs access to your camera ' + 'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        })
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the camera')
+        } else {
+          console.log('Camera permission denied')
+        }
+      } catch (err) {
+        console.warn(err)
+      }
+    }
+    requestCameraPermission()
+  }, [])
 
   return (
     <WhiteBackground>
@@ -75,7 +99,7 @@ const ThailandPassQrScanner: React.FC<{
           onPress={() => navigation.navigate(next, { data: null })}
         />
       </View>
-      <PopupImportVaccine
+      <PopupMessage
         onSelect={async (status) => {
           setModalMode('')
           if (status !== 'ok') {
@@ -126,7 +150,7 @@ const ThailandPassQrScanner: React.FC<{
         ) : (
           <Text>{I18n.t('incorrect_qr')}</Text>
         )}
-      </PopupImportVaccine>
+      </PopupMessage>
     </WhiteBackground>
   )
 }

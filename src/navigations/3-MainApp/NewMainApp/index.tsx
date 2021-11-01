@@ -16,7 +16,6 @@ import {
   View,
 } from 'react-native'
 import { Button, normalize } from 'react-native-elements'
-import RNFS from 'react-native-fs'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import GPSState from 'react-native-gps-state'
 import NotificationPopup from 'react-native-push-notification-popup'
@@ -25,13 +24,12 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Carousel from '../../../../src/components/Carousel'
 import { CircularProgressAvatar } from '../../../../src/components/CircularProgressAvatar'
-import { useVaccine } from '../../../../src/services/use-vaccine'
 import { applicationState, useApplicationState } from '../../../../src/state/app-state'
 import { userPrivateData } from '../../../../src/state/userPrivateData'
-import { useResetTo } from '../../../../src/utils/navigation'
 import { COE_ENABLED } from '../../../constants'
 import { useContactTracer } from '../../../services/contact-tracing-provider'
 import { pushNotification } from '../../../services/notification'
+import { useVaccine } from '../../../services/use-vaccine'
 import { QR_STATE, SelfQR, useSelfQR } from '../../../state/qr'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../../styles'
 import { BeaconFoundPopupContent } from '../BeaconFoundPopup'
@@ -509,7 +507,6 @@ const AvatarProfile = ({
   changeCount?: number
 }) => {
   const [faceURI, setFaceURI] = useState(userPrivateData.getFace())
-  const resetTo = useResetTo()
 
   const color = qr
     ? qr.getStatusColor()
@@ -523,15 +520,15 @@ const AvatarProfile = ({
   // )
 
   const avatarWidth = 100
-  useEffect(() => {
-    RNFS.exists(faceURI).then((exists) => {
-      // if (!exists) {
-      //   resetTo({
-      //     name: 'Onboarding',
-      //   })
-      // }
-    })
-  }, [faceURI, resetTo])
+  // useEffect(() => {
+  //   RNFS.exists(faceURI).then((exists) => {
+  //     // if (!exists) {
+  //     //   resetTo({
+  //     //     name: 'Onboarding',
+  //     //   })
+  //     // }
+  //   })
+  // }, [faceURI, resetTo])
 
   const buttonStyle = {
     position: 'absolute',

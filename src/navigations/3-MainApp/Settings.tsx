@@ -1,12 +1,12 @@
-import React from 'react'
-import { StatusBar, StyleSheet, View, Text, Switch, ScrollView, TouchableHighlight } from 'react-native'
-import { COLORS, FONT_FAMILY, FONT_SIZES } from '../../styles'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useContactTracer } from '../../services/contact-tracing-provider'
 import { useNavigation } from '@react-navigation/native'
-import { userPrivateData } from '../../state/userPrivateData'
+import React from 'react'
+import { ScrollView, StatusBar, StyleSheet, Switch, Text, TouchableHighlight, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import I18n from '../../../i18n/i18n'
 import { COE_ENABLED } from '../../constants'
+import { useContactTracer } from '../../services/contact-tracing-provider'
+import { userPrivateData } from '../../state/userPrivateData'
+import { COLORS, FONT_FAMILY, FONT_SIZES } from '../../styles'
 
 export const Settings = () => {
   const navigation = useNavigation()

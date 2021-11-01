@@ -54,7 +54,7 @@ export const AuthOTP = ({ route }) => {
         return
       }
       hide()
-      applicationState.setData('isPassedOnboarding', true)
+      // applicationState.setData('isPassedOnboarding', true)
       // resetTo({ name: 'MainApp' })
       navigation.navigate('OnboardLocation')
     } catch (err) {
