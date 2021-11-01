@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StatusBar, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/AntDesign'
 import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
+import { backgroundTracking } from '../../services/background-tracking'
+import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_SIZES } from '../../styles'
 import { useResetTo } from '../../utils/navigation'
 
@@ -13,6 +15,13 @@ export const OnboardComplete = () => {
     SUB_TITLE: I18n.t('can_start_using_now'),
     NEXT_BUTTON: I18n.t('start'),
   }
+
+  useEffect(() => {
+    backgroundTracking.start()
+
+    applicationState.setData('isPassedOnboarding', true)
+  }, [])
+
   // const navigation = useNavigation()
   const resetTo = useResetTo()
   return (

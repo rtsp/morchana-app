@@ -28,6 +28,7 @@ export default {
   consume_low_energy_and_can_detect_closed_contact:
     'ใช้พลังงานต่ำ เพื่อคอยสแกนคนใกล้ตัวและแจ้งเตือนทันทีหากคุณได้ไปใกล้ชิดกับคนที่มีความเสี่ยง',
   grant_permission: 'อนุญาตให้เข้าถึง',
+  not_now: 'ไม่ใช่ตอนนี้',
   register_successfully: 'ลงทะเบียนสำเร็จ',
   can_start_using_now: 'เริ่มใช้งานได้ทันที',
   start: 'เริ่มใช้งาน',
@@ -46,7 +47,7 @@ export default {
   your_position: 'ตำแหน่งของคุณ',
   help_notify_if_you_get_near_risky_person_or_area:
     'เพื่อคอยแจ้งเตือนหากคุณได้ไปใกล้ชิดกับคนที่มี ความเสี่ยง หรืออยู่ในพื้นที่เสี่ยง',
-  your_motion: 'การเคลื่อนที่ของคุณ (MOTION)',
+  your_motion: 'การเคลื่อนที่ของคุณ ',
   to_manage_mobile_energy_efficiently: 'เพื่อจัดการการใช้พลังงานของมือถือ อย่างมีประสิทธิภาพ',
   let_doc_notify_you: 'ให้หมอแจ้งเตือนคุณ',
   when_you_are_closed_to_risky_ppl: 'เมื่อคุณอยู่ใกล้ชิดกับคนที่มีความเสี่ยง',
@@ -422,4 +423,6 @@ export default {
   passport_no: 'หมายเลขพาสปอร์ต',
   import: 'นำเข้าข้อมูล',
   fill_error_message: 'กรุณากรอกข้อมูลให้ถูกต้อง',
+  skip: 'ข้าม',
+  access_camera: 'การเข้าถึงกล้อง',
 }

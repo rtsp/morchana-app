@@ -20,6 +20,7 @@ import { userPrivateData } from './state/userPrivateData'
 import { COLORS } from './styles'
 import { compose } from './utils/compose'
 import { APP_VERSION } from './constants'
+import { PopupContextProvider } from './services/use-popup'
 
 // const AppContainer = createAppContainer(Navigator)
 const Stack = createStackNavigator()
@@ -63,7 +64,7 @@ class App extends React.Component {
     const locale = () => AsyncStorage.getItem('locale')
 
     const credential = () =>
-      Promise.all([applicationState.load(), userPrivateData.load()]).catch((e) => console.log('CREDENTIAL ERROR', e))
+      Promise.all([applicationState.load(), userPrivateData.load()]).catch((e) => console.error('CREDENTIAL ERROR', e))
 
     const setUpId = () => NativeModules.ContactTracerModule.setUserId(userPrivateData.getAnonymousId())
 
@@ -72,7 +73,7 @@ class App extends React.Component {
         const lng = resp[0]
         if (lng) I18n.locale = lng
 
-        backgroundTracking.setup(Boolean(applicationState.getData('isPassedOnboarding')))
+        // backgroundTracking.setup(Boolean(applicationState.getData('isPassedOnboarding')))
 
         this.setState({ loaded: true }, () => {
           SplashScreen.hide()
@@ -80,7 +81,7 @@ class App extends React.Component {
       })
       .catch(console.warn)
   }
-  handleAppStateChange(state: AppStateStatus) {
+  handleAppStateChange = (state: AppStateStatus) => {
     this.appState = state
   }
   getTheme() {
@@ -134,21 +135,23 @@ class App extends React.Component {
           <SafeAreaProvider>
             <HUDProvider>
               <VaccineProvider>
-                <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND }}>
-                  <NavigationContainer linking={{ prefixes: ['morchana://'] }} ref={this.navRef}>
-                    <Stack.Navigator
-                      headerMode='none'
-                      screenOptions={{
-                        headerStyle: {
-                          backgroundColor: '#F9F9F9',
-                        },
-                        headerTintColor: '#F9F9F9',
-                      }}
-                    >
-                      <Stack.Screen name='Navigator' component={Navigator} />
-                    </Stack.Navigator>
-                  </NavigationContainer>
-                </View>
+                <PopupContextProvider>
+                  <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND }}>
+                    <NavigationContainer linking={{ prefixes: ['morchana://'] }} ref={this.navRef}>
+                      <Stack.Navigator
+                        headerMode='none'
+                        screenOptions={{
+                          headerStyle: {
+                            backgroundColor: '#F9F9F9',
+                          },
+                          headerTintColor: '#F9F9F9',
+                        }}
+                      >
+                        <Stack.Screen name='Navigator' component={Navigator} />
+                      </Stack.Navigator>
+                    </NavigationContainer>
+                  </View>
+                </PopupContextProvider>
               </VaccineProvider>
             </HUDProvider>
           </SafeAreaProvider>

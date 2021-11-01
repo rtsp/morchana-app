@@ -15,7 +15,7 @@ export const OnboardProgressing = () => {
   // const resetTo = useResetTo()
   useEffect(() => {
     setTimeout(() => {
-      applicationState.setData('isPassedOnboarding', true)
+      // applicationState.setData('isPassedOnboarding', true)
       // if (applicationState.getData('filledQuestionaireV2')) {
       //   navigation.navigate('OnboardComplete')
       // } else {

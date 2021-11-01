@@ -13,7 +13,7 @@ import { useApplicationState } from '../../state/app-state'
 import { QRResult, tagManager } from '../../state/qr'
 import { COLORS } from '../../styles'
 import { decodeJWT, verifyToken } from '../../utils/jwt'
-import PopupImportVaccine from './NewMainApp/PopupImportVaccine'
+import PopupMessage from './NewMainApp/PopupMessage'
 import { QRPopupContent } from './QRPopupContent'
 
 export const QRCodeScan = ({ navigation }) => {
@@ -24,8 +24,11 @@ export const QRCodeScan = ({ navigation }) => {
   const popupRef = useRef<NotificationPopup>()
   const [, setData] = useApplicationState()
   const vaccine = vaccineList && vaccineList[0]
+  const [name, setName] = useState('')
 
-  const name = vaccine && getVaccineUserName ? getVaccineUserName(vaccine) : ''
+  useEffect(() => {
+    vaccine && getVaccineUserName && getVaccineUserName(vaccine).then(setName)
+  }, [vaccine, getVaccineUserName])
 
   useEffect(() => {
     tagManager.update()
@@ -113,7 +116,7 @@ export const QRCodeScan = ({ navigation }) => {
         renderPopupContent={(props) => <QRPopupContent {...props} qrResult={qrResult} />}
       />
       {modalVisible ? (
-        <PopupImportVaccine
+        <PopupMessage
           title={I18n.t('record_found')}
           message={`${I18n.t('vaccination_record_of')}\n\n${name}\n\n${I18n.t('vaccination_found')}\n\n${I18n.t(
             'import_this_record',

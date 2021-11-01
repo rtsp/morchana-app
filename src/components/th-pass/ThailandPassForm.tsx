@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import I18n from '../../../i18n/i18n'
 import { getNationalityList, getPrefixNameList, sendThailandPassForm } from '../../api'
 import { PageBackButton } from '../../navigations/2-Onboarding/components/PageBackButton'
-import PopupImportVaccine from '../../navigations/3-MainApp/NewMainApp/PopupImportVaccine'
+import PopupMessage from '../../navigations/3-MainApp/NewMainApp/PopupMessage'
 import { ThailandPassProfile } from '../../services/use-vaccine'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
 import { PrimaryButton } from '../Button'
@@ -203,7 +203,7 @@ const ThailandPassForm: React.FC<{
           </View>
         </ScrollView>
       </View>
-      <PopupImportVaccine
+      <PopupMessage
         title={
           <View style={styles.errorTitleViewModal}>
             <Icon name='alert-circle-outline' size={32} color={COLORS.RED_WARNING} />
@@ -215,7 +215,7 @@ const ThailandPassForm: React.FC<{
         noCancelButton
       >
         {errorModalMessage}
-      </PopupImportVaccine>
+      </PopupMessage>
     </WhiteBackground>
   )
 }

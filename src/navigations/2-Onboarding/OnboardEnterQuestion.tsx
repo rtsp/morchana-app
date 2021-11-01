@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import I18n from 'i18n-js'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -10,6 +10,7 @@ import { WhiteBackground } from '../../components/WhiteBackground'
 import { COE_ENABLED } from '../../constants'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
 import { PageBackButton } from './components/PageBackButton'
+import { applicationState } from '../../state/app-state'
 
 type SelectValueType = boolean | string
 
@@ -31,6 +32,13 @@ export const OnboardEnterQuestion = () => {
 
   const onSelect = useCallback((itemValue: SelectValueType) => {
     onChange(itemValue)
+  }, [])
+
+  useEffect(() => {
+    const isPassedOnboarding = applicationState.getData('isPassedOnboarding')
+    if (isPassedOnboarding) {
+      navigation.navigate('OnboardLocation')
+    }
   }, [])
 
   const onSubmit = () => {

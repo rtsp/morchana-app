@@ -12,7 +12,7 @@ const Normal: React.FC<TextProps> = ({ children, style, ...rest }) => {
 
 const Bold: React.FC<TextProps> = ({ children, style, ...rest }) => {
   return (
-    <Text style={style ? [styles.boldText, style] : styles.defaultText} {...rest}>
+    <Text style={style ? [styles.boldText, style] : styles.boldText} {...rest}>
       {children}
     </Text>
   )

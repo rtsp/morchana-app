@@ -8,6 +8,7 @@ import { OnboardEnterQuestion } from './OnboardEnterQuestion'
 import { OnboardFace } from './OnboardFace'
 import { OnboardFaceCamera } from './OnboardFaceCamera'
 import { OnboardLocation } from './OnboardLocation'
+import { OnboardMotion } from './OnboardMotion'
 import { OnboardNotification } from './OnboardNotification'
 import { OnboardProgressing } from './OnboardProgressing'
 import {
@@ -33,15 +34,12 @@ export const OnboardingStack = () => {
       <Stack.Screen name='OnboardFaceStack' component={OnboardFaceStack} />
       <Stack.Screen name='OnboardLocation' component={OnboardLocation} />
       <Stack.Screen name='OnboardBluetooth' component={OnboardBluetooth} />
+      <Stack.Screen name='OnboardMotion' component={OnboardMotion} />
       <Stack.Screen name='OnboardNotification' component={OnboardNotification} />
-      <Stack.Screen name='OnboardProgressing' component={OnboardProgressing} options={{ gesturesEnabled: false }} />
-      <Stack.Screen name='OnboardComplete' component={OnboardComplete} options={{ gesturesEnabled: false }} />
-      <Stack.Screen name='OnboardEnterQuestion' component={OnboardEnterQuestion} options={{ gesturesEnabled: false }} />
-      <Stack.Screen
-        name='OnboardThailandPassConsent'
-        component={OnboardThailandPassConsent}
-        options={{ gesturesEnabled: false }}
-      />
+      <Stack.Screen name='OnboardProgressing' component={OnboardProgressing} />
+      <Stack.Screen name='OnboardComplete' component={OnboardComplete} />
+      <Stack.Screen name='OnboardEnterQuestion' component={OnboardEnterQuestion} />
+      <Stack.Screen name='OnboardThailandPassConsent' component={OnboardThailandPassConsent} />
       <Stack.Screen name='OnboardCoeChecking' component={OnboardCoeChecking} />
       <Stack.Screen name='OnboardThailandPassQrScanner' component={OnboardThailandPassQrScanner} />
       <Stack.Screen name='OnboardThailandPassForm' component={OnboardThailandPassForm} />

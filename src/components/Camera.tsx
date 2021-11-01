@@ -8,7 +8,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../styles'
-import useCamera from '../utils/use-camera'
+import useCamera from '../services/use-camera'
 
 const ShutterButtonOuter = styled.View`
   width: 72px;
