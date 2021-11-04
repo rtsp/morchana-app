@@ -69,7 +69,7 @@ const ThailandPassQrScanner: React.FC<{
       <View style={inset}>
         <PageBackButton label={I18n.t('privacy_notice')} />
         <Text style={styles.title}>{I18n.t('scan_qr_code')}</Text>
-        <Text style={styles.subTitle}>{`Scan Thailand Pass's QR code to get information.`}</Text>
+        <Text style={styles.subTitle}>{I18n.t('scan_description_thailandpass_qr')}</Text>
 
         <View style={styles.cameraContainer}>
           <QRCodeScanner
