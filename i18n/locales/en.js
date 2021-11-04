@@ -436,4 +436,6 @@ export default {
   location_description:
     'To detect nearby MOCHANA users even when the app is in the background, we scan for nearby Bluetooth devices and your check-in or location data.  The data will be use with data from other sources, to determined the risk of being exposed to COVID-19 only',
   scan_description_thailandpass_qr: `Scan Thailand Pass's QR code to get information.`,
+  as_shown_in_passport: 'As shown in Passport',
+  as_shown_in_thailand_pass: 'As shown in Thailand Pass',
 }
