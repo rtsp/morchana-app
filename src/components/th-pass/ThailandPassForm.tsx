@@ -19,8 +19,13 @@ const padding = normalize(16)
 
 type InputBoxType = 'text' | 'select_prefix_name' | 'select_national'
 
-const thPassFieldInfo: { id: keyof ThailandPassProfile; label: string; type: InputBoxType; required?: boolean }[] = [
-  { id: 'prefix_name', label: 'prefix_name', type: 'select_prefix_name', required: true },
+const thPassFieldInfo: {
+  id: keyof ThailandPassProfile
+  label: string
+  type: InputBoxType
+  required?: boolean
+}[] = [
+  // { id: 'prefix_name', label: 'prefix_name', type: 'select_prefix_name', required: true },
   { id: 'first_name', label: 'first_name', type: 'text', required: true },
   { id: 'last_name', label: 'last_name', type: 'text', required: true },
   { id: 'nationality', label: 'nationality', type: 'select_national', required: true },

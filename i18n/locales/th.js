@@ -366,7 +366,7 @@ export default {
   planning_to_enter_thailand_question: 'คุณกำลังเดินทางไปประเทศไทยหรือเพิ่งถึงประเทศไทย ภายในไม่กี่วันนี้หรือไม่?',
   select_image_profile: 'รูปประกอบบัญชีผู้ใช้งาน',
   research: 'แบบสำรวจ',
-  personal_information: 'ข้อมูลผู้ใช้งาน',
+  personal_information: 'บัญชีผู้ใช้งาน',
   personal_information_low_i: 'ข้อมูลผู้ใช้งาน',
   coe: 'COE Code',
   coe_reference_id: 'Reference ID',
@@ -410,7 +410,7 @@ export default {
   policy_notice: 'นโยบายความเป็นส่วนตัว',
   thailand_pass_consent_message:
     'ยินยอมให้มีการดึงข้อมูล ไทยแลนด์พาสไอดี ชื่อ และ นามสกุล จาก Thailand Pass เพื่อใช้งานที่แอปพลิเคชันหมอชนะ',
-  privacy_notice: 'Privacy Notice',
+  privacy_notice: 'นโยบายความเป็นส่วนตัว',
   select_image_from_gallery: 'Select image from gallery',
   proceed: 'ดำเนินการ',
   fill_information_by_yourself: 'กรอกข้อมูลด้วยตัวเอง',
@@ -428,4 +428,5 @@ export default {
   access_location: 'Location',
   location_description:
     'To detect nearby MOCHANA users even when the app is in the background, we scan for nearby Bluetooth devices and your check-in or location data.  The data will be use with data from other sources, to determined the risk of being exposed to COVID-19 only',
+  scan_description_thailandpass_qr: 'สแกนคิวอาร์โค้ดไทยแลนด์พาสเพ่ือนำข้อมูลมาใช้งาน',
 }
