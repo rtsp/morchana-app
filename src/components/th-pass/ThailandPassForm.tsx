@@ -24,23 +24,37 @@ const thPassFieldInfo: {
   label: string
   type: InputBoxType
   required?: boolean
+  placeholder?: string
 }[] = [
   // { id: 'prefix_name', label: 'prefix_name', type: 'select_prefix_name', required: true },
-  { id: 'first_name', label: 'first_name', type: 'text', required: true },
-  { id: 'last_name', label: 'last_name', type: 'text', required: true },
-  { id: 'nationality', label: 'nationality', type: 'select_national', required: true },
-  { id: 'thailand_pass_id', label: 'thailand_pass_id', type: 'text', required: true },
-  { id: 'passport_no', label: 'passport_no', type: 'text', required: true },
+  { id: 'first_name', label: 'first_name', type: 'text', placeholder: 'as_shown_in_passport', required: true },
+  { id: 'last_name', label: 'last_name', type: 'text', placeholder: 'as_shown_in_passport', required: true },
+  {
+    id: 'nationality',
+    label: 'nationality',
+    type: 'select_national',
+    placeholder: 'as_shown_in_passport',
+    required: true,
+  },
+  {
+    id: 'thailand_pass_id',
+    label: 'thailand_pass_id',
+    type: 'text',
+    placeholder: 'as_shown_in_thailand_pass',
+    required: true,
+  },
+  { id: 'passport_no', label: 'passport_no', type: 'text', placeholder: 'as_shown_in_passport', required: true },
 ]
 
 const InputBox: React.FC<{
-  label: string
-  value: any
-  type: InputBoxType
-  onChange?: (value: any) => void
   disabled?: boolean
   error?: boolean
-}> = ({ label, value = null, type, error, onChange, disabled }) => {
+  label: string
+  onChange?: (value: any) => void
+  placeholder?: string
+  type: InputBoxType
+  value: any
+}> = ({ label, value = null, type, error, onChange, disabled, placeholder }) => {
   const [items, setItems] = useState<{ label: string; value: string }[]>([])
   const timerRef = useRef(0)
 
@@ -73,15 +87,19 @@ const InputBox: React.FC<{
               items={items || []}
               itemKey='value'
               style={{
-                inputIOS: { ...styles.textSelect, ...(disabled && styles.disabledTextPicker) },
-                inputAndroid: { ...styles.textSelect, ...(disabled && styles.disabledTextPicker) },
+                done: styles.textPicker,
+                doneDepressed: styles.textPicker,
+                inputAndroid: { ...styles.textPicker, ...(disabled && styles.disabledTextPicker) },
+                inputIOS: { ...styles.textPicker, ...(disabled && styles.disabledTextPicker) },
+                placeholder: styles.textplaceHolder,
+                viewContainer: styles.inputContainer,
               }}
-              placeholder={{ value: '', label: '' }}
-              onValueChange={(value) => {
+              placeholder={{ value: '', label: placeholder }}
+              onValueChange={(val) => {
                 if (timerRef.current) clearTimeout(timerRef.current)
                 timerRef.current = setTimeout(() => {
                   timerRef.current = 0
-                  onChange && onChange(value)
+                  onChange && onChange(val)
                 }, 200)
               }}
               disabled={disabled}
@@ -95,6 +113,8 @@ const InputBox: React.FC<{
           inputStyle={{ ...styles.textValue, ...(disabled && styles.disabledText) }}
           labelStyle={styles.textLabel}
           onChangeText={onChange}
+          placeholder={placeholder}
+          placeholderTextColor={styles.textplaceHolder.color}
           inputContainerStyle={{
             ...styles.textInputBox,
             borderColor: error && !disabled ? COLORS.DANGER : COLORS.GRAY_6,
@@ -145,6 +165,7 @@ const ThailandPassForm: React.FC<{
                     label={I18n.t(datum.label)}
                     value={formData[datum.id]}
                     disabled={formMode === 'submit'}
+                    placeholder={datum.placeholder && I18n.t(datum.placeholder)}
                     onChange={(value) => {
                       if (formRef.current[datum.id] === value) return
                       formRef.current[datum.id] = value
@@ -301,13 +322,21 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     paddingHorizontal: 8,
   },
-  textSelect: {
+  textPicker: {
     color: COLORS.TEXT,
     fontFamily: FONT_MED,
     fontSize: FONT_SIZES[500],
     fontWeight: 'normal',
-    height: '100%',
-    paddingHorizontal: 8,
+  },
+  textplaceHolder: {
+    fontFamily: FONT_MED,
+    fontSize: FONT_SIZES[500],
+    fontWeight: 'normal',
+    color: COLORS.GRAY_2,
+  },
+  inputContainer: {
+    justifyContent: 'center',
+    flex: 1,
   },
   errorTitleViewModal: {
     alignItems: 'center',
