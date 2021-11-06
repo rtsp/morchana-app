@@ -9,6 +9,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../styles'
 import useCamera from '../services/use-camera'
+import { normalize } from 'react-native-elements'
 
 const ShutterButtonOuter = styled.View`
   width: 72px;
@@ -36,6 +37,8 @@ const ShutterButton = styled.TouchableOpacity`
   border-radius: 28px;
   aspect-ratio: 1;
 `
+
+const padding = normalize(16)
 
 const FlashButton: React.FC<{
   flashMode: typeof RNCamera.Constants.FlashMode
@@ -73,7 +76,7 @@ const CameraDirectionButton: React.FC<{
 }> = ({ setCameraType, cameraType }) => (
   <TouchableOpacity
     activeOpacity={0.8}
-    style={{ position: 'absolute', left: 0, padding: 16, alignSelf: 'center' }}
+    style={{ position: 'absolute', left: 0, padding, alignSelf: 'center' }}
     onPress={() => {
       setCameraType(
         cameraType === RNCamera.Constants.Type.front ? RNCamera.Constants.Type.back : RNCamera.Constants.Type.front,
@@ -107,7 +110,7 @@ export const SelectImageButton: React.FC<{ onSelectImage: (uri: string) => void 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      style={{ position: 'absolute', right: 0, padding: 16, alignSelf: 'center' }}
+      style={{ position: 'absolute', right: 0, padding, alignSelf: 'center' }}
       onPress={() => openGallery().then(onSelectImage)}
     >
       <EntypoIcon name='images' color='white' size={32} />
@@ -149,7 +152,8 @@ export const Camera: React.FC<{
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          paddingHorizontal: 16,
+          paddingHorizontal: padding,
+          paddingTop: padding,
           position: 'absolute',
         }}
       >
@@ -157,7 +161,13 @@ export const Camera: React.FC<{
         <FlashButton flashMode={flashMode} setFlashMode={setFlashMode} />
       </View>
       <View
-        style={{ flexDirection: 'row', paddingVertical: 8, alignItems: 'flex-end', position: 'absolute', bottom: 0 }}
+        style={{
+          flexDirection: 'row',
+          paddingVertical: padding / 2,
+          alignItems: 'flex-end',
+          position: 'absolute',
+          bottom: 0,
+        }}
       >
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ShutterButtonOuter>

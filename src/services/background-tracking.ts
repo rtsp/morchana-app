@@ -1,12 +1,12 @@
-import BackgroundGeolocation from 'react-native-background-geolocation'
-import { getAnonymousHeaders } from '../api'
 import { Platform } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
-import { StoreLocationHistoryService } from './store-location-history.service'
+import BackgroundGeolocation from 'react-native-background-geolocation'
 import BackgroundTimer from 'react-native-background-timer'
+import DeviceInfo from 'react-native-device-info'
 import GetLocation from 'react-native-get-location'
-import { API_URL } from '../config'
 import I18n from '../../i18n/i18n'
+import { getAnonymousHeaders } from '../api'
+import { API_URL } from '../config'
+import { StoreLocationHistoryService } from './store-location-history.service'
 
 export const canUseGeoLocation = () => {
   const hasGMS = DeviceInfo.hasGmsSync()
@@ -84,6 +84,7 @@ class BackgroundTracking {
 
     return this.registerGeoLocation().then((state) => {
       if (!state.enabled) {
+        console.log('registerGeoLocation state', state)
         BackgroundGeolocation.start().catch(console.log)
       }
     })

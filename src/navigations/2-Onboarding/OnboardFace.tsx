@@ -3,18 +3,16 @@ import React from 'react'
 import { Image, ImageURISource, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Avatar, normalize } from 'react-native-elements'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import I18n from '../../../i18n/i18n'
-import { Title } from '../../components/Base'
 import { PrimaryButton } from '../../components/Button'
 import Texts from '../../components/Texts'
 import { WhiteBackground } from '../../components/WhiteBackground'
 import { useHUD } from '../../HudView'
 import useCamera from '../../services/use-camera'
-import usePopup from '../../services/use-popup'
 import { applicationState } from '../../state/app-state'
 import { userPrivateData } from '../../state/userPrivateData'
 import { COLORS, FONT_BOLD, FONT_SIZES } from '../../styles'
+import { useCameraPermission } from '../../utils/Permission'
 
 const padding = normalize(16)
 
@@ -35,8 +33,8 @@ export const OnboardFace = () => {
   const area = useSafeAreaInsets()
   const navigation = useNavigation()
   const { openGallery } = useCamera()
-  const { showPopup } = usePopup()
   const { showSpinner, hide } = useHUD()
+  const { request } = useCameraPermission()
 
   // React.useEffect(() => {
   //   if (uri) {
@@ -59,23 +57,12 @@ export const OnboardFace = () => {
   const navigateToCamera = () => {
     setPopupCamera(false)
 
-    showPopup({
-      onSelect: (status) => {
-        if (status === 'ok') {
-          navigation.navigate('OnboardFaceCamera', { setUri })
-        } else {
-          navigation.navigate('OnboardEnterQuestion')
-        }
-      },
-      okLabel: I18n.t('grant_permission'),
-      cancelLabel: I18n.t('not_now'),
-      title: (
-        <View style={{ flexDirection: 'column', alignItems: 'center', paddingTop: 16, paddingBottom: 8 }}>
-          <MaterialCommunityIcons name='camera' color={COLORS.DARK_BLUE} size={36} />
-          <Title>{I18n.t('access_camera')}</Title>
-        </View>
-      ),
-      content: I18n.t('photo_description'),
+    request().then((granted) => {
+      if (granted) {
+        navigation.navigate('OnboardFaceCamera', { setUri })
+      } else {
+        navigation.navigate('OnboardEnterQuestion')
+      }
     })
   }
 

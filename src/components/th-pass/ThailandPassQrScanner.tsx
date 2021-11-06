@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core'
+import { useIsFocused } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { Dimensions, PermissionsAndroid, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -11,9 +12,9 @@ import { PrimaryButton } from '../../components/Button'
 import { WhiteBackground } from '../../components/WhiteBackground'
 import { PageBackButton } from '../../navigations/2-Onboarding/components/PageBackButton'
 import PopupMessage from '../../navigations/3-MainApp/NewMainApp/PopupMessage'
-import usePopup from '../../services/use-popup'
 import { ThailandPassProfile } from '../../services/use-vaccine'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
+import { useCameraPermission } from '../../utils/Permission'
 
 const padding = normalize(4)
 
@@ -21,9 +22,12 @@ const ThailandPassQrScanner: React.FC<{
   next: string
 }> = ({ next }) => {
   const navigation = useNavigation()
-  const { showPopup } = usePopup()
   const [modalMode, setModalMode] = useState<'error' | 'ok' | ''>('')
   const [thPass, setThPass] = useState<ThailandPassProfile | null>(null)
+  const [cameraEnabled, setCameraEnabled] = useState(false)
+  const permission = useCameraPermission()
+  const isFocused = useIsFocused()
+
   const validateThailandPass = (uri: string) => {
     getThailandPass({ uri })
       .then((res) => {
@@ -43,26 +47,8 @@ const ThailandPassQrScanner: React.FC<{
   const inset = useSafeAreaInsets()
 
   useEffect(() => {
-    const requestCameraPermission = async () => {
-      try {
-        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
-          title: 'Cool Photo App Camera Permission',
-          message: 'Cool Photo App needs access to your camera ' + 'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        })
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the camera')
-        } else {
-          console.log('Camera permission denied')
-        }
-      } catch (err) {
-        console.warn(err)
-      }
-    }
-    requestCameraPermission()
-  }, [])
+    isFocused && permission.request().then(setCameraEnabled)
+  }, [permission, isFocused])
 
   return (
     <WhiteBackground>
@@ -72,25 +58,27 @@ const ThailandPassQrScanner: React.FC<{
         <Text style={styles.subTitle}>{I18n.t('scan_description_thailandpass_qr')}</Text>
 
         <View style={styles.cameraContainer}>
-          <QRCodeScanner
-            showMarker
-            markerStyle={{
-              borderColor: COLORS.WHITE,
-            }}
-            cameraStyle={styles.cameraStyle}
-            onRead={(e) => e.data && validateThailandPass(e.data)}
-            fadeIn={false}
-            reactivate
-            reactivateTimeout={5000}
-          />
+          {isFocused && cameraEnabled && (
+            <QRCodeScanner
+              showMarker
+              markerStyle={{
+                borderColor: COLORS.WHITE,
+              }}
+              cameraStyle={styles.cameraStyle}
+              onRead={(e) => e.data && validateThailandPass(e.data)}
+              fadeIn={false}
+              reactivate
+              reactivateTimeout={5000}
+            />
+          )}
         </View>
 
         {/* <TouchableOpacity onPress={()=> {
 
-          }}>
-          [><Image source={require('../../assets/gallery.png')} resizeMode='contain' style={styles.galleryIcon} /><]
-          <MaterialCommunityIcons name='insert-photo-outlined' color='white' size={36} />
-        </TouchableOpacity> */}
+              }}>
+              [><Image source={require('../../assets/gallery.png')} resizeMode='contain' style={styles.galleryIcon} /><]
+              <MaterialCommunityIcons name='insert-photo-outlined' color='white' size={36} />
+              </TouchableOpacity> */}
 
         <PrimaryButton
           title={I18n.t('fill_information_by_yourself')}
@@ -132,19 +120,19 @@ const ThailandPassQrScanner: React.FC<{
       >
         {thPass && modalMode === 'ok' ? (
           <>
-            <Text style={{}}>
+            <Text style={{ textAlign: 'center' }}>
+              {'\n'}
               {I18n.t('firstname_lastname')}
-              <Text style={styles.textBold}>
-                {'  '}
+              <Text style={styles.popupText}>
+                {'\n'}
                 {thPass.first_name + ' ' + thPass.last_name}
               </Text>
-              {'\n\n'}
+              {'\n'}
             </Text>
-            <Text>
+            <Text style={{ textAlign: 'center' }}>
               {I18n.t('thailand_pass_id')}
-              {'  '}
-              <Text style={styles.textBold}>{thPass.thailand_pass_id}</Text>
-              {'\n\n'}
+              {'\n'}
+              <Text style={styles.popupText}>{thPass.thailand_pass_id}</Text>
             </Text>
           </>
         ) : (
@@ -197,9 +185,10 @@ const styles = StyleSheet.create({
     color: COLORS.DARK_BLUE,
   },
   galleryIcon: {},
-  textBold: {
+  popupText: {
     fontFamily: FONT_BOLD,
     fontSize: FONT_SIZES[500],
+    textAlign: 'center',
   },
   titleModal: {
     color: COLORS.DARK_BLUE,

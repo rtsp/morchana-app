@@ -1,71 +1,39 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Image, Platform, SafeAreaView, StatusBar, Text, View } from 'react-native'
+import { ActivityIndicator, Image, SafeAreaView, StatusBar, Text, View } from 'react-native'
 import { normalize } from 'react-native-elements'
-import { check, PERMISSIONS, request } from 'react-native-permissions'
 import I18n from '../../../i18n/i18n'
-import { Title } from '../../components/Base'
 import { PrimaryButton } from '../../components/Button'
-import { useHUD } from '../../HudView'
-import usePopup from '../../services/use-popup'
 import { COLORS } from '../../styles'
+import { useLocationPermission } from '../../utils/Permission'
 import { doctorSize, styles } from './const'
 import { OnboardHeader } from './OnboadHeader'
-import { backgroundTracking } from '../../services/background-tracking'
-
-const LOCATION_PERMISSION = Platform.select({
-  ios: PERMISSIONS.IOS.LOCATION_ALWAYS,
-  android: PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
-})
 
 export const OnboardLocation = () => {
   const navigation = useNavigation()
-  const { showPopup } = usePopup()
+  const permission = useLocationPermission()
 
-  const [locationPerm, setLocationPerm] = useState('checking')
-
-  const { showSpinner, hide } = useHUD()
+  const [locationPerm, setLocationPerm] = useState<string | undefined>('checking')
 
   useEffect(() => {
-    LOCATION_PERMISSION &&
-      check(LOCATION_PERMISSION).then((perms) => {
-        if (perms === 'granted') {
-          navigation.navigate('OnboardMotion')
-        } else {
-          perms && setLocationPerm(perms)
-        }
-      })
-  }, [navigation])
+    permission.check().then((perms) => {
+      if (perms === 'granted') {
+        navigation.navigate('OnboardMotion')
+      } else {
+        setLocationPerm(perms)
+      }
+    })
+  }, [navigation, permission])
 
   const handleSubmit = () => {
-    showPopup({
-      onSelect: async (status) => {
-        if (status === 'ok') {
-          showSpinner()
-
-          LOCATION_PERMISSION && (await request(LOCATION_PERMISSION))
-          hide()
-
-          setTimeout(() => {
-            navigation.navigate('OnboardMotion')
-          }, 1000)
-        } else {
-          navigation.navigate('OnboardBluetooth')
-        }
-      },
-      okLabel: I18n.t('grant_permission'),
-      cancelLabel: I18n.t('not_now'),
-      title: (
-        <View style={{ flexDirection: 'column', alignItems: 'center', paddingTop: 16, paddingBottom: 8 }}>
-          <Image
-            source={require('../../assets/perm-location-icon.png')}
-            resizeMode='contain'
-            style={{ width: normalize(32) }}
-          />
-          <Title>{I18n.t('your_position')}</Title>
-        </View>
-      ),
-      content: I18n.t('help_notify_if_you_get_near_risky_person_or_area'),
+    permission.request().then((granted) => {
+      if (granted) {
+        setTimeout(() => {
+          navigation.navigate('OnboardMotion')
+        }, 1000)
+      } else {
+        navigation.navigate('OnboardBluetooth')
+      }
     })
   }
 
@@ -118,7 +86,7 @@ export const OnboardLocation = () => {
               resizeMode='contain'
               style={{ height: doctorSize }}
             />
-            <Text style={I18n.currentLocale() == 'en' ? styles.titleEN : styles.title}>
+            <Text style={I18n.currentLocale() === 'en' ? styles.titleEN : styles.title}>
               {I18n.t('pls_grant_permission')}
             </Text>
             <Text style={styles.subtitle}>{I18n.t('let_doc_estimate_your_risk')}</Text>

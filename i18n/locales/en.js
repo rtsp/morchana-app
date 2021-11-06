@@ -40,15 +40,19 @@ export default {
   gallery: 'Gallery',
   photo_description:
     'Please select your profile photo (need access to your camera) This photo will use to build the participation and ownership of the application. The data will be stored locally without sending out from your smartphone.',
+  photo_permission_description:
+    'This app use camera to take a photo of user and is also used to scan QR code to verify Thailand Pass, ThaiChana. The photo will be stored locally without sending it out from your smartphone.',
   add_image: 'Add image',
   change_profile_image: 'Change profile image',
   pls_grant_permission: 'Please grant permission',
   let_doc_estimate_your_risk: 'Let the doctor estimate your risk level',
   your_position: 'Location',
   help_notify_if_you_get_near_risky_person_or_area:
-    'Need to access in the background to help notify the high COVID-19 Risk person or in the risky area',
+    'This app collects location data to notify when you are near the high COVID-19 Risk person or in the risky area even when the app is closed or not in use',
   your_motion: 'Physical Activity',
   to_manage_mobile_energy_efficiently: 'To efficiently manage mobile energy usage',
+  your_motion_permission:
+    'This app will use your motion to efficiently manage mobile energy usage for request location even when the app is closed or not in use',
   let_doc_notify_you: 'Let the doctor notify you',
   when_you_are_closed_to_risky_ppl: 'When you are closed to people with COVID-19 risk',
   turn_on_notification: 'Turn on Notification',

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import I18n from 'i18n-js'
 import moment from 'moment'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -8,6 +8,7 @@ import {
   Dimensions,
   Easing,
   Modal,
+  Platform,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -18,6 +19,7 @@ import {
 import { Button, normalize } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import GPSState from 'react-native-gps-state'
+import { PERMISSIONS } from 'react-native-permissions'
 import NotificationPopup from 'react-native-push-notification-popup'
 import { useSafeArea } from 'react-native-safe-area-view'
 import FeatherIcon from 'react-native-vector-icons/Feather'
@@ -27,17 +29,23 @@ import { CircularProgressAvatar } from '../../../../src/components/CircularProgr
 import { applicationState, useApplicationState } from '../../../../src/state/app-state'
 import { userPrivateData } from '../../../../src/state/userPrivateData'
 import { COE_ENABLED } from '../../../constants'
-import { backgroundTracking } from '../../../services/background-tracking'
 import { useContactTracer } from '../../../services/contact-tracing-provider'
 import { pushNotification } from '../../../services/notification'
 import { useVaccine } from '../../../services/use-vaccine'
 import { QR_STATE, SelfQR, useSelfQR } from '../../../state/qr'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../../styles'
+import { requestLocationPermission } from '../../../utils/Permission'
 import { BeaconFoundPopupContent } from '../BeaconFoundPopup'
 import QRCard from './QRCard'
 import { UpdateProfileButton } from './UpdateProfileButton'
 import VaccineCard from './VaccineCard'
 import WorkFromHomeCard from './WorkFromHomeCard'
+import { useBackgroundTracking } from '../../../services/use-background-tracking'
+
+const LOCATION_PERMISSION = Platform.select({
+  ios: PERMISSIONS.IOS.LOCATION_ALWAYS,
+  android: PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+})
 
 const padding = normalize(16)
 // const carouselItems = ['qr', 'vaccine'] //, 'wfh']
@@ -55,7 +63,7 @@ const mapQrStatusColor = (qr?: SelfQR, qrState?: QR_STATE) =>
 export const MainApp = () => {
   const inset = useSafeArea()
   const { qrData, qrState, isLinked } = useSelfQR()
-  const { beaconLocationName, isBluetoothOn } = useContactTracer()
+  const { beaconLocationName, isBluetoothOn, enable } = useContactTracer()
   const [location, setLocation] = useState('')
   const popupRef = useRef<NotificationPopup | any>()
   const activeDotAnim = useRef(new Animated.Value(0)).current
@@ -68,6 +76,9 @@ export const MainApp = () => {
     text: '',
   })
   const [[firstName, lastName], setName] = useState<string[]>([])
+  const [isInitialized, setIsInitialized] = useState(false)
+  const isFocused = useIsFocused()
+  const backgroundTrackingStart = useBackgroundTracking()
 
   const windowWidth = Dimensions.get('window').width
 
@@ -137,9 +148,11 @@ export const MainApp = () => {
   )
 
   useEffect(() => {
+    if (!isFocused || isInitialized) return
+    setIsInitialized(true)
     pushNotification.requestPermissions()
-    backgroundTracking.start()
-  }, [])
+    backgroundTrackingStart()
+  }, [backgroundTrackingStart, isFocused, isInitialized])
 
   useEffect(() => {
     startAnimated()
@@ -217,18 +230,22 @@ export const MainApp = () => {
         <View style={styles.containerTop}>
           <View style={styles.containerHeader}>
             <View style={styles.iconStatusContainer}>
-              <FontAwesome
-                name='map-marker'
-                color={triggerGps === 3 ? '#10A7DC' : '#C1C1C1'}
-                size={24}
-                style={styles.iconStatusButton}
-              />
-              <FontAwesome
-                name='bluetooth-b'
-                color={isBluetoothOn ? '#10A7DC' : '#C1C1C1'}
-                size={24}
-                style={styles.iconStatusButton}
-              />
+              <TouchableOpacity onPress={enable}>
+                <FontAwesome
+                  name='map-marker'
+                  color={triggerGps === 3 ? '#10A7DC' : '#C1C1C1'}
+                  size={24}
+                  style={styles.iconStatusButton}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={requestLocationPermission}>
+                <FontAwesome
+                  name='bluetooth-b'
+                  color={isBluetoothOn ? '#10A7DC' : '#C1C1C1'}
+                  size={24}
+                  style={styles.iconStatusButton}
+                />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={[styles.profileHeader, profileStyle, isLeftAvatar() ? { alignItems: 'flex-start' } : {}]}>

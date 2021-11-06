@@ -13,6 +13,7 @@ import { useApplicationState } from '../../state/app-state'
 import { QRResult, tagManager } from '../../state/qr'
 import { COLORS } from '../../styles'
 import { decodeJWT, verifyToken } from '../../utils/jwt'
+import { useCameraPermission } from '../../utils/Permission'
 import PopupMessage from './NewMainApp/PopupMessage'
 import { QRPopupContent } from './QRPopupContent'
 
@@ -25,6 +26,8 @@ export const QRCodeScan = ({ navigation }) => {
   const [, setData] = useApplicationState()
   const vaccine = vaccineList && vaccineList[0]
   const [name, setName] = useState('')
+  const [cameraEnabled, setCameraEnabled] = useState(false)
+  const { request } = useCameraPermission()
 
   useEffect(() => {
     vaccine && getVaccineUserName && getVaccineUserName(vaccine).then(setName)
@@ -41,13 +44,18 @@ export const QRCodeScan = ({ navigation }) => {
         title: qrResult.getLabel(),
         timeText: qrResult.getTag()?.title,
       })
-      scanManager.add(qrResult.annonymousId)
+      scanManager.add(qrResult.anonymousId)
     }
   }, [qrResult])
+
+  useEffect(() => {
+    isFocused && request().then(setCameraEnabled)
+  }, [request, isFocused])
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F9F9F9' }}>
       <StatusBar barStyle='dark-content' backgroundColor={COLORS.WHITE} />
-      {isFocused ? (
+      {isFocused && cameraEnabled ? (
         <QRCodeScanner
           showMarker
           markerStyle={{

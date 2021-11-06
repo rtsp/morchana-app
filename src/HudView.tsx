@@ -1,6 +1,6 @@
-import React, { Component, useState, useMemo, useContext } from 'react'
-import { ActivityIndicator, View, Animated, Easing, StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
+import React, { memo, PureComponent, useContext, useMemo, useState, ReactNode } from 'react'
+import { ActivityIndicator, Animated, Easing, StyleSheet, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
 })
 
-class HudView extends Component {
+class HudView extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -172,7 +172,7 @@ class HudView extends Component {
     )
   }
 
-  _showHud(icon, rotate, hideOnCompletion) {
+  _showHud(icon: ReactNode, rotate?: number, hideOnCompletion?: boolean) {
     this.setState({ isVisible: false, icon: icon, isRotating: rotate })
     this._initializeRotationAnimation(rotate)
     this._fadeIn()
@@ -226,7 +226,7 @@ class HudView extends Component {
     return this._showHud(icon, rotate, hideOnCompletion)
   }
 
-  showCustomComponent(component, rotate, hideOnCompletion) {
+  showCustomComponent(component: ReactNode, rotate?: number, hideOnCompletion?: boolean) {
     return this._showHud(component, rotate, hideOnCompletion)
   }
 
@@ -286,13 +286,13 @@ HudView.defaultProps = {
   iconColor: '#FFFFFF',
 }
 
-export const HUDContext = React.createContext('HudContainer')
+export const HUDContext = React.createContext<HudView | null>(null)
 
 export const useHUD = () => {
   const hud = useContext(HUDContext)
   return useMemo(() => {
     if (!hud) {
-      return {}
+      return {} as HudView
     }
     return {
       showSpinner: hud.showCustomComponent.bind(hud, <ActivityIndicator size='large' color='white' />),
@@ -305,7 +305,7 @@ export const useHUD = () => {
   }, [hud])
 }
 
-export const HUDProvider = ({ children }) => {
+export const HUDProvider = memo(({ children }) => {
   const [hudRef, setHUDRef] = useState(null)
 
   return (
@@ -321,4 +321,4 @@ export const HUDProvider = ({ children }) => {
       </HudView>
     </HUDContext.Provider>
   )
-}
+})
