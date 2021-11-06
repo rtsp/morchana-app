@@ -4,26 +4,24 @@ import { Image, SafeAreaView, StatusBar, Text, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import I18n from '../../../i18n/i18n'
 import { PrimaryButton } from '../../components/Button'
-import { useHUD } from '../../HudView'
 import { useContactTracer } from '../../services/contact-tracing-provider'
 import { COLORS } from '../../styles'
+import { useBluetoothPermission } from '../../utils/Permission'
 import { doctorSize, styles } from './const'
 import { OnboardHeader } from './OnboadHeader'
 
 export const OnboardBluetooth = () => {
   const navigation = useNavigation()
   const contactTracer = useContactTracer()
-
-  const { showSpinner, hide } = useHUD()
+  const permission = useBluetoothPermission()
 
   const handleSubmit = () => {
-    showSpinner()
-    contactTracer?.enable()
-    hide()
-
-    setTimeout(() => {
-      navigation.navigate('OnboardComplete')
-    }, 1000)
+    permission.request().then((val) => {
+      val && contactTracer?.enable()
+      setTimeout(() => {
+        navigation.navigate('OnboardComplete')
+      }, 500)
+    })
   }
 
   return (
@@ -52,7 +50,7 @@ export const OnboardBluetooth = () => {
               resizeMode='contain'
               style={{ height: doctorSize }}
             />
-            <Text style={I18n.currentLocale() == 'en' ? styles.titleEN : styles.title}>
+            <Text style={I18n.currentLocale() === 'en' ? styles.titleEN : styles.title}>
               {I18n.t('risky_ppl_nearby')}
             </Text>
             <Text style={styles.subtitle}>{I18n.t('app_can_check_with_bluetooth')}</Text>

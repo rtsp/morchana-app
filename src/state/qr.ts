@@ -235,13 +235,13 @@ interface DecodedResult {
 
 export class QRResult extends QR {
   iat: number
-  annonymousId: string
+  anonymousId: string
   tagId?: string
   age?: string
   iss: string
   constructor(decodedResult: DecodedResult) {
     super(CODE_MAP[decodedResult._[1]])
-    this.annonymousId = decodedResult._[0]
+    this.anonymousId = decodedResult._[0]
     this.tagId = decodedResult._[2]
     this.age = decodedResult._[3]
     this.iat = decodedResult.iat

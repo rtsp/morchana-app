@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Platform } from 'react-native'
 import RNFS from 'react-native-fs'
 import RNFetchBlob from 'rn-fetch-blob'
@@ -39,7 +39,7 @@ const useCamera = () => {
     [showSpinner, hide],
   )
 
-  return { openGallery }
+  return useMemo(() => ({ openGallery }), [openGallery])
 }
 
 export default useCamera

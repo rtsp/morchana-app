@@ -1,73 +1,39 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Image, Platform, SafeAreaView, StatusBar, Text, View } from 'react-native'
+import { ActivityIndicator, Image, SafeAreaView, StatusBar, Text, View } from 'react-native'
 import { normalize } from 'react-native-elements'
-import { check, PERMISSIONS, request } from 'react-native-permissions'
 import I18n from '../../../i18n/i18n'
-import { Title } from '../../components/Base'
 import { PrimaryButton } from '../../components/Button'
-import { useHUD } from '../../HudView'
-import { backgroundTracking } from '../../services/background-tracking'
-import usePopup from '../../services/use-popup'
 import { COLORS } from '../../styles'
+import { useMotionPermission } from '../../utils/Permission'
 import { doctorSize, styles } from './const'
 import { OnboardHeader } from './OnboadHeader'
 
-const ACTIVITY_PERMISSION = Platform.select({
-  ios: PERMISSIONS.IOS.MOTION, // NOT SURE
-  android: PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
-})
-
 export const OnboardMotion = () => {
   const navigation = useNavigation()
+  const permission = useMotionPermission()
 
-  const [activityPerm, setActivityPerm] = useState('checking')
-  const { showPopup } = usePopup()
-
-  const { showSpinner, hide } = useHUD()
+  const [activityPerm, setActivityPerm] = useState<string | undefined>('checking')
 
   useEffect(() => {
-    ACTIVITY_PERMISSION &&
-      check(ACTIVITY_PERMISSION).then((perms) => {
-        if (perms === 'granted') {
-          // backgroundTracking.start().then(() => navigation.navigate('OnboardBluetooth'))
-          navigation.navigate('OnboardBluetooth')
-        } else {
-          perms && setActivityPerm(perms)
-        }
-      })
-  }, [navigation])
-
-  const handleSubmit = () => {
-    showPopup({
-      onSelect: async (status) => {
-        if (status === 'ok') {
-          showSpinner()
-
-          ACTIVITY_PERMISSION && (await request(ACTIVITY_PERMISSION))
-          hide()
-
-          setTimeout(() => {
-            navigation.navigate('OnboardBluetooth')
-          }, 1000)
-        } else {
-          navigation.navigate('OnboardBluetooth')
-        }
-      },
-      okLabel: I18n.t('grant_permission'),
-      cancelLabel: I18n.t('skip'),
-      title: (
-        <View style={{ flexDirection: 'column', alignItems: 'center', paddingTop: 16, paddingBottom: 8 }}>
-          <Image
-            source={require('../../assets/perm-motion-icon.png')}
-            resizeMode='contain'
-            style={{ width: normalize(40) }}
-          />
-          <Title>{I18n.t('your_motion')}</Title>
-        </View>
-      ),
-      content: I18n.t('to_manage_mobile_energy_efficiently'),
+    permission.check().then((perms) => {
+      if (perms === 'granted') {
+        navigation.navigate('OnboardBluetooth')
+      } else {
+        setActivityPerm(perms)
+      }
     })
+  }, [navigation, permission])
+
+  const handleSubmit = async () => {
+    const granted = await permission.request()
+    if (granted) {
+      setTimeout(() => {
+        navigation.navigate('OnboardBluetooth')
+      }, 1000)
+    } else {
+      navigation.navigate('OnboardBluetooth')
+    }
   }
 
   if (activityPerm === 'checking') {

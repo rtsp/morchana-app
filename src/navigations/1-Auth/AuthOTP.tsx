@@ -20,7 +20,6 @@ import { mobileParing, requestOTP } from '../../api'
 import { PrimaryButton } from '../../components/Button'
 import { CountdownTime } from '../../components/CountdownTimer'
 import { useHUD } from '../../HudView'
-import { applicationState } from '../../state/app-state'
 import { COLORS, FONT_BOLD, FONT_FAMILY, FONT_MED, FONT_SIZES } from '../../styles'
 import { PageBackButton } from '../2-Onboarding/components/PageBackButton'
 

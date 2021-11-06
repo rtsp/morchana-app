@@ -1,10 +1,9 @@
 import React, { useContext } from 'react'
-import { NativeEventEmitter, DeviceEventEmitter, NativeModules, Platform } from 'react-native'
-import { requestLocationPermission } from '../utils/Permission'
-import { beaconLookup } from './beacon-lookup'
-import { beaconScanner, bluetoothScanner } from './contact-scanner'
+import { DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform } from 'react-native'
 import BackgroundGeolocation from 'react-native-background-geolocation'
 import BluetoothStateManager from 'react-native-bluetooth-state-manager'
+import { beaconLookup } from './beacon-lookup'
+import { beaconScanner, bluetoothScanner } from './contact-scanner'
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ContactTracerModule)
 
@@ -105,26 +104,27 @@ export class ContactTracerProvider extends React.Component<ContactTracerProps, C
         if (isBLEAvailable) {
           this.appendStatusText('BLE is available')
           // BLE is available, continue requesting Location Permission
-          return requestLocationPermission()
+          // return requestLocationPermission()
         } else {
           // BLE is not available, don't do anything furthur since BLE is required
           this.appendStatusText('BLE is NOT available')
         }
+        return !!isBLEAvailable
       })
       // For requestLocationPermission()
-      .then((locationPermissionGranted) => {
-        this.setState({
-          isLocationPermissionGranted: locationPermissionGranted,
-        })
-        if (locationPermissionGranted) {
-          // Location permission is granted, try turning on Bluetooth now
-          this.appendStatusText('Location permission is granted')
-          return NativeModules.ContactTracerModule.tryToTurnBluetoothOn()
-        } else {
-          // Location permission is required, we cannot continue working without this permission
-          this.appendStatusText('Location permission is NOT granted')
-        }
-      })
+      // .then((locationPermissionGranted) => {
+      //   this.setState({
+      //     isLocationPermissionGranted: locationPermissionGranted,
+      //   })
+      //   if (locationPermissionGranted) {
+      //     // Location permission is granted, try turning on Bluetooth now
+      //     this.appendStatusText('Location permission is granted')
+      //     return NativeModules.ContactTracerModule.tryToTurnBluetoothOn()
+      //   } else {
+      //     // Location permission is required, we cannot continue working without this permission
+      //     this.appendStatusText('Location permission is NOT granted')
+      //   }
+      // })
       // For NativeModules.ContactTracerModule.tryToTurnBluetoothOn()
       .then((bluetoothOn) => {
         this.setState({

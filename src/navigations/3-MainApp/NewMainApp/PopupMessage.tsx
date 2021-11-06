@@ -94,10 +94,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 8,
     elevation: 2,
-    paddingVertical: 5,
-    width: 115,
+    paddingVertical: 8,
+    width: 120,
   },
   textStyle: {
     fontFamily: FONT_FAMILY,

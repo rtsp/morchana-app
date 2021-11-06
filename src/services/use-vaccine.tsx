@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import axios from 'axios'
 import { get } from 'lodash'
 import moment, { Moment } from 'moment'
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react'
 import { fetch } from 'react-native-ssl-pinning'
 import I18n from '../../i18n/i18n'
 import { getAnonymousHeaders } from '../api'
@@ -157,7 +157,7 @@ export const VaccineProvider: React.FC = ({ children }) => {
 
   const isVaccineURL = React.useCallback(async (url: string) => {
     const config = await getConfig()
-    return url && url.includes(config.url)
+    return !!(url && url.includes(config.url))
   }, [])
 
   const requestAndSave = React.useCallback(async (_cid: string) => {
@@ -260,10 +260,10 @@ export const VaccineProvider: React.FC = ({ children }) => {
     [requestAndSave, cid],
   )
 
-  const getName = async () => {
+  const getName = useCallback(async () => {
     const vac = vaccineList && vaccineList[0]
     if (vac) {
-      const name = getVaccineUserName ? getVaccineUserName(vac) : ''
+      const name = getVaccineUserName ? await getVaccineUserName(vac) : ''
       const names = name.split(' ')
 
       const lName = names.pop() || ''
@@ -278,7 +278,7 @@ export const VaccineProvider: React.FC = ({ children }) => {
     }
 
     return ['', '']
-  }
+  }, [getVaccineUserName, vaccineList])
 
   const getUpdateTime = React.useCallback(() => {
     return updateTime ? moment(updateTime).locale(I18n.locale || 'th') : null
@@ -286,17 +286,30 @@ export const VaccineProvider: React.FC = ({ children }) => {
 
   return (
     <VaccineContext.Provider
-      value={{
-        cid,
-        getName,
-        vaccineList,
-        requestVaccine,
-        getUpdateTime,
-        reloadVaccine,
-        resetVaccine,
-        isVaccineURL,
-        getVaccineUserName,
-      }}
+      value={useMemo(
+        () => ({
+          cid,
+          getName,
+          vaccineList,
+          requestVaccine,
+          getUpdateTime,
+          reloadVaccine,
+          resetVaccine,
+          isVaccineURL,
+          getVaccineUserName,
+        }),
+        [
+          cid,
+          getName,
+          getUpdateTime,
+          getVaccineUserName,
+          isVaccineURL,
+          reloadVaccine,
+          requestVaccine,
+          resetVaccine,
+          vaccineList,
+        ],
+      )}
     >
       {children}
     </VaccineContext.Provider>
