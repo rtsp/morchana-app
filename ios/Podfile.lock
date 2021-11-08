@@ -353,6 +353,9 @@ PODS:
   - RNPureJwt (2.1.1):
     - JWT (= 3.0.0-beta.11)
     - React
+  - RNQrGenerator (1.2.0):
+    - React
+    - ZXingObjC
   - RNReanimated (2.2.0):
     - DoubleConversion
     - FBLazyVector
@@ -399,6 +402,9 @@ PODS:
   - Sentry/Core (4.4.3)
   - SSZipArchive (2.4.2)
   - Yoga (1.14.0)
+  - ZXingObjC (3.6.5):
+    - ZXingObjC/All (= 3.6.5)
+  - ZXingObjC/All (3.6.5)
 
 DEPENDENCIES:
   - appcenter-analytics (from `../node_modules/appcenter-analytics/ios`)
@@ -467,6 +473,7 @@ DEPENDENCIES:
   - RNI18n (from `../node_modules/react-native-i18n`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNPureJwt (from `../node_modules/react-native-pure-jwt`)
+  - RNQrGenerator (from `../node_modules/rn-qr-generator`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
@@ -485,6 +492,7 @@ SPEC REPOS:
     - JWT
     - Sentry
     - SSZipArchive
+    - ZXingObjC
 
 EXTERNAL SOURCES:
   appcenter-analytics:
@@ -615,6 +623,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions"
   RNPureJwt:
     :path: "../node_modules/react-native-pure-jwt"
+  RNQrGenerator:
+    :path: "../node_modules/rn-qr-generator"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -701,6 +711,7 @@ SPEC CHECKSUMS:
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNPermissions: 1008d3511fee0e25739cf81c4af0d1b2248f1053
   RNPureJwt: b9e795e38e2b6808d3b8934ce413a508e2f76863
+  RNQrGenerator: 34beaf1996de4a2f2122c7019dccd1717b22d8d7
   RNReanimated: d9da990fc90123f4ffbfdda93d00fc15174863a8
   RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
   RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
@@ -710,7 +721,8 @@ SPEC CHECKSUMS:
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
   SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
+  ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: 8e5edaca75702c030fbf881030f22e94000f9c09
+PODFILE CHECKSUM: e94c61e320d273bce78e2f289565d5491822cfbb
 
 COCOAPODS: 1.11.2
