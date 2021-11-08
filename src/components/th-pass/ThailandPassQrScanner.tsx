@@ -1,17 +1,21 @@
 import { useNavigation } from '@react-navigation/core'
+
 import { useIsFocused } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { normalize } from 'react-native-elements'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import RNQRGenerator from 'rn-qr-generator'
 import I18n from '../../../i18n/i18n'
 import { getThailandPass } from '../../api'
 import { PrimaryButton } from '../../components/Button'
 import { WhiteBackground } from '../../components/WhiteBackground'
 import { PageBackButton } from '../../navigations/2-Onboarding/components/PageBackButton'
 import PopupMessage from '../../navigations/3-MainApp/NewMainApp/PopupMessage'
+import useCamera from '../../services/use-camera'
 import { ThailandPassProfile } from '../../services/use-vaccine'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
 import { useCameraPermission } from '../../utils/Permission'
@@ -27,6 +31,7 @@ const ThailandPassQrScanner: React.FC<{
   const [cameraEnabled, setCameraEnabled] = useState(false)
   const permission = useCameraPermission()
   const isFocused = useIsFocused()
+  const { openGallery } = useCamera()
 
   const validateThailandPass = (uri: string) => {
     getThailandPass({ uri })
@@ -71,6 +76,30 @@ const ThailandPassQrScanner: React.FC<{
               reactivateTimeout={5000}
             />
           )}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{ position: 'absolute', bottom: padding * 2, left: padding * 2, padding, alignSelf: 'center' }}
+            onPress={() =>
+              openGallery().then((uri) => {
+                RNQRGenerator.detect({ uri })
+                  .then((response) => {
+                    const { values } = response // Array of detected QR code values. Empty if nothing found.
+                    if (!values || !values.length) {
+                      setModalMode('error')
+                      return
+                    }
+                    console.log('qr - values', values)
+                    validateThailandPass(values[0])
+                  })
+                  .catch((error) => {
+                    console.error('qr error', error)
+                    setModalMode('error')
+                  })
+              })
+            }
+          >
+            <EntypoIcon name='images' color='white' size={32} />
+          </TouchableOpacity>
         </View>
 
         {/* <TouchableOpacity onPress={()=> {
@@ -144,13 +173,14 @@ const ThailandPassQrScanner: React.FC<{
 }
 
 const windowSize = Dimensions.get('window')
-const size = Math.min(windowSize.width, windowSize.height) - padding - padding
+const size = Math.min(windowSize.width, windowSize.height) - padding * 8
 
 const styles = StyleSheet.create({
   cameraContainer: {
     textAlign: 'center',
     padding,
     height: size + padding + padding,
+    backgroundColor: 'black',
   },
   cameraStyle: {
     height: size,

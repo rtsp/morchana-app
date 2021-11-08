@@ -8,6 +8,7 @@ import android.os.StrictMode;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.gevorg.reactlibrary.RNQrGeneratorPackage;
 import com.nuuneoi.lib.contacttracer.service.TracerService;
 import com.nuuneoi.lib.contacttracer.utils.ServiceUtils;
 import com.reactnativecommunity.imageeditor.ImageEditorPackage;
