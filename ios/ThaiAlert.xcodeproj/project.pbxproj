@@ -555,14 +555,14 @@
 				CODE_SIGN_ENTITLEMENTS = ThaiAlert/ThaiAlert.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1635391776;
+				CURRENT_PROJECT_VERSION = 1636339437;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = ED5ZZ7TVDS;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ThaiAlert/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.1.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -587,14 +587,14 @@
 				CODE_SIGN_ENTITLEMENTS = ThaiAlert/ThaiAlert.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1635391776;
+				CURRENT_PROJECT_VERSION = 1636339437;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = ED5ZZ7TVDS;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ThaiAlert/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.1.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -665,14 +665,14 @@
 				CODE_SIGN_ENTITLEMENTS = ThaiAlert/ThaiAlert.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1635391776;
+				CURRENT_PROJECT_VERSION = 1636339437;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = ED5ZZ7TVDS;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ThaiAlert/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.4;
+				MARKETING_VERSION = 2.1.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
