@@ -178,7 +178,7 @@ export const useBluetoothPermission = () => {
   return usePermission(
     useMemo(
       () => ({
-        permission: Platform.OS === 'android' ? undefined : PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL,
+        permission: undefined,
         title: (
           <View style={{ flexDirection: 'column', alignItems: 'center', paddingTop: 16, paddingBottom: 8 }}>
             <Image
