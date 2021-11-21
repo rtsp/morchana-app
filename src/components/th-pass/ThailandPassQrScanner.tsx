@@ -1,26 +1,70 @@
 import { useNavigation } from '@react-navigation/core'
-
 import { useIsFocused } from '@react-navigation/native'
+import { Buffer } from 'buffer'
+import jpeg from 'jpeg-js'
+import jsQR from 'jsqr'
 import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { normalize } from 'react-native-elements'
+import { Asset, launchImageLibrary } from 'react-native-image-picker'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import RNQRGenerator from 'rn-qr-generator'
 import I18n from '../../../i18n/i18n'
 import { getThailandPass } from '../../api'
 import { PrimaryButton } from '../../components/Button'
 import { WhiteBackground } from '../../components/WhiteBackground'
+import { useHUD } from '../../HudView'
 import { PageBackButton } from '../../navigations/2-Onboarding/components/PageBackButton'
 import PopupMessage from '../../navigations/3-MainApp/NewMainApp/PopupMessage'
-import useCamera from '../../services/use-camera'
 import { ThailandPassProfile } from '../../services/use-vaccine'
 import { COLORS, FONT_BOLD, FONT_MED, FONT_SIZES } from '../../styles'
 import { useCameraPermission } from '../../utils/Permission'
 
 const padding = normalize(4)
+
+const decodeImageQR = async (image: Asset) => {
+  try {
+    // Get the image and its base64 data into a buffer
+    if (!image.base64) {
+      return null
+    }
+    const base64Buffer = Buffer.from(image.base64, 'base64')
+
+    let pixelData
+    let imageBuffer
+
+    // Handle decoding based on different mimetypes
+    if (image.type === 'image/jpeg') {
+      pixelData = jpeg.decode(base64Buffer, { useTArray: true }) // --> useTArray makes jpeg-js work on react-native without needing to nodeify it
+      imageBuffer = pixelData.data
+    } else if (image.type === 'image/png') {
+      const PNG = require('pngjs/browser').PNG
+
+      pixelData = PNG.sync.read(base64Buffer)
+      imageBuffer = pixelData.data
+    } else {
+      // you can alert the user here that the format is not supported
+      return null
+    }
+
+    // Convert the buffer into a clamped array that jsqr uses
+    const data = Uint8ClampedArray.from(imageBuffer)
+
+    // Get the QR string from the image
+    const code = jsQR(data, image.width ?? 0, image.height ?? 0)
+    if (!code) {
+      return null
+    }
+
+    console.log('qr - values', code)
+    return code
+  } catch (error) {
+    console.error('error')
+  }
+  return null
+}
 
 const ThailandPassQrScanner: React.FC<{
   next: string
@@ -29,25 +73,27 @@ const ThailandPassQrScanner: React.FC<{
   const [modalMode, setModalMode] = useState<'error' | 'ok' | ''>('')
   const [thPass, setThPass] = useState<ThailandPassProfile | null>(null)
   const [cameraEnabled, setCameraEnabled] = useState(false)
+  const [imageDecoding, setImageDecoding] = useState(false)
   const permission = useCameraPermission()
   const isFocused = useIsFocused()
-  const { openGallery } = useCamera()
+  const { showSpinner, hide } = useHUD()
 
-  const validateThailandPass = (uri: string) => {
-    getThailandPass({ uri })
-      .then((res) => {
-        if (!res || res.error || !res.data) {
-          console.error('thailand pass error', res.error)
-          setModalMode('error')
-          return
-        }
+  const validateThailandPass = async (uri: string) => {
+    try {
+      const res = await getThailandPass({ uri })
+      if (!res || res.error || !res.data) {
+        console.error('thailand pass error', res.error)
+        setModalMode('error')
+        return
+      }
 
-        setThPass(res.data)
-        setModalMode('ok')
-      })
-      .catch((e) => {
-        console.error('thailand pass error', e)
-      })
+      setThPass(res.data)
+      setModalMode('ok')
+      return
+    } catch (e) {
+      console.error('thailand pass error', e)
+    }
+    return
   }
   const inset = useSafeAreaInsets()
 
@@ -63,7 +109,7 @@ const ThailandPassQrScanner: React.FC<{
         <Text style={styles.subTitle}>{I18n.t('scan_description_thailandpass_qr')}</Text>
 
         <View style={styles.cameraContainer}>
-          {isFocused && cameraEnabled && (
+          {isFocused && cameraEnabled && !imageDecoding && (
             <QRCodeScanner
               showMarker
               markerStyle={{
@@ -79,35 +125,43 @@ const ThailandPassQrScanner: React.FC<{
           <TouchableOpacity
             activeOpacity={0.8}
             style={{ position: 'absolute', bottom: padding * 2, left: padding * 2, padding, alignSelf: 'center' }}
-            onPress={() =>
-              openGallery().then((uri) => {
-                RNQRGenerator.detect({ uri })
-                  .then((response) => {
-                    const { values } = response // Array of detected QR code values. Empty if nothing found.
-                    if (!values || !values.length) {
-                      setModalMode('error')
-                      return
-                    }
-                    console.log('qr - values', values)
-                    validateThailandPass(values[0])
-                  })
-                  .catch((error) => {
-                    console.error('qr error', error)
-                    setModalMode('error')
-                  })
+            onPress={async () => {
+              setImageDecoding(true)
+              showSpinner()
+
+              const { didCancel, assets, errorCode } = await launchImageLibrary({
+                selectionLimit: 1,
+                mediaType: 'photo',
+                includeBase64: true,
               })
-            }
+
+              if (didCancel) {
+                hide()
+                return
+              }
+
+              if (errorCode || !assets || !assets.length) {
+                // Handle errors here, or separately
+                console.error('launchImageLibrary ERROR', didCancel, errorCode)
+                hide()
+                setImageDecoding(false)
+                return
+              }
+
+              const code = await decodeImageQR(assets[0])
+              if (code) {
+                await validateThailandPass(code.data)
+              } else {
+                setModalMode('error')
+              }
+
+              hide()
+              setImageDecoding(false)
+            }}
           >
             <EntypoIcon name='images' color='white' size={32} />
           </TouchableOpacity>
         </View>
-
-        {/* <TouchableOpacity onPress={()=> {
-
-              }}>
-              [><Image source={require('../../assets/gallery.png')} resizeMode='contain' style={styles.galleryIcon} /><]
-              <MaterialCommunityIcons name='insert-photo-outlined' color='white' size={36} />
-              </TouchableOpacity> */}
 
         <PrimaryButton
           title={I18n.t('fill_information_by_yourself')}
@@ -124,8 +178,6 @@ const ThailandPassQrScanner: React.FC<{
             return
           }
 
-          // console.log('onSelect')
-          // await AsyncStorage.setItem('th-pass', JSON.stringify(thPass))
           if (next) {
             navigation.navigate(next, { data: thPass })
           } else {
@@ -177,14 +229,12 @@ const size = Math.min(windowSize.width, windowSize.height) - padding * 8
 
 const styles = StyleSheet.create({
   cameraContainer: {
-    textAlign: 'center',
-    padding,
-    height: size + padding + padding,
+    height: size,
     backgroundColor: 'black',
   },
   cameraStyle: {
     height: size,
-    width: size,
+    width: windowSize.width,
     overflow: 'hidden',
   },
   title: {

@@ -68,9 +68,9 @@ export const OnboardFace = () => {
 
   const navigateToGallery = () => {
     setPopupCamera(false)
-    openGallery().then((uri) => {
-      // console.log('openGallery', uri)
-      setUri(uri)
+    openGallery().then((asset) => {
+      if (!asset?.uri) return
+      setUri(asset.uri)
     })
   }
 

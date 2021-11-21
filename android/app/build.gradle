@@ -217,7 +217,6 @@ android {
 
 
 dependencies {
-    implementation project(':rn-qr-generator')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules

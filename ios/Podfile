@@ -16,6 +16,8 @@ target "ThaiAlert" do
   pod "Permission-Motion", :path => "#{permissions_path}/Motion.podspec"
   pod "Permission-Camera", :path => "#{permissions_path}/Camera.podspec"
 
-  pod 'RNQrGenerator', :path => '../node_modules/rn-qr-generator'
+
+
+
 
 end
