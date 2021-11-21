@@ -1,15 +1,14 @@
 import styled from '@emotion/native'
 import { useIsFocused } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
-// import ImagePicker from 'react-native-image-picker';
 import { NativeModules, TouchableOpacity, View } from 'react-native'
 import { RNCamera } from 'react-native-camera'
+import { normalize } from 'react-native-elements'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { COLORS } from '../styles'
 import useCamera from '../services/use-camera'
-import { normalize } from 'react-native-elements'
+import { COLORS } from '../styles'
 
 const ShutterButtonOuter = styled.View`
   width: 72px;
@@ -111,7 +110,7 @@ export const SelectImageButton: React.FC<{ onSelectImage: (uri: string) => void 
     <TouchableOpacity
       activeOpacity={0.8}
       style={{ position: 'absolute', right: 0, padding, alignSelf: 'center' }}
-      onPress={() => openGallery().then(onSelectImage)}
+      onPress={() => openGallery().then((asset) => asset?.uri && onSelectImage(asset.uri))}
     >
       <EntypoIcon name='images' color='white' size={32} />
     </TouchableOpacity>
